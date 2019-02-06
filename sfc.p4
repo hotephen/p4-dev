@@ -24,12 +24,14 @@ header ethernet_t {
 header nsh_t {
     bit<2>    ver;
     bit<1>    oam;
-    bit<1>    context;
+    bit<1>    un1;
+    bit<6>    ttl;
     bit<6>    len;
+    bit<4>    un4;
     bit<8>    MDtype;
     bit<16>   Nextpro;
-    bit<24>   spid;
-    bit<8>    sidx;
+    bit<24>   spi;
+    bit<8>    si;
 }
 
 
@@ -108,7 +110,7 @@ parser MyParser(packet_in packet,
 ************   C H E C K S U M    V E R I F I C A T I O N   *************
 *************************************************************************/
 
-control MyVerifyChecksum(inout headers hdr, inout metadata meta) {   
+control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
     apply {  }
 }
 
@@ -124,14 +126,14 @@ control MyIngress(inout headers hdr,
         mark_to_drop();
     }
 
-    
+
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
         standard_metadata.egress_spec = port;
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
         hdr.ethernet.dstAddr = dstAddr;
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
-    
+
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
@@ -144,9 +146,9 @@ control MyIngress(inout headers hdr,
         size = 1024;
         default_action = drop();
     }
-  
 
-  
+
+
     action l2_forward(egressSpec_t port) {
         standard_metadata.egress_spec = port;
         hdr.nsh.sidx = hdr.nsh.sidx - 1;
@@ -178,7 +180,7 @@ control MyIngress(inout headers hdr,
         }
         size = 1024;
         default_action = NoAction();
-    } 
+    }
 
 
     apply {
@@ -202,8 +204,8 @@ control MyIngress(inout headers hdr,
 control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
-    apply { 
-        
+    apply {
+
     }
 
 }
