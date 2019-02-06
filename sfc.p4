@@ -55,11 +55,11 @@ struct metadata {
 }
 
 struct headers {
-    ethernet_t   ethernet;
     nsh_t        nsh;
-    ethernet_t   in_ethernet;
+    ethernet_t   ethernet;
     ipv4_t       ipv4;
 }
+
 
 /*************************************************************************
 *********************** P A R S E R  ***********************************
@@ -74,26 +74,17 @@ parser MyParser(packet_in packet,
         transition parse_ethernet;
     }
 
-    state parse_ethernet {
-        packet.extract(hdr.ethernet);
-        transition select(hdr.ethernet.etherType) {
-            TYPE_NSH: parse_nsh;
-            TYPE_IPV4: parse_ipv4;
-            default: accept;
-        }
-    }
-
     state parse_nsh {
         packet.extract(hdr.nsh);
         transition select(hdr.nsh.Nextpro) {
-            TYPE_ETHER: parse_inner_ether;
+            TYPE_ETHER: parse_ether;
             default: accept;
         }
     }
 
-    state parse_inner_ether {
+    state parse_ether {
         packet.extract(hdr.in_ethernet);
-        transition select(hdr.in_ethernet.etherType) {
+        transition select(hdr.ethernet.etherType) {
             TYPE_IPV4: parse_ipv4;
             default: accept;
         }
@@ -134,6 +125,7 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
+
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
@@ -149,39 +141,52 @@ control MyIngress(inout headers hdr,
 
 
 
+    action si_decrease {
+        hdr.nsh.si = hdr.nsh.si - 1;
+    }
+
+    action loopback {
+        hdr.nsh.si = hdr.nsh.si - 1;
+        standard_metadata.egress_spec = standard_metadata.ingress.port;
+    }
+
+
+
+
+/*
     action l2_forward(egressSpec_t port) {
         standard_metadata.egress_spec = port;
         hdr.nsh.sidx = hdr.nsh.sidx - 1;
     }
-
-    table nsh_exact {
+*/
+    table sf1 {
         key = {
-            hdr.ethernet.dstAddr: exact;
+            hdr.nsh.spi: exact;
+            hdr.nsh.si: exact;
         }
         actions = {
-            l2_forward;
+            si_decrease;
             drop;
+            NoAction;
         }
         size = 1024;
         default_action = drop();
     }
 
-    action sub_sidx() {
-        hdr.nsh.sidx = hdr.nsh.sidx - 1;
-    }
 
-    table nsh_count {
+    table sf2 {
         key = {
-            hdr.nsh.spid: exact;
+            hdr.nsh.spi: exact;
+            hdr.nsh.si: exact;
         }
         actions = {
-            sub_sidx;
+            loopback;
+            drop;
             NoAction;
         }
         size = 1024;
-        default_action = NoAction();
+        default_action = drop();
     }
-
 
     apply {
         if (hdr.ipv4.isValid() && !hdr.nsh.isValid()) {
@@ -191,8 +196,8 @@ control MyIngress(inout headers hdr,
 
         if (hdr.nsh.isValid()) {
             // process tunneled packets
-            nsh_count.apply();
-            nsh_exact.apply();
+            sf1.apply();
+            sf2.apply();
         }
     }
 }
