@@ -1,0 +1,2 @@
+table_add sf1 si_decrease 1 255 =>
+table_add sf2 si_decrease 1 254 =>
