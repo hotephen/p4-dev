@@ -29,8 +29,8 @@ header nsh_t {
     bit<6>    ttl;
     bit<6>    len;
     bit<4>    un4;
-    bit<8>    MDtype;
-    bit<16>   Nextpro;
+    bit<4>    MDtype;
+    bit<16>    Nextpro;
     bit<24>   spi;
     bit<8>    si;
 }
@@ -51,12 +51,10 @@ header ipv4_t {
     ip4Addr_t dstAddr;
 }
 
-/*
-struct standard_metadata_t {
-    bit<9>  ingress_port;
-    bit<9>  egress_spec;
+
+struct metadata {
 }
-*/
+
 struct headers {
     nsh_t        nsh;
     ethernet_t   ethernet;
@@ -70,6 +68,7 @@ struct headers {
 
 parser MyParser(packet_in packet,
                 out headers hdr,
+		inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
 
     state start {
@@ -103,7 +102,8 @@ parser MyParser(packet_in packet,
 ************   C H E C K S U M    V E R I F I C A T I O N   *************
 *************************************************************************/
 
-control MyVerifyChecksum(inout headers hdr) {
+control MyVerifyChecksum(inout headers hdr, inout metadata meta
+) {
     apply {  }
 }
 
@@ -113,6 +113,7 @@ control MyVerifyChecksum(inout headers hdr) {
 *************************************************************************/
 
 control MyIngress(inout headers hdr,
+		  inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
     action drop() {
         mark_to_drop();
@@ -208,6 +209,7 @@ control MyIngress(inout headers hdr,
 *************************************************************************/
 
 control MyEgress(inout headers hdr,
+		 inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
     apply {
 
@@ -219,7 +221,7 @@ control MyEgress(inout headers hdr,
 *************   C H E C K S U M    C O M P U T A T I O N   **************
 *************************************************************************/
 
-control MyComputeChecksum(inout headers  hdr) {
+control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
      apply {
 
     }
