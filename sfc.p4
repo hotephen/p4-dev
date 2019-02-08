@@ -72,7 +72,7 @@ parser MyParser(packet_in packet,
                 inout standard_metadata_t standard_metadata) {
 
     state start {
-        transition parse_ether;
+        transition parse_nsh;
     }
 
     state parse_nsh {
@@ -128,6 +128,7 @@ control MyIngress(inout headers hdr,
     }
 
 
+/*    
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
@@ -138,29 +139,23 @@ control MyIngress(inout headers hdr,
             NoAction;
         }
         size = 1024;
-        default_action = drop();
+        default_action = NoAction();
     }
+*/
 
 
-
-    action si_decrease() {
+    action si_decrease(egressSpec_t port) {
         hdr.nsh.si = hdr.nsh.si - 1;
+	standard_metadata.egress_spec = port;
     }
 
     action loopback() {
         hdr.nsh.si = hdr.nsh.si - 1;
-        standard_metadata.egress_spec = standard_metadata.ingress_port;
+        resubmit(hdr.nsh.si);
     }
 
 
 
-
-/*
-    action l2_forward(egressSpec_t port) {
-        standard_metadata.egress_spec = port;
-        hdr.nsh.sidx = hdr.nsh.sidx - 1;
-    }
-*/
     table sf1 {
         key = {
             hdr.nsh.spi: exact;
@@ -168,11 +163,12 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             si_decrease;
+	
             drop;
             NoAction;
         }
         size = 1024;
-        default_action = drop();
+        default_action = NoAction();
     }
 
 
@@ -180,6 +176,7 @@ control MyIngress(inout headers hdr,
         key = {
             hdr.nsh.spi: exact;
             hdr.nsh.si: exact;
+	    
         }
         actions = {
             loopback;
@@ -187,21 +184,17 @@ control MyIngress(inout headers hdr,
             NoAction;
         }
         size = 1024;
-        default_action = drop();
+        default_action = NoAction();
     }
 
     apply {
-        if (hdr.ipv4.isValid() && !hdr.nsh.isValid()) {
-            // Process only non-tunneled IPv4 packets
-            ipv4_lpm.apply();
-        }
-
-        if (hdr.nsh.isValid()) {
-            // process tunneled packets
-            sf1.apply();
-            sf2.apply();
-        }
+            sf1.apply();    
+	if(standard_metadata.instance_type == 0){
+	    sf2.apply();
+	}
     }
+
+    
 }
 
 /*************************************************************************
@@ -233,8 +226,8 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
-        packet.emit(hdr.ethernet);
-        packet.emit(hdr.nsh);
+	packet.emit(hdr.nsh);
+        packet.emit(hdr.ethernet);      
         packet.emit(hdr.ipv4);
     }
 }
