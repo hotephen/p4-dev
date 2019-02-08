@@ -53,8 +53,6 @@ header ipv4_t {
 
 
 struct metadata {
-    bit<24>    metadata_spi;
-    bit<8>     metadata_si;
 }
 
 struct headers {
@@ -147,39 +145,25 @@ control MyIngress(inout headers hdr,
 
 
     action si_decrease(egressSpec_t port) {
-	meta.metadata_si = meta.metadata_si - 1;
+        hdr.nsh.si = hdr.nsh.si - 1;
 	standard_metadata.egress_spec = port;
     }
 
-    action loopback() {  
-	meta.metadata_si = meta.metadata_si - 1;
-        resubmit(meta);
+    action loopback() {
+        hdr.nsh.si = hdr.nsh.si - 1;
+        resubmit(hdr);
     }
 
-    action hdr_to_meta() {
-	meta.metadata_spi = hdr.nsh.spi;
-	meta.metadata_si = hdr.nsh.si;	
-	}        
-
-
-
-    table precheck{
-	key = {
-		standard_metadata.instance_type : exact;
-	}
-	actions = {
-		hdr_to_meta;
-	}
-    }
 
 
     table sf1 {
         key = {
-            meta.metadata_spi: exact;
-            meta.metadata_si: exact;
+            hdr.nsh.spi: exact;
+            hdr.nsh.si: exact;
         }
         actions = {
             si_decrease;
+	
             drop;
             NoAction;
         }
@@ -190,8 +174,8 @@ control MyIngress(inout headers hdr,
 
     table sf2 {
         key = {
-            meta.metadata_spi: exact;
-            meta.metadata_si: exact;
+            hdr.nsh.spi: exact;
+            hdr.nsh.si: exact;
 	    
         }
         actions = {
@@ -204,9 +188,9 @@ control MyIngress(inout headers hdr,
     }
 
     apply {
-	    precheck.apply();
-	    sf1.apply();    
+            sf1.apply();    
 	    sf2.apply();
+	
     }
 
     
