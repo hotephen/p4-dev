@@ -121,7 +121,6 @@ control MyIngress(inout headers hdr,
         mark_to_drop();
     }
 
-
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
         standard_metadata.egress_spec = port;
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
@@ -129,8 +128,27 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
+    action si_decrease(egressSpec_t port) {
+	    meta.metadata_si = meta.metadata_si - 1;
+	    standard_metadata.egress_spec = port;
+    }
 
-/*    
+    action loopback() {  
+	    meta.metadata_si = meta.metadata_si - 1;
+        resubmit(meta);
+    }
+
+    action hdr_to_meta() {
+	    meta.metadata_spi = hdr.nsh.spi;
+	    meta.metadata_si = hdr.nsh.si;	
+	}        
+
+    action add_nsh() {
+
+
+    }
+
+
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
@@ -143,24 +161,6 @@ control MyIngress(inout headers hdr,
         size = 1024;
         default_action = NoAction();
     }
-*/
-
-
-    action si_decrease(egressSpec_t port) {
-	meta.metadata_si = meta.metadata_si - 1;
-	standard_metadata.egress_spec = port;
-    }
-
-    action loopback() {  
-	meta.metadata_si = meta.metadata_si - 1;
-        resubmit(meta);
-    }
-
-    action hdr_to_meta() {
-	meta.metadata_spi = hdr.nsh.spi;
-	meta.metadata_si = hdr.nsh.si;	
-	}        
-
 
 
     table precheck{
