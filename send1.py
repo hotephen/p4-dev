@@ -58,7 +58,7 @@ def main():
     iface = "veth0"
     iface_1 = "veth2"
     iface_2 = "veth4"
-    nsh = int('0x0000006558000001ff', 16)
+
     
     pkt =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01')
 #    pkt = Ether(dst='00:00:00:00:00:02') / pkt / IP(src=addr1,dst=addr) / "hi"

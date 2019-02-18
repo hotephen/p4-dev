@@ -30,7 +30,7 @@ header nsh_t {
     bit<6>    len;
     bit<4>    un4;
     bit<4>    MDtype;
-    bit<16>    Nextpro;
+    bit<16>   Nextpro;
     bit<24>   spi;
     bit<8>    si;
 }
@@ -55,6 +55,7 @@ header ipv4_t {
 struct metadata {
     bit<24>    metadata_spi;
     bit<8>     metadata_si;
+    bit<1>     metadata_nsh;
 }
 
 struct headers {
@@ -70,7 +71,7 @@ struct headers {
 
 parser MyParser(packet_in packet,
                 out headers hdr,
-		inout metadata meta,
+		        inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
 
     state start {
@@ -138,17 +139,17 @@ control MyIngress(inout headers hdr,
         resubmit(meta);
     }
 
-    action hdr_to_meta() {
+    action change_hdr_to_meta() {
 	    meta.metadata_spi = hdr.nsh.spi;
 	    meta.metadata_si = hdr.nsh.si;	
 	}        
 
     action add_nsh() {
-
-
+        meta.metadata_nsh = 1;
+        hdr.nsh.setValid();
     }
 
-
+/*
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
@@ -161,17 +162,32 @@ control MyIngress(inout headers hdr,
         size = 1024;
         default_action = NoAction();
     }
+*/
 
 
     table precheck{
-	key = {
-		standard_metadata.instance_type : exact;
-	}
-	actions = {
-		hdr_to_meta;
-	}
+        key = {
+            standard_metadata.instance_type : exact;
+        }
+        actions = {
+            change_hdr_to_meta;
+            drop;
+            NoAction;
+        }
+        default_action = NoAction();
     }
 
+    table service_classifier{
+        key = {
+            hdr.ipv4.srcAddr: exact;
+        }
+        actions = {
+            add_nsh;
+            drop;
+            NoAction;
+        }
+        default_action = NoAction();
+    }
 
     table sf1 {
         key = {
@@ -205,8 +221,10 @@ control MyIngress(inout headers hdr,
 
     apply {
 	    precheck.apply();
+        service_classifier.apply();
 	    sf1.apply();    
 	    sf2.apply();
+        
     }
 
     
@@ -241,7 +259,7 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
-	packet.emit(hdr.nsh);
+	    packet.emit(hdr.nsh);
         packet.emit(hdr.ethernet);      
         packet.emit(hdr.ipv4);
     }
