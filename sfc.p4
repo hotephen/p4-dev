@@ -59,8 +59,9 @@ struct metadata {
 }
 
 struct headers {
+    ethernet_t   out_ethernet;
     nsh_t        nsh;
-    ethernet_t   ethernet;
+    ethernet_t   in_ethernet;
     ipv4_t       ipv4;
 }
 
@@ -75,20 +76,29 @@ parser MyParser(packet_in packet,
                 inout standard_metadata_t standard_metadata) {
 
     state start {
-        transition parse_nsh;
+        transition parse_out_ethernet;
+    }
+
+    state parse_out_ethernet {
+        packet.extract(hdr.out_ethernet);
+        transition select(hdr.out_ethernet.etherType) {
+            TYPE_NSH: parse_nsh;
+            TYPE_IPV4: parse_ipv4;
+            default: accept;
+        }
     }
 
     state parse_nsh {
         packet.extract(hdr.nsh);
         transition select(hdr.nsh.Nextpro) {
-            TYPE_ETHER: parse_ether;
+            TYPE_ETHER: parse_in_ethernet;
             default: accept;
         }
     }
 
-    state parse_ether {
-        packet.extract(hdr.ethernet);
-        transition select(hdr.ethernet.etherType) {
+    state parse_in_ethernet {
+        packet.extract(hdr.in_ethernet);
+        transition select(hdr.in_ethernet.etherType) {
             TYPE_IPV4: parse_ipv4;
             default: accept;
         }
@@ -121,14 +131,14 @@ control MyIngress(inout headers hdr,
     action drop() {
         mark_to_drop();
     }
-
+/*
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
         standard_metadata.egress_spec = port;
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
         hdr.ethernet.dstAddr = dstAddr;
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
-
+*/
     action si_decrease(egressSpec_t port) {
 	    meta.metadata_si = meta.metadata_si - 1;
 	    standard_metadata.egress_spec = port;
@@ -147,6 +157,8 @@ control MyIngress(inout headers hdr,
     action add_nsh() {
         meta.metadata_nsh = 1;
         hdr.nsh.setValid();
+        hdr.in_ethernet.setValid();
+        standard_metadata.egress_spec = 2;
     }
 
 /*
@@ -219,6 +231,19 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
+    table sff {
+        key {
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
+        actions = {
+            loopback;
+            ipv4_forward;
+            drop;
+            NoAction;
+        }
+    }
+
     apply {
 	    precheck.apply();
         service_classifier.apply();
@@ -259,8 +284,9 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
+        packet.emit(hdr.out_ethernet);
 	    packet.emit(hdr.nsh);
-        packet.emit(hdr.ethernet);      
+        packet.emit(hdr.in_ethernet);      
         packet.emit(hdr.ipv4);
     }
 }
