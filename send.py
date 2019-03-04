@@ -47,3 +47,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# ./send.py dst src

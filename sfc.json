@@ -136,7 +136,7 @@
       "name" : "metadata",
       "source_info" : {
         "filename" : "sfc.p4",
-        "line" : 149,
+        "line" : 148,
         "column" : 17,
         "source_fragment" : "meta"
       },
@@ -312,7 +312,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "sfc.p4",
-        "line" : 272,
+        "line" : 298,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -350,21 +350,10 @@
       "primitives" : []
     },
     {
-      "name" : "MyIngress.drop",
+      "name" : "NoAction",
       "id" : 4,
       "runtime_data" : [],
-      "primitives" : [
-        {
-          "op" : "drop",
-          "parameters" : [],
-          "source_info" : {
-            "filename" : "sfc.p4",
-            "line" : 132,
-            "column" : 8,
-            "source_fragment" : "mark_to_drop()"
-          }
-        }
-      ]
+      "primitives" : []
     },
     {
       "name" : "MyIngress.drop",
@@ -418,8 +407,42 @@
       ]
     },
     {
-      "name" : "MyIngress.si_decrease",
+      "name" : "MyIngress.drop",
       "id" : 8,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "drop",
+          "parameters" : [],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 132,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop()"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.drop",
+      "id" : 9,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "drop",
+          "parameters" : [],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 132,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop()"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.si_decrease",
+      "id" : 10,
       "runtime_data" : [
         {
           "name" : "port",
@@ -492,7 +515,222 @@
     },
     {
       "name" : "MyIngress.loopback",
-      "id" : 9,
+      "id" : 11,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "resubmit",
+          "parameters" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x1"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 148,
+            "column" : 8,
+            "source_fragment" : "resubmit(meta)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.change_hdr_to_meta",
+      "id" : 12,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "metadata.metadata_spi"]
+            },
+            {
+              "type" : "field",
+              "value" : ["nsh", "spi"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 152,
+            "column" : 5,
+            "source_fragment" : "meta.metadata_spi = hdr.nsh.spi"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "metadata.metadata_si"]
+            },
+            {
+              "type" : "field",
+              "value" : ["nsh", "si"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 153,
+            "column" : 5,
+            "source_fragment" : "meta.metadata_si = hdr.nsh.si"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.add_nsh",
+      "id" : 13,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "metadata.metadata_nsh"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 157,
+            "column" : 8,
+            "source_fragment" : "meta.metadata_nsh = 1"
+          }
+        },
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "nsh"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 158,
+            "column" : 8,
+            "source_fragment" : "hdr.nsh.setValid()"
+          }
+        },
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "in_ethernet"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 159,
+            "column" : 8,
+            "source_fragment" : "hdr.in_ethernet.setValid()"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0002"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 160,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = 2"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.l2_forward",
+      "id" : 14,
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        },
+        {
+          "name" : "dstAddr",
+          "bitwidth" : 48
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 164,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["out_ethernet", "srcAddr"]
+            },
+            {
+              "type" : "field",
+              "value" : ["out_ethernet", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 165,
+            "column" : 8,
+            "source_fragment" : "hdr.out_ethernet.srcAddr = hdr.out_ethernet.dstAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["out_ethernet", "dstAddr"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 1
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 166,
+            "column" : 8,
+            "source_fragment" : "hdr.out_ethernet.dstAddr = dstAddr"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.pass",
+      "id" : 15,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -532,144 +770,9 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 148,
-            "column" : 5,
+            "line" : 171,
+            "column" : 8,
             "source_fragment" : "meta.metadata_si = meta.metadata_si - 1"
-          }
-        },
-        {
-          "op" : "resubmit",
-          "parameters" : [
-            {
-              "type" : "hexstr",
-              "value" : "0x1"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sfc.p4",
-            "line" : 149,
-            "column" : 8,
-            "source_fragment" : "resubmit(meta)"
-          }
-        }
-      ]
-    },
-    {
-      "name" : "MyIngress.change_hdr_to_meta",
-      "id" : 10,
-      "runtime_data" : [],
-      "primitives" : [
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["scalars", "metadata.metadata_spi"]
-            },
-            {
-              "type" : "field",
-              "value" : ["nsh", "spi"]
-            }
-          ],
-          "source_info" : {
-            "filename" : "sfc.p4",
-            "line" : 153,
-            "column" : 5,
-            "source_fragment" : "meta.metadata_spi = hdr.nsh.spi"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["scalars", "metadata.metadata_si"]
-            },
-            {
-              "type" : "field",
-              "value" : ["nsh", "si"]
-            }
-          ],
-          "source_info" : {
-            "filename" : "sfc.p4",
-            "line" : 154,
-            "column" : 5,
-            "source_fragment" : "meta.metadata_si = hdr.nsh.si"
-          }
-        }
-      ]
-    },
-    {
-      "name" : "MyIngress.add_nsh",
-      "id" : 11,
-      "runtime_data" : [],
-      "primitives" : [
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["scalars", "metadata.metadata_nsh"]
-            },
-            {
-              "type" : "hexstr",
-              "value" : "0x01"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sfc.p4",
-            "line" : 158,
-            "column" : 8,
-            "source_fragment" : "meta.metadata_nsh = 1"
-          }
-        },
-        {
-          "op" : "add_header",
-          "parameters" : [
-            {
-              "type" : "header",
-              "value" : "nsh"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sfc.p4",
-            "line" : 159,
-            "column" : 8,
-            "source_fragment" : "hdr.nsh.setValid()"
-          }
-        },
-        {
-          "op" : "add_header",
-          "parameters" : [
-            {
-              "type" : "header",
-              "value" : "in_ethernet"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sfc.p4",
-            "line" : 160,
-            "column" : 8,
-            "source_fragment" : "hdr.in_ethernet.setValid()"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["standard_metadata", "egress_spec"]
-            },
-            {
-              "type" : "hexstr",
-              "value" : "0x0002"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sfc.p4",
-            "line" : 161,
-            "column" : 8,
-            "source_fragment" : "standard_metadata.egress_spec = 2"
           }
         }
       ]
@@ -692,7 +795,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 180,
+            "line" : 189,
             "column" : 10,
             "source_fragment" : "precheck"
           },
@@ -710,13 +813,13 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [10, 4, 0],
+          "action_ids" : [12, 5, 0],
           "actions" : ["MyIngress.change_hdr_to_meta", "MyIngress.drop", "NoAction"],
-          "base_default_next" : "MyIngress.service_classifier",
+          "base_default_next" : "MyIngress.sc",
           "next_tables" : {
-            "MyIngress.change_hdr_to_meta" : "MyIngress.service_classifier",
-            "MyIngress.drop" : "MyIngress.service_classifier",
-            "NoAction" : "MyIngress.service_classifier"
+            "MyIngress.change_hdr_to_meta" : "MyIngress.sc",
+            "MyIngress.drop" : "MyIngress.sc",
+            "NoAction" : "MyIngress.sc"
           },
           "default_entry" : {
             "action_id" : 0,
@@ -726,13 +829,13 @@
           }
         },
         {
-          "name" : "MyIngress.service_classifier",
+          "name" : "MyIngress.sc",
           "id" : 1,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 192,
+            "line" : 201,
             "column" : 10,
-            "source_fragment" : "service_classifier"
+            "source_fragment" : "sc"
           },
           "key" : [
             {
@@ -748,7 +851,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [11, 5, 1],
+          "action_ids" : [13, 6, 1],
           "actions" : ["MyIngress.add_nsh", "MyIngress.drop", "NoAction"],
           "base_default_next" : "MyIngress.sf1",
           "next_tables" : {
@@ -768,7 +871,7 @@
           "id" : 2,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 204,
+            "line" : 213,
             "column" : 10,
             "source_fragment" : "sf1"
           },
@@ -792,7 +895,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [8, 6, 2],
+          "action_ids" : [10, 7, 2],
           "actions" : ["MyIngress.si_decrease", "MyIngress.drop", "NoAction"],
           "base_default_next" : "MyIngress.sf2",
           "next_tables" : {
@@ -812,9 +915,59 @@
           "id" : 3,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 219,
+            "line" : 228,
             "column" : 10,
             "source_fragment" : "sf2"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "meta.metadata_spi",
+              "target" : ["scalars", "metadata.metadata_spi"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "meta.metadata_si",
+              "target" : ["scalars", "metadata.metadata_si"],
+              "mask" : null
+            },
+            {
+              "match_type" : "lpm",
+              "name" : "hdr.ipv4.srcAddr",
+              "target" : ["ipv4", "srcAddr"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "lpm",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [15, 8, 3],
+          "actions" : ["MyIngress.pass", "MyIngress.drop", "NoAction"],
+          "base_default_next" : "MyIngress.sff",
+          "next_tables" : {
+            "MyIngress.pass" : "MyIngress.sff",
+            "MyIngress.drop" : "MyIngress.sff",
+            "NoAction" : "MyIngress.sff"
+          },
+          "default_entry" : {
+            "action_id" : 8,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
+        },
+        {
+          "name" : "MyIngress.sff",
+          "id" : 4,
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 243,
+            "column" : 10,
+            "source_fragment" : "sff"
           },
           "key" : [
             {
@@ -836,16 +989,17 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [9, 7, 3],
-          "actions" : ["MyIngress.loopback", "MyIngress.drop", "NoAction"],
+          "action_ids" : [11, 14, 9, 4],
+          "actions" : ["MyIngress.loopback", "MyIngress.l2_forward", "MyIngress.drop", "NoAction"],
           "base_default_next" : null,
           "next_tables" : {
             "MyIngress.loopback" : null,
+            "MyIngress.l2_forward" : null,
             "MyIngress.drop" : null,
             "NoAction" : null
           },
           "default_entry" : {
-            "action_id" : 3,
+            "action_id" : 4,
             "action_const" : false,
             "action_data" : [],
             "action_entry_const" : false
@@ -860,7 +1014,7 @@
       "id" : 1,
       "source_info" : {
         "filename" : "sfc.p4",
-        "line" : 249,
+        "line" : 275,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },

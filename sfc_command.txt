@@ -1,4 +1,6 @@
-table_add sf1 si_decrease 1 254 => 2
-table_add sf2 loopback 1 255 =>
 table_add precheck change_hdr_to_meta 0 =>
-table_add service_classifier add_nsh 192.168.0.1 =>
+table_add sc add_nsh 192.168.0.1 =>
+table_add sf1 si_decrease 1 254 => 2
+table_add sf2 pass 1 255 192.168.0.0/16 =>
+table_add sff loopback 1 254 =>
+table_add sff l2_forward 1 253 => 3 00:00:00:00:00:00

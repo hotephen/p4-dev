@@ -145,7 +145,6 @@ control MyIngress(inout headers hdr,
     }
 
     action loopback() {  
-	    meta.metadata_si = meta.metadata_si - 1;
         resubmit(meta);
     }
 
@@ -161,6 +160,16 @@ control MyIngress(inout headers hdr,
         standard_metadata.egress_spec = 2;
     }
 
+    action l2_forward(egressSpec_t port, macAddr_t dstAddr) {
+        standard_metadata.egress_spec = port;
+        hdr.out_ethernet.srcAddr = hdr.out_ethernet.dstAddr;
+        hdr.out_ethernet.dstAddr = dstAddr;
+               
+    }
+
+    action pass() {
+        meta.metadata_si = meta.metadata_si - 1;
+    }
 /*
     table ipv4_lpm {
         key = {
@@ -189,7 +198,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
-    table service_classifier{
+    table sc{
         key = {
             hdr.ipv4.srcAddr: exact;
         }
@@ -201,7 +210,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
-    table sf1 {
+    table sf1 {     // FW
         key = {
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
@@ -216,14 +225,30 @@ control MyIngress(inout headers hdr,
     }
 
 
-    table sf2 {
+    table sf2 {     // ACL 
         key = {
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
-	    
+            hdr.ipv4.srcAddr: lpm;
+        }
+        actions = {
+            pass;
+            drop;
+            NoAction;
+        }
+        size = 1024;
+        default_action = drop();
+    }
+
+    table sff {
+        key = {
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
         }
         actions = {
             loopback;
+            //ipv4_forward;
+            l2_forward;
             drop;
             NoAction;
         }
@@ -231,24 +256,12 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
-    table sff {
-        key {
-            meta.metadata_spi: exact;
-            meta.metadata_si: exact;
-        }
-        actions = {
-            loopback;
-            ipv4_forward;
-            drop;
-            NoAction;
-        }
-    }
-
     apply {
 	    precheck.apply();
-        service_classifier.apply();
+        sc.apply();
 	    sf1.apply();    
 	    sf2.apply();
+        sff.apply();
         
     }
 
