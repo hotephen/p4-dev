@@ -257,7 +257,8 @@ control MyIngress(inout headers hdr,
     }
 
     apply {
-	    precheck.apply();
+	    
+        precheck.apply();
         sc.apply();
 	    sf1.apply();    
 	    sf2.apply();
