@@ -8,7 +8,7 @@ import struct
 from scapy.all import sendp, send, get_if_list, get_if_hwaddr
 from scapy.all import Packet
 from scapy.all import Ether, IP, UDP, TCP
-from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3BytesField, ByteField, XByteField
+from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3BytesField, ByteField
 
 #def get_if():
 #    ifs=get_if_list()
@@ -33,10 +33,13 @@ class NSH(Packet):
         BitField('Un1', 0, 1),
         BitField('TTL', 0, 6),
         BitField('Len', None, 6),
-	    BitField('Un4', 1, 4),
+	    BitField('Un2', 0, 4),
         BitField('MDType', 1, 4),
-        ByteField("NextProto", 0x65),
-        ByteField("NextProto_2", 0x58),
+        ShortEnumField('NextProto', 3, {1: 'IPv4',
+                                       2: 'IPv6',
+                                       3: 'Ethernet',
+                                       4: 'NSH',
+                                       5: 'MPLS'}),
         X3BytesField('NSP', 1),
         ByteField('NSI', 255)
     ]
@@ -57,12 +60,11 @@ def main():
     iface_2 = "veth4"
 
     
-    out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
-    in_ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
-#   pkt = Ether(dst='00:00:00:00:00:02') / pkt / IP(src=addr1,dst=addr) / "hi"
-    pkt1 = out_ether / NSH() / in_ether / IP(src=addr1,dst=addr) / "hi"
-#   pkt = pkt /IP(src=addr1,dst=addr) / TCP(dport=1234, sport=random.randint(49152,65535)) / "hi"
-#   pkt.show2()
+    pkt =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01')
+#    pkt = Ether(dst='00:00:00:00:00:02') / pkt / IP(src=addr1,dst=addr) / "hi"
+    pkt1 = NSH() / pkt / IP(src=addr1,dst=addr) / "hi"
+# pkt = pkt /IP(src=addr1,dst=addr) / TCP(dport=1234, sport=random.randint(49152,65535)) / "hi"
+#    pkt.show2()
     pkt1.show()
     hexdump(pkt1)
     sendp(pkt1, iface=iface, verbose=False)
