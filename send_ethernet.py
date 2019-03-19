@@ -12,9 +12,9 @@ from scapy.all import hexdump
 
 def main():
 
-    iface = "veth0"
+    iface = "veth1"
     
-    pkt =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
+    pkt =  Ether(src='00:00:00:00:00:00', dst='00:00:00:00:00:01', type=0x800)
     pkt.show()
     hexdump(pkt) # show hexadecimal expression of packet
     sendp(pkt, iface=iface, verbose=False)
