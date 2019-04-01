@@ -5,7 +5,7 @@
 *********************** H E A D E R S  ***********************************
 *************************************************************************/
 
-header mac_t {
+header zigbee_mac_t {
     bit<16> framecontrol;
     bit<16> dstpan;
     bit<16> dst;
@@ -68,7 +68,7 @@ struct metadata {
 }
 
 struct headers {
-    mac_t               mac;
+    zigbee_mac_t        zigbee_mac;
     zigbee_network_t    zigbee_network;
     zigbee_app_t        zigbee_app;
     zigbee_cluster_t    zigbee_cluster;
@@ -94,24 +94,24 @@ parser MyParser(packet_in packet,
     }
 
     state parse_mac {
-        packet.extract(hdr.mac);
+        packet.extract(hdr.zigbee_mac);
         transition parse_zigbee_network;
         
-        }
     }
+    
 
     state parse_zigbee_network {
         packet.extract(hdr.zigbee_network);
         transition parse_zigbee_app;
 
-        }
+        
     }
 
     state parse_zigbee_app {
         packet.extract(hdr.zigbee_app);
         transition parse_zigbee_cluster;
         
-        }
+        
     }
 
     state parse_zigbee_cluster {
@@ -125,12 +125,12 @@ parser MyParser(packet_in packet,
 ************   C H E C K S U M    V E R I F I C A T I O N   *************
 *************************************************************************/
 
-/*
+
 control MyVerifyChecksum(inout headers hdr, inout metadata meta
 ) {
     apply {  }
 }
-*/
+
 
 /*************************************************************************
 **************  I N G R E S S   P R O C E S S I N G   *******************
@@ -144,53 +144,36 @@ control MyIngress(inout headers hdr,
         mark_to_drop();
     }
 
-*/
-    action zigbee_network_valid() {
-	    hdr.zigbee_network.setInvalid();
-    }
-    
+    action action1() {
+	    hdr.zigbee_mac.setInvalid();
+        hdr.zigbee_network.setInvalid();
         hdr.zigbee_app.setInvalid();
         hdr.zigbee_cluster.setInvalid();
-        
-        
-/*
-        hdr.ble_hci.setValid();
-        hdr.ble_l2cap.setValid();
-        hdr.ble_att.setValid();
-*/
-    }
 
-   
+        hdr.ble_hci = {2, 16384, 2048};
+        hdr.ble_l2cap = {1024, 1024};
+        hdr.ble_att = {92, 4608, 110}; 
+
     }
-/*
-    table ipv4_lpm {
+  
+    table table1 {
         key = {
-            hdr.ipv4.dstAddr: lpm;
+            hdr.zigbee_network.src : exact;
+            hdr.zigbee_network.dst : exact;
+            hdr.zigbee_network.framecontrol : exact;
+
         }
         actions = {
-            ipv4_forward;
-            drop;
-            NoAction;
-        }
-        size = 1024;
-        default_action = NoAction();
-    }
-*/
-    table command {
-        key = {
-            hdr.zigbee_cluster.command : exact;
-        }
-        actions = {
-            convert_zig_to_ble;
+            action1;
             drop;
             NoAction;
         }
         default_action = NoAction();
     }
 
-
-
-    
+    apply {
+        table1.apply();
+    }    
 }
 
 /*************************************************************************
