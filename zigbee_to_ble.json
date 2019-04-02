@@ -248,7 +248,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "zigbee_to_ble.p4",
-        "line" : 206,
+        "line" : 208,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -291,6 +291,10 @@
         {
           "name" : "port",
           "bitwidth" : 9
+        },
+        {
+          "name" : "data",
+          "bitwidth" : 8
         }
       ],
       "primitives" : [
@@ -540,15 +544,15 @@
               "value" : ["ble_att", "value"]
             },
             {
-              "type" : "hexstr",
-              "value" : "0x6e"
+              "type" : "runtime_data",
+              "value" : 1
             }
           ],
           "source_info" : {
             "filename" : "zigbee_to_ble.p4",
             "line" : 155,
             "column" : 8,
-            "source_fragment" : "hdr.ble_att = {92, 4608, 110"
+            "source_fragment" : "hdr.ble_att = {92, 4608, data"
           }
         },
         {
@@ -565,8 +569,8 @@
           ],
           "source_info" : {
             "filename" : "zigbee_to_ble.p4",
-            "line" : 156,
-            "column" : 1,
+            "line" : 157,
+            "column" : 5,
             "source_fragment" : "standard_metadata.egress_spec = port"
           }
         }
@@ -590,7 +594,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "zigbee_to_ble.p4",
-            "line" : 159,
+            "line" : 160,
             "column" : 10,
             "source_fragment" : "table1"
           },
@@ -611,6 +615,12 @@
               "match_type" : "exact",
               "name" : "hdr.zigbee_network.framecontrol",
               "target" : ["zigbee_network", "framecontrol"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "hdr.zigbee_cluster.command",
+              "target" : ["zigbee_cluster", "command"],
               "mask" : null
             }
           ],
@@ -644,7 +654,7 @@
       "id" : 1,
       "source_info" : {
         "filename" : "zigbee_to_ble.p4",
-        "line" : 183,
+        "line" : 185,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
