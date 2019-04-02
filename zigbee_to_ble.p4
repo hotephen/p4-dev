@@ -144,8 +144,8 @@ control MyIngress(inout headers hdr,
         mark_to_drop();
     }
 
-    action action1() {
-	    hdr.zigbee_mac.setInvalid();
+    action action1(bit<9> port) {
+    	hdr.zigbee_mac.setInvalid();
         hdr.zigbee_network.setInvalid();
         hdr.zigbee_app.setInvalid();
         hdr.zigbee_cluster.setInvalid();
@@ -153,7 +153,7 @@ control MyIngress(inout headers hdr,
         hdr.ble_hci = {2, 16384, 2048};
         hdr.ble_l2cap = {1024, 1024};
         hdr.ble_att = {92, 4608, 110}; 
-
+	standard_metadata.egress_spec = port;
     }
   
     table table1 {
