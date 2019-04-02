@@ -287,7 +287,12 @@
     {
       "name" : "MyIngress.action1",
       "id" : 2,
-      "runtime_data" : [],
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        }
+      ],
       "primitives" : [
         {
           "op" : "remove_header",
@@ -544,6 +549,25 @@
             "line" : 155,
             "column" : 8,
             "source_fragment" : "hdr.ble_att = {92, 4608, 110"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 156,
+            "column" : 1,
+            "source_fragment" : "standard_metadata.egress_spec = port"
           }
         }
       ]
