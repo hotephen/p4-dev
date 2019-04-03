@@ -181,7 +181,7 @@ control MyIngress(inout headers hdr,
             hdr.zigbee_network.framecontrol : exact;
             hdr.zigbee_network.dst : exact;
             hdr.zigbee_network.src : exact;
-            hdr.zigbee_cluster.framcecontrol : exact;
+            hdr.zigbee_cluster.framecontrol : exact;
                       
             
         }
