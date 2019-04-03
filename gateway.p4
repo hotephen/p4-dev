@@ -28,7 +28,7 @@ header zigbee_network_t {
 
 header zigbee_app_t {
     bit<8>  framecontrol;
-    bit<8>  dst_end;
+    bit<8>  dst_endpoint;
     bit<16> cluster;
     bit<16> profile;
     bit<8>  src_endpoint;
@@ -144,27 +144,65 @@ control MyIngress(inout headers hdr,
         mark_to_drop();
     }
 
-    action action1(bit<9> port, bit<8> data) {
+
+    action action_zig_to_zig(bit<9> port) {
+        standard_metadata.egress_spec = port;
+    }
+
+
+    action action1() {
     	hdr.zigbee_mac.setInvalid();
         hdr.zigbee_network.setInvalid();
+           
+        hdr.ble_hci.setValid();
+        hdr.ble_l2cap.setValid();
+        hdr.ble_att.setValid();
+	    
+    }
+  
+    action action2(){
         hdr.zigbee_app.setInvalid();
-        hdr.zigbee_cluster.setInvalid();
 
         hdr.ble_hci = {2, 16384, 2048};
         hdr.ble_l2cap = {1024, 1024};
-        hdr.ble_att = {92, 4608, data}; 
-//        hdr.ble_att.value = data;
-	    standard_metadata.egress_spec = port;
+
     }
-  
+
+    action action3(bit<9> port, bit<8> data){
+        hdr.zigbee_cluster.setInvalid();
+
+        hdr.ble_att = {92, 4608, data};
+        standard_metadata.egress_spec = port;
+
+    }
+
+    table table_zig_to_zig {
+        key = {
+            hdr.zigbee_network.framecontrol : exact;
+            hdr.zigbee_network.dst : exact;
+            hdr.zigbee_network.src : exact;
+            hdr.zigbee_cluster.framcecontrol : exact;
+                      
+            
+        }
+
+        actions = {
+            action_zig_to_zig;
+            drop;
+            NoAction;
+        }
+        default_action = NoAction();
+    }
+
+
     table table1 {
         key = {
-            hdr.zigbee_network.src : exact;
-            hdr.zigbee_network.dst : exact;
             hdr.zigbee_network.framecontrol : exact;
-            hdr.zigbee_cluster.command : exact;
-
+            hdr.zigbee_network.dst : exact;
+            hdr.zigbee_network.src : exact;           
+            
         }
+
         actions = {
             action1;
             drop;
@@ -173,8 +211,42 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
+    table table2 {
+        key = {
+            hdr.zigbee_app.dst_endpoint : exact;
+            hdr.zigbee_app.cluster : exact;
+            hdr.zigbee_app.profile : exact;
+            hdr.zigbee_app.src_endpoint : exact;
+            
+        }
+
+        actions = {
+            action2;
+            drop;
+            NoAction;
+        }
+        default_action = NoAction();
+    }
+
+    table table3 {
+        key = {
+            hdr.zigbee_cluster.framecontrol : exact;
+            hdr.zigbee_cluster.command : exact;
+        }
+
+        actions = {
+            action3;
+            drop;
+            NoAction;
+        }
+    }
+
+   
     apply {
+        table_zig_to_zig.apply();
         table1.apply();
+        table2.apply();
+        table3.apply();
     }    
 }
 
@@ -207,7 +279,10 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
-        
+        packet.emit(hdr.zigbee_mac);
+        packet.emit(hdr.zigbee_network);
+        packet.emit(hdr.zigbee_app);
+        packet.emit(hdr.zigbee_cluster);
         packet.emit(hdr.ble_hci);
         packet.emit(hdr.ble_l2cap);
         packet.emit(hdr.ble_att);
