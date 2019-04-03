@@ -1,0 +1,711 @@
+{
+  "header_types" : [
+    {
+      "name" : "scalars_0",
+      "id" : 0,
+      "fields" : []
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "fields" : [
+        ["ingress_port", 9, false],
+        ["egress_spec", 9, false],
+        ["egress_port", 9, false],
+        ["clone_spec", 32, false],
+        ["instance_type", 32, false],
+        ["drop", 1, false],
+        ["recirculate_port", 16, false],
+        ["packet_length", 32, false],
+        ["enq_timestamp", 32, false],
+        ["enq_qdepth", 19, false],
+        ["deq_timedelta", 32, false],
+        ["deq_qdepth", 19, false],
+        ["ingress_global_timestamp", 48, false],
+        ["egress_global_timestamp", 48, false],
+        ["lf_field_list", 32, false],
+        ["mcast_grp", 16, false],
+        ["resubmit_flag", 32, false],
+        ["egress_rid", 16, false],
+        ["checksum_error", 1, false],
+        ["recirculate_flag", 32, false],
+        ["parser_error", 32, false],
+        ["_padding", 5, false]
+      ]
+    },
+    {
+      "name" : "zigbee_mac_t",
+      "id" : 2,
+      "fields" : [
+        ["framecontrol", 16, false],
+        ["dstpan", 16, false],
+        ["dst", 16, false],
+        ["src", 16, false]
+      ]
+    },
+    {
+      "name" : "zigbee_network_t",
+      "id" : 3,
+      "fields" : [
+        ["framecontrol", 16, false],
+        ["dst", 16, false],
+        ["src", 16, false],
+        ["radius", 8, false],
+        ["seq", 8, false],
+        ["extended_dst", 64, false],
+        ["extended_src", 64, false]
+      ]
+    },
+    {
+      "name" : "zigbee_app_t",
+      "id" : 4,
+      "fields" : [
+        ["framecontrol", 8, false],
+        ["dst_end", 8, false],
+        ["cluster", 16, false],
+        ["profile", 16, false],
+        ["src_endpoint", 8, false],
+        ["counter", 8, false]
+      ]
+    },
+    {
+      "name" : "zigbee_cluster_t",
+      "id" : 5,
+      "fields" : [
+        ["framecontrol", 8, false],
+        ["command", 8, false]
+      ]
+    },
+    {
+      "name" : "ble_hci_t",
+      "id" : 6,
+      "fields" : [
+        ["code", 8, false],
+        ["acl", 16, false],
+        ["total_length", 16, false]
+      ]
+    },
+    {
+      "name" : "ble_l2cap_t",
+      "id" : 7,
+      "fields" : [
+        ["data_length", 16, false],
+        ["cid", 16, false]
+      ]
+    },
+    {
+      "name" : "ble_att_t",
+      "id" : 8,
+      "fields" : [
+        ["opcode", 8, false],
+        ["handle", 16, false],
+        ["value", 8, false]
+      ]
+    }
+  ],
+  "headers" : [
+    {
+      "name" : "scalars",
+      "id" : 0,
+      "header_type" : "scalars_0",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "header_type" : "standard_metadata",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "zigbee_mac",
+      "id" : 2,
+      "header_type" : "zigbee_mac_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "zigbee_network",
+      "id" : 3,
+      "header_type" : "zigbee_network_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "zigbee_app",
+      "id" : 4,
+      "header_type" : "zigbee_app_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "zigbee_cluster",
+      "id" : 5,
+      "header_type" : "zigbee_cluster_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "ble_hci",
+      "id" : 6,
+      "header_type" : "ble_hci_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "ble_l2cap",
+      "id" : 7,
+      "header_type" : "ble_l2cap_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "ble_att",
+      "id" : 8,
+      "header_type" : "ble_att_t",
+      "metadata" : false,
+      "pi_omit" : true
+    }
+  ],
+  "header_stacks" : [],
+  "header_union_types" : [],
+  "header_unions" : [],
+  "header_union_stacks" : [],
+  "field_lists" : [],
+  "errors" : [
+    ["NoError", 1],
+    ["PacketTooShort", 2],
+    ["NoMatch", 3],
+    ["StackOutOfBounds", 4],
+    ["HeaderTooShort", 5],
+    ["ParserTimeout", 6]
+  ],
+  "enums" : [],
+  "parsers" : [
+    {
+      "name" : "parser",
+      "id" : 0,
+      "init_state" : "start",
+      "parse_states" : [
+        {
+          "name" : "start",
+          "id" : 0,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "zigbee_mac"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "zigbee_network"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "zigbee_app"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "zigbee_cluster"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : []
+        }
+      ]
+    }
+  ],
+  "parse_vsets" : [],
+  "deparsers" : [
+    {
+      "name" : "deparser",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "zigbee_to_ble.p4",
+        "line" : 206,
+        "column" : 8,
+        "source_fragment" : "MyDeparser"
+      },
+      "order" : ["ble_hci", "ble_l2cap", "ble_att"]
+    }
+  ],
+  "meter_arrays" : [],
+  "counter_arrays" : [],
+  "register_arrays" : [],
+  "calculations" : [],
+  "learn_lists" : [],
+  "actions" : [
+    {
+      "name" : "NoAction",
+      "id" : 0,
+      "runtime_data" : [],
+      "primitives" : []
+    },
+    {
+      "name" : "MyIngress.drop",
+      "id" : 1,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "drop",
+          "parameters" : [],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 144,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop()"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.action1",
+      "id" : 2,
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "remove_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "zigbee_mac"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 148,
+            "column" : 5,
+            "source_fragment" : "hdr.zigbee_mac.setInvalid()"
+          }
+        },
+        {
+          "op" : "remove_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "zigbee_network"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 149,
+            "column" : 8,
+            "source_fragment" : "hdr.zigbee_network.setInvalid()"
+          }
+        },
+        {
+          "op" : "remove_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "zigbee_app"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 150,
+            "column" : 8,
+            "source_fragment" : "hdr.zigbee_app.setInvalid()"
+          }
+        },
+        {
+          "op" : "remove_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "zigbee_cluster"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 151,
+            "column" : 8,
+            "source_fragment" : "hdr.zigbee_cluster.setInvalid()"
+          }
+        },
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "ble_hci"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 153,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_hci"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ble_hci", "code"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x02"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 153,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_hci = {2"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ble_hci", "acl"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x4000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 153,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_hci = {2, 16384"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ble_hci", "total_length"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0800"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 153,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_hci = {2, 16384, 2048"
+          }
+        },
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "ble_l2cap"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 154,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_l2cap"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ble_l2cap", "data_length"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0400"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 154,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_l2cap = {1024"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ble_l2cap", "cid"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0400"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 154,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_l2cap = {1024, 1024"
+          }
+        },
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "ble_att"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 155,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_att"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ble_att", "opcode"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x5c"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 155,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_att = {92"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ble_att", "handle"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x1200"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 155,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_att = {92, 4608"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ble_att", "value"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x6e"
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 155,
+            "column" : 8,
+            "source_fragment" : "hdr.ble_att = {92, 4608, 110"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 156,
+            "column" : 1,
+            "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        }
+      ]
+    }
+  ],
+  "pipelines" : [
+    {
+      "name" : "ingress",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "zigbee_to_ble.p4",
+        "line" : 139,
+        "column" : 8,
+        "source_fragment" : "MyIngress"
+      },
+      "init_table" : "MyIngress.table1",
+      "tables" : [
+        {
+          "name" : "MyIngress.table1",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "zigbee_to_ble.p4",
+            "line" : 159,
+            "column" : 10,
+            "source_fragment" : "table1"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "hdr.zigbee_network.src",
+              "target" : ["zigbee_network", "src"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "hdr.zigbee_network.dst",
+              "target" : ["zigbee_network", "dst"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "hdr.zigbee_network.framecontrol",
+              "target" : ["zigbee_network", "framecontrol"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [2, 1, 0],
+          "actions" : ["MyIngress.action1", "MyIngress.drop", "NoAction"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "MyIngress.action1" : null,
+            "MyIngress.drop" : null,
+            "NoAction" : null
+          },
+          "default_entry" : {
+            "action_id" : 0,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
+        }
+      ],
+      "action_profiles" : [],
+      "conditionals" : []
+    },
+    {
+      "name" : "egress",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "zigbee_to_ble.p4",
+        "line" : 183,
+        "column" : 8,
+        "source_fragment" : "MyEgress"
+      },
+      "init_table" : null,
+      "tables" : [],
+      "action_profiles" : [],
+      "conditionals" : []
+    }
+  ],
+  "checksums" : [],
+  "force_arith" : [],
+  "extern_instances" : [],
+  "field_aliases" : [
+    [
+      "queueing_metadata.enq_timestamp",
+      ["standard_metadata", "enq_timestamp"]
+    ],
+    [
+      "queueing_metadata.enq_qdepth",
+      ["standard_metadata", "enq_qdepth"]
+    ],
+    [
+      "queueing_metadata.deq_timedelta",
+      ["standard_metadata", "deq_timedelta"]
+    ],
+    [
+      "queueing_metadata.deq_qdepth",
+      ["standard_metadata", "deq_qdepth"]
+    ],
+    [
+      "intrinsic_metadata.ingress_global_timestamp",
+      ["standard_metadata", "ingress_global_timestamp"]
+    ],
+    [
+      "intrinsic_metadata.egress_global_timestamp",
+      ["standard_metadata", "egress_global_timestamp"]
+    ],
+    [
+      "intrinsic_metadata.lf_field_list",
+      ["standard_metadata", "lf_field_list"]
+    ],
+    [
+      "intrinsic_metadata.mcast_grp",
+      ["standard_metadata", "mcast_grp"]
+    ],
+    [
+      "intrinsic_metadata.resubmit_flag",
+      ["standard_metadata", "resubmit_flag"]
+    ],
+    [
+      "intrinsic_metadata.egress_rid",
+      ["standard_metadata", "egress_rid"]
+    ],
+    [
+      "intrinsic_metadata.recirculate_flag",
+      ["standard_metadata", "recirculate_flag"]
+    ]
+  ],
+  "program" : "./zigbee_to_ble.p4i",
+  "__meta__" : {
+    "version" : [2, 18],
+    "compiler" : "https://github.com/p4lang/p4c"
+  }
+}

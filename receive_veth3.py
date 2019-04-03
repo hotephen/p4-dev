@@ -32,7 +32,7 @@ def main():
     iface = 'veth3'
     print "sniffing on %s" % iface
     sys.stdout.flush()
-    sniff(iface = iface, filter="ether dst 02:40:00:08:00:04",
+    sniff(iface = iface, 
           prn = lambda x: handle_pkt(x))
 
 

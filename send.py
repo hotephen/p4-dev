@@ -33,11 +33,9 @@ def main():
 #src addr
     addr1 = socket.gethostbyname(sys.argv[2])
 
-    iface = "veth0"
-    iface_1 = "veth2"
-    iface_2 = "veth4"
-    
-    pkt =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
+    iface = "veth3"
+      
+    pkt =  Ether(src=get_if_hwaddr(iface), dst='80:00:00:00:00:01', type=0x800)
     pkt1 = pkt / IP(src=addr1,dst=addr) / "hi"
     pkt1.show()
     hexdump(pkt1) # show hexadecimal expression of packet
