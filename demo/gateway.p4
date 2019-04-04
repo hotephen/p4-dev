@@ -140,19 +140,6 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta
 control MyIngress(inout headers hdr,
         inout metadata meta,
         inout standard_metadata_t standard_metadata) {
-        
-        apply{}
-}
-         
-         
-
-/*************************************************************************
-****************  E G R E S S   P R O C E S S I N G   *******************
-*************************************************************************/
-
-control MyEgress(inout headers hdr,
-       inout metadata meta,
-         inout standard_metadata_t standard_metadata) {
 
     action drop() {
         mark_to_drop();
@@ -191,7 +178,7 @@ control MyEgress(inout headers hdr,
     }
 
     action clone_packet(){
-        clone(CloneType.E2E, 0);
+        clone(CloneType.I2E, 0);
     }
 
     table table_zig_to_zig {
@@ -257,8 +244,8 @@ control MyEgress(inout headers hdr,
             NoAction;
         }
     }
-/*
-    table table_recirculate{
+
+    table table_clone{
         key = { 
             standard_metadata.instance_type : exact;
         }
@@ -269,7 +256,7 @@ control MyEgress(inout headers hdr,
             NoAction;
         }
     }
-*/
+
     table table_zig_to_zig2 {
         key = {
             hdr.zigbee_network.framecontrol : exact;
@@ -295,7 +282,7 @@ control MyEgress(inout headers hdr,
             table1.apply();
             table2.apply();
             table3.apply();
-            //table_recirculate.apply();
+            table_clone.apply();
         }
         else{
             table_zig_to_zig2.apply();
@@ -303,6 +290,40 @@ control MyEgress(inout headers hdr,
     }    
 
 
+}
+         
+         
+
+/*************************************************************************
+****************  E G R E S S   P R O C E S S I N G   *******************
+*************************************************************************/
+
+control MyEgress(inout headers hdr,
+       inout metadata meta,
+         inout standard_metadata_t standard_metadata) {
+
+/*
+    action action_recirculate(){
+        recirculate(hdr);
+    }
+
+    table check {
+        key = {
+            standard_metadata.instance_type : exact;
+        }
+        actions = {
+            action_recirculate;
+            drop;
+            NoAction;
+        }
+    }
+*/
+    apply{
+        if(standard_metadata.instance_type !=0) {
+            recirculate(hdr);
+        }
+
+    }
 }
 
 /*************************************************************************
