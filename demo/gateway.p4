@@ -178,7 +178,7 @@ control MyIngress(inout headers hdr,
     }
 
     action clone_packet(){
-        clone(CloneType.I2E, 1);
+        clone(CloneType.I2E, standard_metadata.clone_spec);
     }
 
     table table_zig_to_zig {
