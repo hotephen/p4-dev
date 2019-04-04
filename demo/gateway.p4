@@ -152,7 +152,7 @@ control MyIngress(inout headers hdr,
 
 
     action action1() {
-       hdr.zigbee_mac.setInvalid();
+        hdr.zigbee_mac.setInvalid();
         hdr.zigbee_network.setInvalid();
            
         hdr.ble_hci.setValid();
@@ -278,11 +278,12 @@ control MyIngress(inout headers hdr,
     apply {
 
         if(standard_metadata.instance_type==0){    
+            table_clone.apply();
             table_zig_to_zig.apply();
             table1.apply();
             table2.apply();
             table3.apply();
-            table_clone.apply();
+            
         }
         else{
             table_zig_to_zig2.apply();
