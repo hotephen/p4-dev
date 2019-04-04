@@ -160,7 +160,7 @@ control MyEgress(inout headers hdr,
 
 
     action action_zig_to_zig(bit<9> port) {
-        standard_metadata.egress_spec = port;
+        standard_metadata.egress_port = port;
     }
 
 
@@ -186,7 +186,7 @@ control MyEgress(inout headers hdr,
         hdr.zigbee_cluster.setInvalid();
 
         hdr.ble_att = {92, 4608, data};
-        standard_metadata.egress_spec = port;
+        standard_metadata.egress_port = port;
 
     }
 

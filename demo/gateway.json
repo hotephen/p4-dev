@@ -420,7 +420,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["standard_metadata", "egress_spec"]
+              "value" : ["standard_metadata", "egress_port"]
             },
             {
               "type" : "runtime_data",
@@ -431,7 +431,7 @@
             "filename" : "gateway.p4",
             "line" : 163,
             "column" : 8,
-            "source_fragment" : "standard_metadata.egress_spec = port"
+            "source_fragment" : "standard_metadata.egress_port = port"
           }
         }
       ]
@@ -451,7 +451,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["standard_metadata", "egress_spec"]
+              "value" : ["standard_metadata", "egress_port"]
             },
             {
               "type" : "runtime_data",
@@ -462,7 +462,7 @@
             "filename" : "gateway.p4",
             "line" : 163,
             "column" : 8,
-            "source_fragment" : "standard_metadata.egress_spec = port"
+            "source_fragment" : "standard_metadata.egress_port = port"
           }
         }
       ]
@@ -802,7 +802,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["standard_metadata", "egress_spec"]
+              "value" : ["standard_metadata", "egress_port"]
             },
             {
               "type" : "runtime_data",
@@ -813,7 +813,7 @@
             "filename" : "gateway.p4",
             "line" : 189,
             "column" : 8,
-            "source_fragment" : "standard_metadata.egress_spec = port"
+            "source_fragment" : "standard_metadata.egress_port = port"
           }
         }
       ]
