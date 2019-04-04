@@ -160,7 +160,7 @@ control MyEgress(inout headers hdr,
 
 
     action action_zig_to_zig(bit<9> port) {
-        standard_metadata.egress_port = port;
+        standard_metadata.egress_spec = port;
     }
 
 
@@ -186,7 +186,7 @@ control MyEgress(inout headers hdr,
         hdr.zigbee_cluster.setInvalid();
 
         hdr.ble_att = {92, 4608, data};
-        standard_metadata.egress_port = port;
+        standard_metadata.egress_spec = port;
 
     }
 
@@ -257,7 +257,7 @@ control MyEgress(inout headers hdr,
             NoAction;
         }
     }
-
+/*
     table table_recirculate{
         key = { 
             standard_metadata.instance_type : exact;
@@ -269,7 +269,7 @@ control MyEgress(inout headers hdr,
             NoAction;
         }
     }
-
+*/
     table table_zig_to_zig2 {
         key = {
             hdr.zigbee_network.framecontrol : exact;
@@ -295,7 +295,7 @@ control MyEgress(inout headers hdr,
             table1.apply();
             table2.apply();
             table3.apply();
-            table_recirculate.apply();
+            //table_recirculate.apply();
         }
         else{
             table_zig_to_zig2.apply();
