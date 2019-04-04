@@ -1376,12 +1376,12 @@
             "filename" : "gateway.p4",
             "line" : 322,
             "column" : 11,
-            "source_fragment" : "standard_metadata.instance_type == 0"
+            "source_fragment" : "standard_metadata.instance_type != 0"
           },
           "expression" : {
             "type" : "expression",
             "value" : {
-              "op" : "==",
+              "op" : "!=",
               "left" : {
                 "type" : "field",
                 "value" : ["standard_metadata", "instance_type"]

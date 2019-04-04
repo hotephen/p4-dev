@@ -319,7 +319,7 @@ control MyEgress(inout headers hdr,
     }
 */
     apply{
-        if(standard_metadata.instance_type == 0) {
+        if(standard_metadata.instance_type != 0) {
             recirculate(hdr);
         }
 
