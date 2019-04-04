@@ -1,2 +1,2 @@
-table_add table_clone action clone_packet 0 => 
+table_add table_clone clone_packet 0 => 
 table_add table_zig_to_zig2 action_zig_to_zig 0x1a88 0x0000 0x0001 0x30 => 1
