@@ -4,6 +4,7 @@
 /*************************************************************************
 *********************** H E A D E R S  ***********************************
 *************************************************************************/
+#define MIRROR_ID 0
 
 header zigbee_mac_t {
     bit<16> framecontrol;
@@ -86,7 +87,7 @@ struct headers {
 
 parser MyParser(packet_in packet,
                 out headers hdr,
-		        inout metadata meta,
+              inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
 
     state start {
@@ -137,9 +138,22 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta
 *************************************************************************/
 
 control MyIngress(inout headers hdr,
-		 inout metadata meta,
-         inout standard_metadata_t standard_metadata) {
+        inout metadata meta,
+        inout standard_metadata_t standard_metadata) {
         
+        apply{}
+}
+         
+         
+
+/*************************************************************************
+****************  E G R E S S   P R O C E S S I N G   *******************
+*************************************************************************/
+
+control MyEgress(inout headers hdr,
+       inout metadata meta,
+         inout standard_metadata_t standard_metadata) {
+
     action drop() {
         mark_to_drop();
     }
@@ -151,13 +165,13 @@ control MyIngress(inout headers hdr,
 
 
     action action1() {
-    	hdr.zigbee_mac.setInvalid();
+       hdr.zigbee_mac.setInvalid();
         hdr.zigbee_network.setInvalid();
            
         hdr.ble_hci.setValid();
         hdr.ble_l2cap.setValid();
         hdr.ble_att.setValid();
-	    
+       
     }
   
     action action2(){
@@ -176,13 +190,16 @@ control MyIngress(inout headers hdr,
 
     }
 
+    action clone_packet(){
+        clone(CloneType.E2E, 0);
+    }
+
     table table_zig_to_zig {
         key = {
             hdr.zigbee_network.framecontrol : exact;
             hdr.zigbee_network.dst : exact;
             hdr.zigbee_network.src : exact;
-            hdr.zigbee_cluster.framecontrol : exact;
-                      
+            hdr.zigbee_cluster.framecontrol : exact;  
             
         }
 
@@ -241,25 +258,50 @@ control MyIngress(inout headers hdr,
         }
     }
 
+    table table_recirculate{
+        key = { 
+            standard_metadata.instance_type : exact;
+        }
+
+        actions = {
+            clone_packet;
+            drop;
+            NoAction;
+        }
+    }
+
+    table table_zig_to_zig2 {
+        key = {
+            hdr.zigbee_network.framecontrol : exact;
+            hdr.zigbee_network.dst : exact;
+            hdr.zigbee_network.src : exact;
+            hdr.zigbee_cluster.framecontrol : exact;     
+            
+        }
+
+        actions = {
+            action_zig_to_zig;
+            drop;
+            NoAction;
+        }
+        default_action = NoAction();
+    }
+
    
     apply {
-        table_zig_to_zig.apply();
-        table1.apply();
-        table2.apply();
-        table3.apply();
+
+        if(standard_metadata.instance_type==0){    
+            table_zig_to_zig.apply();
+            table1.apply();
+            table2.apply();
+            table3.apply();
+            table_recirculate.apply();
+        }
+        else{
+            table_zig_to_zig2.apply();
+        }
     }    
-}
 
-/*************************************************************************
-****************  E G R E S S   P R O C E S S I N G   *******************
-*************************************************************************/
-
-control MyEgress(inout headers hdr,
-		 inout metadata meta,
-                 inout standard_metadata_t standard_metadata) {
-    apply {
-
-    }
 
 }
 

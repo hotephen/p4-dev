@@ -172,7 +172,13 @@
   "header_union_types" : [],
   "header_unions" : [],
   "header_union_stacks" : [],
-  "field_lists" : [],
+  "field_lists" : [
+    {
+      "id" : 1,
+      "name" : "fl",
+      "elements" : []
+    }
+  ],
   "errors" : [
     ["NoError", 1],
     ["PacketTooShort", 2],
@@ -248,7 +254,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "gateway.p4",
-        "line" : 280,
+        "line" : 322,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -286,41 +292,19 @@
       "primitives" : []
     },
     {
-      "name" : "MyIngress.drop",
+      "name" : "NoAction",
       "id" : 4,
       "runtime_data" : [],
-      "primitives" : [
-        {
-          "op" : "drop",
-          "parameters" : [],
-          "source_info" : {
-            "filename" : "gateway.p4",
-            "line" : 144,
-            "column" : 8,
-            "source_fragment" : "mark_to_drop()"
-          }
-        }
-      ]
+      "primitives" : []
     },
     {
-      "name" : "MyIngress.drop",
+      "name" : "NoAction",
       "id" : 5,
       "runtime_data" : [],
-      "primitives" : [
-        {
-          "op" : "drop",
-          "parameters" : [],
-          "source_info" : {
-            "filename" : "gateway.p4",
-            "line" : 144,
-            "column" : 8,
-            "source_fragment" : "mark_to_drop()"
-          }
-        }
-      ]
+      "primitives" : []
     },
     {
-      "name" : "MyIngress.drop",
+      "name" : "MyEgress.drop",
       "id" : 6,
       "runtime_data" : [],
       "primitives" : [
@@ -329,7 +313,7 @@
           "parameters" : [],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 144,
+            "line" : 158,
             "column" : 8,
             "source_fragment" : "mark_to_drop()"
           }
@@ -337,7 +321,7 @@
       ]
     },
     {
-      "name" : "MyIngress.drop",
+      "name" : "MyEgress.drop",
       "id" : 7,
       "runtime_data" : [],
       "primitives" : [
@@ -346,7 +330,7 @@
           "parameters" : [],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 144,
+            "line" : 158,
             "column" : 8,
             "source_fragment" : "mark_to_drop()"
           }
@@ -354,8 +338,76 @@
       ]
     },
     {
-      "name" : "MyIngress.action_zig_to_zig",
+      "name" : "MyEgress.drop",
       "id" : 8,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "drop",
+          "parameters" : [],
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 158,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop()"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyEgress.drop",
+      "id" : 9,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "drop",
+          "parameters" : [],
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 158,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop()"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyEgress.drop",
+      "id" : 10,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "drop",
+          "parameters" : [],
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 158,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop()"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyEgress.drop",
+      "id" : 11,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "drop",
+          "parameters" : [],
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 158,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop()"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyEgress.action_zig_to_zig",
+      "id" : 12,
       "runtime_data" : [
         {
           "name" : "port",
@@ -377,7 +429,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 149,
+            "line" : 163,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = port"
           }
@@ -385,8 +437,39 @@
       ]
     },
     {
-      "name" : "MyIngress.action1",
-      "id" : 9,
+      "name" : "MyEgress.action_zig_to_zig",
+      "id" : 13,
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 163,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyEgress.action1",
+      "id" : 14,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -399,8 +482,8 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 154,
-            "column" : 5,
+            "line" : 168,
+            "column" : 7,
             "source_fragment" : "hdr.zigbee_mac.setInvalid()"
           }
         },
@@ -414,7 +497,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 155,
+            "line" : 169,
             "column" : 8,
             "source_fragment" : "hdr.zigbee_network.setInvalid()"
           }
@@ -429,7 +512,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 157,
+            "line" : 171,
             "column" : 8,
             "source_fragment" : "hdr.ble_hci.setValid()"
           }
@@ -444,7 +527,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 158,
+            "line" : 172,
             "column" : 8,
             "source_fragment" : "hdr.ble_l2cap.setValid()"
           }
@@ -459,7 +542,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 159,
+            "line" : 173,
             "column" : 8,
             "source_fragment" : "hdr.ble_att.setValid()"
           }
@@ -467,8 +550,8 @@
       ]
     },
     {
-      "name" : "MyIngress.action2",
-      "id" : 10,
+      "name" : "MyEgress.action2",
+      "id" : 15,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -481,7 +564,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 164,
+            "line" : 178,
             "column" : 8,
             "source_fragment" : "hdr.zigbee_app.setInvalid()"
           }
@@ -496,7 +579,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 166,
+            "line" : 180,
             "column" : 8,
             "source_fragment" : "hdr.ble_hci"
           }
@@ -515,7 +598,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 166,
+            "line" : 180,
             "column" : 8,
             "source_fragment" : "hdr.ble_hci = {2"
           }
@@ -534,7 +617,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 166,
+            "line" : 180,
             "column" : 8,
             "source_fragment" : "hdr.ble_hci = {2, 16384"
           }
@@ -553,7 +636,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 166,
+            "line" : 180,
             "column" : 8,
             "source_fragment" : "hdr.ble_hci = {2, 16384, 2048"
           }
@@ -568,7 +651,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 167,
+            "line" : 181,
             "column" : 8,
             "source_fragment" : "hdr.ble_l2cap"
           }
@@ -587,7 +670,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 167,
+            "line" : 181,
             "column" : 8,
             "source_fragment" : "hdr.ble_l2cap = {1024"
           }
@@ -606,7 +689,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 167,
+            "line" : 181,
             "column" : 8,
             "source_fragment" : "hdr.ble_l2cap = {1024, 1024"
           }
@@ -614,8 +697,8 @@
       ]
     },
     {
-      "name" : "MyIngress.action3",
-      "id" : 11,
+      "name" : "MyEgress.action3",
+      "id" : 16,
       "runtime_data" : [
         {
           "name" : "port",
@@ -637,7 +720,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 172,
+            "line" : 186,
             "column" : 8,
             "source_fragment" : "hdr.zigbee_cluster.setInvalid()"
           }
@@ -652,7 +735,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 174,
+            "line" : 188,
             "column" : 8,
             "source_fragment" : "hdr.ble_att"
           }
@@ -671,7 +754,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 174,
+            "line" : 188,
             "column" : 8,
             "source_fragment" : "hdr.ble_att = {92"
           }
@@ -690,7 +773,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 174,
+            "line" : 188,
             "column" : 8,
             "source_fragment" : "hdr.ble_att = {92, 4608"
           }
@@ -709,7 +792,7 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 174,
+            "line" : 188,
             "column" : 8,
             "source_fragment" : "hdr.ble_att = {92, 4608, data"
           }
@@ -728,9 +811,35 @@
           ],
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 175,
+            "line" : 189,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyEgress.clone_packet",
+      "id" : 17,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "clone_egress_pkt_to_egress",
+          "parameters" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x1"
+            }
+          ],
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 194,
+            "column" : 8,
+            "source_fragment" : "clone(CloneType.E2E, 0)"
           }
         }
       ]
@@ -742,18 +851,32 @@
       "id" : 0,
       "source_info" : {
         "filename" : "gateway.p4",
-        "line" : 139,
+        "line" : 140,
         "column" : 8,
         "source_fragment" : "MyIngress"
       },
-      "init_table" : "MyIngress.table_zig_to_zig",
+      "init_table" : null,
+      "tables" : [],
+      "action_profiles" : [],
+      "conditionals" : []
+    },
+    {
+      "name" : "egress",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "gateway.p4",
+        "line" : 153,
+        "column" : 8,
+        "source_fragment" : "MyEgress"
+      },
+      "init_table" : "node_4",
       "tables" : [
         {
-          "name" : "MyIngress.table_zig_to_zig",
+          "name" : "MyEgress.table_zig_to_zig",
           "id" : 0,
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 179,
+            "line" : 197,
             "column" : 10,
             "source_fragment" : "table_zig_to_zig"
           },
@@ -789,13 +912,13 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [8, 4, 0],
-          "actions" : ["MyIngress.action_zig_to_zig", "MyIngress.drop", "NoAction"],
-          "base_default_next" : "MyIngress.table1",
+          "action_ids" : [12, 6, 0],
+          "actions" : ["MyEgress.action_zig_to_zig", "MyEgress.drop", "NoAction"],
+          "base_default_next" : "MyEgress.table1",
           "next_tables" : {
-            "MyIngress.action_zig_to_zig" : "MyIngress.table1",
-            "MyIngress.drop" : "MyIngress.table1",
-            "NoAction" : "MyIngress.table1"
+            "MyEgress.action_zig_to_zig" : "MyEgress.table1",
+            "MyEgress.drop" : "MyEgress.table1",
+            "NoAction" : "MyEgress.table1"
           },
           "default_entry" : {
             "action_id" : 0,
@@ -805,11 +928,11 @@
           }
         },
         {
-          "name" : "MyIngress.table1",
+          "name" : "MyEgress.table1",
           "id" : 1,
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 198,
+            "line" : 215,
             "column" : 10,
             "source_fragment" : "table1"
           },
@@ -839,13 +962,13 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [9, 5, 1],
-          "actions" : ["MyIngress.action1", "MyIngress.drop", "NoAction"],
-          "base_default_next" : "MyIngress.table2",
+          "action_ids" : [14, 7, 1],
+          "actions" : ["MyEgress.action1", "MyEgress.drop", "NoAction"],
+          "base_default_next" : "MyEgress.table2",
           "next_tables" : {
-            "MyIngress.action1" : "MyIngress.table2",
-            "MyIngress.drop" : "MyIngress.table2",
-            "NoAction" : "MyIngress.table2"
+            "MyEgress.action1" : "MyEgress.table2",
+            "MyEgress.drop" : "MyEgress.table2",
+            "NoAction" : "MyEgress.table2"
           },
           "default_entry" : {
             "action_id" : 1,
@@ -855,11 +978,11 @@
           }
         },
         {
-          "name" : "MyIngress.table2",
+          "name" : "MyEgress.table2",
           "id" : 2,
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 214,
+            "line" : 231,
             "column" : 10,
             "source_fragment" : "table2"
           },
@@ -895,13 +1018,13 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [10, 6, 2],
-          "actions" : ["MyIngress.action2", "MyIngress.drop", "NoAction"],
-          "base_default_next" : "MyIngress.table3",
+          "action_ids" : [15, 8, 2],
+          "actions" : ["MyEgress.action2", "MyEgress.drop", "NoAction"],
+          "base_default_next" : "MyEgress.table3",
           "next_tables" : {
-            "MyIngress.action2" : "MyIngress.table3",
-            "MyIngress.drop" : "MyIngress.table3",
-            "NoAction" : "MyIngress.table3"
+            "MyEgress.action2" : "MyEgress.table3",
+            "MyEgress.drop" : "MyEgress.table3",
+            "NoAction" : "MyEgress.table3"
           },
           "default_entry" : {
             "action_id" : 2,
@@ -911,11 +1034,11 @@
           }
         },
         {
-          "name" : "MyIngress.table3",
+          "name" : "MyEgress.table3",
           "id" : 3,
           "source_info" : {
             "filename" : "gateway.p4",
-            "line" : 231,
+            "line" : 248,
             "column" : 10,
             "source_fragment" : "table3"
           },
@@ -939,13 +1062,13 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [11, 7, 3],
-          "actions" : ["MyIngress.action3", "MyIngress.drop", "NoAction"],
-          "base_default_next" : null,
+          "action_ids" : [16, 9, 3],
+          "actions" : ["MyEgress.action3", "MyEgress.drop", "NoAction"],
+          "base_default_next" : "MyEgress.table_recirculate",
           "next_tables" : {
-            "MyIngress.action3" : null,
-            "MyIngress.drop" : null,
-            "NoAction" : null
+            "MyEgress.action3" : "MyEgress.table_recirculate",
+            "MyEgress.drop" : "MyEgress.table_recirculate",
+            "NoAction" : "MyEgress.table_recirculate"
           },
           "default_entry" : {
             "action_id" : 3,
@@ -953,24 +1076,131 @@
             "action_data" : [],
             "action_entry_const" : false
           }
+        },
+        {
+          "name" : "MyEgress.table_recirculate",
+          "id" : 4,
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 261,
+            "column" : 10,
+            "source_fragment" : "table_recirculate"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.instance_type",
+              "target" : ["standard_metadata", "instance_type"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [17, 10, 4],
+          "actions" : ["MyEgress.clone_packet", "MyEgress.drop", "NoAction"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "MyEgress.clone_packet" : null,
+            "MyEgress.drop" : null,
+            "NoAction" : null
+          },
+          "default_entry" : {
+            "action_id" : 4,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
+        },
+        {
+          "name" : "MyEgress.table_zig_to_zig2",
+          "id" : 5,
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 273,
+            "column" : 10,
+            "source_fragment" : "table_zig_to_zig2"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "hdr.zigbee_network.framecontrol",
+              "target" : ["zigbee_network", "framecontrol"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "hdr.zigbee_network.dst",
+              "target" : ["zigbee_network", "dst"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "hdr.zigbee_network.src",
+              "target" : ["zigbee_network", "src"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "hdr.zigbee_cluster.framecontrol",
+              "target" : ["zigbee_cluster", "framecontrol"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [13, 11, 5],
+          "actions" : ["MyEgress.action_zig_to_zig", "MyEgress.drop", "NoAction"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "MyEgress.action_zig_to_zig" : null,
+            "MyEgress.drop" : null,
+            "NoAction" : null
+          },
+          "default_entry" : {
+            "action_id" : 5,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
         }
       ],
       "action_profiles" : [],
-      "conditionals" : []
-    },
-    {
-      "name" : "egress",
-      "id" : 1,
-      "source_info" : {
-        "filename" : "gateway.p4",
-        "line" : 257,
-        "column" : 8,
-        "source_fragment" : "MyEgress"
-      },
-      "init_table" : null,
-      "tables" : [],
-      "action_profiles" : [],
-      "conditionals" : []
+      "conditionals" : [
+        {
+          "name" : "node_4",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "gateway.p4",
+            "line" : 293,
+            "column" : 11,
+            "source_fragment" : "standard_metadata.instance_type==0"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "==",
+              "left" : {
+                "type" : "field",
+                "value" : ["standard_metadata", "instance_type"]
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x00000000"
+              }
+            }
+          },
+          "true_next" : "MyEgress.table_zig_to_zig",
+          "false_next" : "MyEgress.table_zig_to_zig2"
+        }
+      ]
     }
   ],
   "checksums" : [],
