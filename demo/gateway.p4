@@ -176,11 +176,11 @@ control MyIngress(inout headers hdr,
         standard_metadata.egress_spec = port;
 
     }
-
+/*
     action clone_packet(){
         clone(CloneType.I2E, standard_metadata.clone_spec);
     }
-
+*/
     table table_zig_to_zig {
         key = {
             hdr.zigbee_network.framecontrol : exact;
@@ -245,18 +245,7 @@ control MyIngress(inout headers hdr,
         }
     }
 
-    table table_clone{
-        key = { 
-            standard_metadata.instance_type : exact;
-        }
-
-        actions = {
-            clone_packet;
-            drop;
-            NoAction;
-        }
-    }
-
+/*
     table table_zig_to_zig2 {
         key = {
             hdr.zigbee_network.framecontrol : exact;
@@ -273,21 +262,15 @@ control MyIngress(inout headers hdr,
         }
         default_action = NoAction();
     }
-
+*/
    
     apply {
-
-        if(standard_metadata.instance_type==0){    
-            table_clone.apply();
+          
             table_zig_to_zig.apply();
             table1.apply();
             table2.apply();
             table3.apply();
             
-        }
-        else{
-            table_zig_to_zig2.apply();
-        }
     }    
 
 
@@ -320,11 +303,11 @@ control MyEgress(inout headers hdr,
     }
 */
     apply{
-        if(standard_metadata.instance_type != 0) {
-            recirculate(hdr);
-        }
-
+     /*   if(standard_metadata.instance_type != 0) {
+            recirculate(hdr); */
     }
+
+    
 }
 
 /*************************************************************************
