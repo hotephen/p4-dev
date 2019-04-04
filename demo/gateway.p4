@@ -65,7 +65,7 @@ header ble_att_t {
 
 
 struct metadata {
-
+    bit<8>  clone_marking;
 }
 
 struct headers {
@@ -178,7 +178,7 @@ control MyIngress(inout headers hdr,
     }
 
     action clone_packet(){
-        clone(CloneType.I2E, 0);
+        clone(CloneType.I2E, 1);
     }
 
     table table_zig_to_zig {
@@ -319,7 +319,7 @@ control MyEgress(inout headers hdr,
     }
 */
     apply{
-        if(standard_metadata.instance_type !=0) {
+        if(standard_metadata.instance_type == 0) {
             recirculate(hdr);
         }
 

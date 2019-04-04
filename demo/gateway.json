@@ -3,7 +3,9 @@
     {
       "name" : "scalars_0",
       "id" : 0,
-      "fields" : []
+      "fields" : [
+        ["metadata.clone_marking", 8, false]
+      ]
     },
     {
       "name" : "standard_metadata",
@@ -948,7 +950,7 @@
           "parameters" : [
             {
               "type" : "hexstr",
-              "value" : "0x00000000"
+              "value" : "0x00000001"
             },
             {
               "type" : "hexstr",
@@ -959,7 +961,7 @@
             "filename" : "gateway.p4",
             "line" : 181,
             "column" : 8,
-            "source_fragment" : "clone(CloneType.I2E, 0)"
+            "source_fragment" : "clone(CloneType.I2E, 1)"
           }
         }
       ]
@@ -1374,12 +1376,12 @@
             "filename" : "gateway.p4",
             "line" : 322,
             "column" : 11,
-            "source_fragment" : "standard_metadata.instance_type !=0"
+            "source_fragment" : "standard_metadata.instance_type == 0"
           },
           "expression" : {
             "type" : "expression",
             "value" : {
-              "op" : "!=",
+              "op" : "==",
               "left" : {
                 "type" : "field",
                 "value" : ["standard_metadata", "instance_type"]
