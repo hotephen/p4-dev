@@ -139,9 +139,9 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 */
-    action si_decrease(egressSpec_t port) {
+    action si_decrease() {
 	    meta.metadata_si = meta.metadata_si - 1;
-	    standard_metadata.egress_spec = port;
+	    
     }
 
     action loopback() {  
@@ -153,10 +153,12 @@ control MyIngress(inout headers hdr,
 	    meta.metadata_si = hdr.nsh.si;	
 	}        
 
-    action add_nsh() {
+    action add_nsh(bit<24> spi) {
         meta.metadata_nsh = 1;
         hdr.nsh.setValid();
         hdr.in_ethernet.setValid();
+        meta.metadata_spi = spi;
+        meta.metadata_si = 255;
         standard_metadata.egress_spec = 2;
     }
 
@@ -167,23 +169,6 @@ control MyIngress(inout headers hdr,
                
     }
 
-    action pass() {
-        meta.metadata_si = meta.metadata_si - 1;
-    }
-/*
-    table ipv4_lpm {
-        key = {
-            hdr.ipv4.dstAddr: lpm;
-        }
-        actions = {
-            ipv4_forward;
-            drop;
-            NoAction;
-        }
-        size = 1024;
-        default_action = NoAction();
-    }
-*/
 
 
     table precheck{
@@ -201,6 +186,7 @@ control MyIngress(inout headers hdr,
     table sc{
         key = {
             hdr.ipv4.srcAddr: exact;
+            hdr.ipv4.dstAddr: exact;
         }
         actions = {
             add_nsh;
@@ -210,7 +196,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
-    table sf1 {     // FW
+    table sf1 {     
         key = {
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
@@ -224,20 +210,19 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
-
-    table sf2 {     // ACL 
+    table sf2 {     
         key = {
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
-            hdr.ipv4.srcAddr: lpm;
+            
         }
         actions = {
-            pass;
+            si_decrease;
             drop;
             NoAction;
         }
         size = 1024;
-        default_action = drop();
+        default_action = NoAction();
     }
 
     table sff {
@@ -247,7 +232,6 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             loopback;
-            //ipv4_forward;
             l2_forward;
             drop;
             NoAction;

@@ -10,18 +10,6 @@ from scapy.all import Packet
 from scapy.all import Ether, IP, UDP, TCP
 from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3BytesField, ByteField
 
-#def get_if():
-#    ifs=get_if_list()
-#    iface=None # "h1-eth0"
-#    for i in get_if_list():
-#        if "eth0" in i:
-#            iface=i
-#            break;
-#    if not iface:
-#        print "Cannot find eth0 interface"
-#        exit(1)
-#    return iface
-
 class NSH(Packet):
     """Network Service Header.
        NSH MD-type 1 if there is no ContextHeaders"""

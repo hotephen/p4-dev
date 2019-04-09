@@ -10,37 +10,25 @@ from scapy.all import Packet
 from scapy.all import Ether, IP, UDP, TCP
 from scapy.all import hexdump
 
-#def get_if():
-#    ifs=get_if_list()
-#    iface=None # "h1-eth0"
-#    for i in get_if_list():
-#        if "eth0" in i:
-#            iface=i
-#            break;
-#    if not iface:
-#        print "Cannot find eth0 interface"
-#        exit(1)
-#    return iface
-
 def main():
 
     if len(sys.argv)<3:
         print 'pass 1 arguments: <destination> '
         exit(1)
 
-#dst addr
-    addr = socket.gethostbyname(sys.argv[1])
 #src addr
+    addr = socket.gethostbyname(sys.argv[1])
+#dst addr
     addr1 = socket.gethostbyname(sys.argv[2])
 
-    iface = "veth3"
+    iface = "veth0"
       
     pkt =  Ether(src=get_if_hwaddr(iface), dst='80:00:00:00:00:01', type=0x800)
-    pkt1 = pkt / IP(src=addr1,dst=addr) / "hi"
+    pkt1 = pkt / IP(src=addr,dst=addr1) / "hi"
     pkt1.show()
     hexdump(pkt1) # show hexadecimal expression of packet
     sendp(pkt1, iface=iface, verbose=False)
-    print "sending on interface %s to dmac=00:00:00:00:00:01" % (iface)
+    print "sending on interface %s " % (iface)
 
 
 if __name__ == '__main__':
