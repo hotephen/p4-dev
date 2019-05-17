@@ -33,7 +33,7 @@ class NSH(Packet):
         BitField('Un1', 0, 1),
         BitField('TTL', 0, 6),
         BitField('Len', None, 6),
-	    BitField('Un4', 1, 4),
+	BitField('Un4', 1, 4),
         BitField('MDType', 1, 4),
         ByteField("NextProto", 0x65),
         ByteField("NextProto_2", 0x58),
@@ -47,9 +47,10 @@ def main():
         print 'pass 1 arguments: <destination> '
         exit(1)
 
-#dst addr
-    addr = socket.gethostbyname(sys.argv[1])
 #src addr
+    addr = socket.gethostbyname(sys.argv[1])
+
+#dst addr
     addr1 = socket.gethostbyname(sys.argv[2])
 
     iface = "veth0"
@@ -59,18 +60,13 @@ def main():
     
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
     in_ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
-#   pkt = Ether(dst='00:00:00:00:00:02') / pkt / IP(src=addr1,dst=addr) / "hi"
-    pkt1 = out_ether / NSH() / in_ether / IP(src=addr1,dst=addr) / "hi"
-#   pkt = pkt /IP(src=addr1,dst=addr) / TCP(dport=1234, sport=random.randint(49152,65535)) / "hi"
-#   pkt.show2()
+
+    pkt1 = out_ether / NSH() / in_ether / IP(src=addr,dst=addr1) / "hi"
     pkt1.show()
     hexdump(pkt1)
     sendp(pkt1, iface=iface, verbose=False)
     print "sending on interface %s (Bmv2 port 0) to dmac=00:00:00:00:00:01" % (iface)
 
-
-#    sendp(pkt1, iface=iface_1, verbose=False)
-#    print "sending on interface %s (Bmv2 port 1) from Ipv4.srcAddr= %s" % (iface_1, str(addr1))
 
 if __name__ == '__main__':
     main()
