@@ -136,7 +136,7 @@
       "name" : "metadata",
       "source_info" : {
         "filename" : "sfc.p4",
-        "line" : 148,
+        "line" : 150,
         "column" : 17,
         "source_fragment" : "meta"
       },
@@ -312,7 +312,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "sfc.p4",
-        "line" : 284,
+        "line" : 297,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -482,7 +482,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 143,
+            "line" : 145,
             "column" : 5,
             "source_fragment" : "meta.metadata_si = meta.metadata_si - 1"
           }
@@ -531,7 +531,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 143,
+            "line" : 145,
             "column" : 5,
             "source_fragment" : "meta.metadata_si = meta.metadata_si - 1"
           }
@@ -553,7 +553,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 148,
+            "line" : 150,
             "column" : 8,
             "source_fragment" : "resubmit(meta)"
           }
@@ -579,7 +579,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 152,
+            "line" : 154,
             "column" : 5,
             "source_fragment" : "meta.metadata_spi = hdr.nsh.spi"
           }
@@ -598,7 +598,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 153,
+            "line" : 155,
             "column" : 5,
             "source_fragment" : "meta.metadata_si = hdr.nsh.si"
           }
@@ -629,7 +629,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 157,
+            "line" : 159,
             "column" : 8,
             "source_fragment" : "meta.metadata_nsh = 1"
           }
@@ -644,7 +644,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 158,
+            "line" : 160,
             "column" : 8,
             "source_fragment" : "hdr.nsh.setValid()"
           }
@@ -659,7 +659,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 159,
+            "line" : 161,
             "column" : 8,
             "source_fragment" : "hdr.in_ethernet.setValid()"
           }
@@ -678,7 +678,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 160,
+            "line" : 162,
             "column" : 8,
             "source_fragment" : "meta.metadata_spi = spi"
           }
@@ -697,7 +697,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 161,
+            "line" : 163,
             "column" : 8,
             "source_fragment" : "meta.metadata_si = 255"
           }
@@ -716,7 +716,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 162,
+            "line" : 164,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = 2"
           }
@@ -751,7 +751,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 166,
+            "line" : 168,
             "column" : 8,
             "source_fragment" : "standard_metadata.egress_spec = port"
           }
@@ -770,7 +770,7 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 167,
+            "line" : 169,
             "column" : 8,
             "source_fragment" : "hdr.out_ethernet.srcAddr = hdr.out_ethernet.dstAddr"
           }
@@ -789,9 +789,197 @@
           ],
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 168,
+            "line" : 170,
             "column" : 8,
             "source_fragment" : "hdr.out_ethernet.dstAddr = dstAddr"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.l2_forward",
+      "id" : 16,
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        },
+        {
+          "name" : "dstAddr",
+          "bitwidth" : 48
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 168,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["out_ethernet", "srcAddr"]
+            },
+            {
+              "type" : "field",
+              "value" : ["out_ethernet", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 169,
+            "column" : 8,
+            "source_fragment" : "hdr.out_ethernet.srcAddr = hdr.out_ethernet.dstAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["out_ethernet", "dstAddr"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 1
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 170,
+            "column" : 8,
+            "source_fragment" : "hdr.out_ethernet.dstAddr = dstAddr"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.ipv4_forward",
+      "id" : 17,
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 175,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "ttl"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["ipv4", "ttl"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0xff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 180,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "metadata.metadata_si"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "metadata.metadata_si"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0xff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sfc.p4",
+            "line" : 181,
+            "column" : 8,
+            "source_fragment" : "meta.metadata_si = meta.metadata_si - 1"
           }
         }
       ]
@@ -814,7 +1002,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 174,
+            "line" : 184,
             "column" : 10,
             "source_fragment" : "precheck"
           },
@@ -852,7 +1040,7 @@
           "id" : 1,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 186,
+            "line" : 196,
             "column" : 10,
             "source_fragment" : "sc"
           },
@@ -896,11 +1084,17 @@
           "id" : 2,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 199,
+            "line" : 209,
             "column" : 10,
             "source_fragment" : "sf1"
           },
           "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "hdr.out_ethernet.dstAddr",
+              "target" : ["out_ethernet", "dstAddr"],
+              "mask" : null
+            },
             {
               "match_type" : "exact",
               "name" : "meta.metadata_spi",
@@ -920,10 +1114,11 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [10, 7, 2],
-          "actions" : ["MyIngress.si_decrease", "MyIngress.drop", "NoAction"],
+          "action_ids" : [15, 10, 7, 2],
+          "actions" : ["MyIngress.l2_forward", "MyIngress.si_decrease", "MyIngress.drop", "NoAction"],
           "base_default_next" : "MyIngress.sf2",
           "next_tables" : {
+            "MyIngress.l2_forward" : "MyIngress.sf2",
             "MyIngress.si_decrease" : "MyIngress.sf2",
             "MyIngress.drop" : "MyIngress.sf2",
             "NoAction" : "MyIngress.sf2"
@@ -940,11 +1135,17 @@
           "id" : 3,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 214,
+            "line" : 225,
             "column" : 10,
             "source_fragment" : "sf2"
           },
           "key" : [
+            {
+              "match_type" : "lpm",
+              "name" : "hdr.ipv4.dstAddr",
+              "target" : ["ipv4", "dstAddr"],
+              "mask" : null
+            },
             {
               "match_type" : "exact",
               "name" : "meta.metadata_spi",
@@ -958,16 +1159,17 @@
               "mask" : null
             }
           ],
-          "match_type" : "exact",
+          "match_type" : "lpm",
           "type" : "simple",
           "max_size" : 1024,
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [11, 8, 3],
-          "actions" : ["MyIngress.si_decrease", "MyIngress.drop", "NoAction"],
+          "action_ids" : [17, 11, 8, 3],
+          "actions" : ["MyIngress.ipv4_forward", "MyIngress.si_decrease", "MyIngress.drop", "NoAction"],
           "base_default_next" : "MyIngress.sff",
           "next_tables" : {
+            "MyIngress.ipv4_forward" : "MyIngress.sff",
             "MyIngress.si_decrease" : "MyIngress.sff",
             "MyIngress.drop" : "MyIngress.sff",
             "NoAction" : "MyIngress.sff"
@@ -984,7 +1186,7 @@
           "id" : 4,
           "source_info" : {
             "filename" : "sfc.p4",
-            "line" : 229,
+            "line" : 242,
             "column" : 10,
             "source_fragment" : "sff"
           },
@@ -1008,7 +1210,7 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [12, 15, 9, 4],
+          "action_ids" : [12, 16, 9, 4],
           "actions" : ["MyIngress.loopback", "MyIngress.l2_forward", "MyIngress.drop", "NoAction"],
           "base_default_next" : null,
           "next_tables" : {
@@ -1033,7 +1235,7 @@
       "id" : 1,
       "source_info" : {
         "filename" : "sfc.p4",
-        "line" : 261,
+        "line" : 274,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },

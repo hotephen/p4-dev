@@ -139,6 +139,8 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 */
+
+
     action si_decrease() {
 	    meta.metadata_si = meta.metadata_si - 1;
 	    
@@ -169,7 +171,15 @@ control MyIngress(inout headers hdr,
                
     }
 
+    action ipv4_forward(bit<9> port) {
+        standard_metadata.egress_spec = port;
 
+    /*  hdr.out_ethernet.srcAddr = hdr.out_ethernet.dstAddr;
+        hdr.out_ethernet.dstAddr = dstAddr;
+    */
+        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+        meta.metadata_si = meta.metadata_si - 1;
+    }
 
     table precheck{
         key = {
@@ -198,10 +208,12 @@ control MyIngress(inout headers hdr,
 
     table sf1 {     
         key = {
+            hdr.out_ethernet.dstAddr : exact;
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
         }
         actions = {
+            l2_forward;
             si_decrease;
             drop;
             NoAction;
@@ -212,11 +224,13 @@ control MyIngress(inout headers hdr,
 
     table sf2 {     
         key = {
+            hdr.ipv4.dstAddr : lpm;
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
             
         }
         actions = {
+            ipv4_forward;
             si_decrease;
             drop;
             NoAction;
