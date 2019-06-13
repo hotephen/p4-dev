@@ -181,6 +181,10 @@ control MyIngress(inout headers hdr,
         meta.metadata_si = meta.metadata_si - 1;
     }
 
+    /*
+    instance_type 0 : 
+    instance_type
+    */
     table precheck{
         key = {
             standard_metadata.instance_type : exact;

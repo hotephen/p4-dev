@@ -11,6 +11,11 @@ table l2_forward_t {
 	}
 }
 
+table sf_t {
+	
+}
+
+
 control process_l2_forward {
 	apply(l2_forward_t);
 }
