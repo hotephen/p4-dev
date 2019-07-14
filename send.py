@@ -47,4 +47,4 @@ if __name__ == '__main__':
     main()
 
 
-# ./send.py dst src
+# usage : python send.py src dst veth
