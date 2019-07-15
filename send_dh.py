@@ -22,30 +22,18 @@ from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3Byt
 #        exit(1)
 #    return iface
 
-class NSH(Packet):
-    """Network Service Header.
-       NSH MD-type 1 if there is no ContextHeaders"""
-    name = "NSH"
+class DH(Packet):
+    """Description Header"""
+       
+    name = "DH"
 
     fields_desc = [
-        BitField('Ver', 0, 2),
-        BitField('OAM', 0, 1),
-        BitField('Un1', 0, 1),
-        BitField('TTL', 0, 6),
-        BitField('Len', None, 6),
-	    BitField('Un4', 1, 4),
-        BitField('MDType', 1, 4),
-        ByteField("NextProto", 0x65),
-        ByteField("NextProto_2", 0x58),
-        X3BytesField('NSP', 1),
-        ByteField('NSI', 255)
-    ]
+        BitField('test', 0, 2),
+        BitField('test1', 0, 1),
+   ]
 
 def main():
 
-    if len(sys.argv)<3:
-        print 'pass 1 arguments: <destination> '
-        exit(1)
 
 #src addr
     addr = socket.gethostbyname(sys.argv[1])
@@ -53,19 +41,17 @@ def main():
 #dst addr
     addr1 = socket.gethostbyname(sys.argv[2])
 
-    iface = "veth0"
-    iface_1 = "veth2"
-    iface_2 = "veth4"
+    iface = sys.argv[3]
 
-    
+   
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
     in_ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
 
-    pkt1 = out_ether / NSH() / in_ether / IP(src=addr,dst=addr1) / "hi"
+    pkt1 = DH() / in_ether / IP(src=addr,dst=addr1) / "hi"
     pkt1.show()
     hexdump(pkt1)
     sendp(pkt1, iface=iface, verbose=False)
-    print "sending on interface %s (Bmv2 port 0) to dmac=00:00:00:00:00:01" % (iface)
+    print "sending on interface %s to dmac=00:00:00:00:00:01" % (iface)
 
 
 if __name__ == '__main__':
