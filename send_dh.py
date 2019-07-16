@@ -28,8 +28,10 @@ class DH(Packet):
     name = "DH"
 
     fields_desc = [
-        BitField('test', 0, 2),
-        BitField('test1', 0, 1),
+        BitField('field1',0, 8),
+        BitField('field2',0, 8),
+        BitField('field3',0, 8),
+        BitField('field4',0, 8)
    ]
 
 def main():
