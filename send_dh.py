@@ -46,15 +46,16 @@ def main():
     iface = sys.argv[3]
 
    
-    out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
-    in_ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
+    ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
 
-    pkt1 = DH() / in_ether / IP(src=addr,dst=addr1) / "hi"
-    pkt1.show()
-    hexdump(pkt1)
-    sendp(pkt1, iface=iface, verbose=False)
+    pkt = DH() / ether / IP(src=addr,dst=addr1) / "hi"
+    pkt.show()
+    hexdump(pkt)
+    sendp(pkt, iface=iface, verbose=False)
     print "sending on interface %s to dmac=00:00:00:00:00:01" % (iface)
 
 
 if __name__ == '__main__':
     main()
+
+#usage 
