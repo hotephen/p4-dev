@@ -87,19 +87,22 @@ table table_config_at_initial {
 
 
 
-action set_action_id(action_bitmap, match_bitmap, next_stage, next_prog, match_result) {
+action set_stage_and_bitmap(action_bitmap, match_bitmap, next_stage, next_prog) {
     modify_field(vdp_metadata.action_chain_bitmap , action_bitmap);
     modify_field(vdp_metadata.match_chain_bitmap , match_bitmap);
     modify_field(vdp_metadata.stage_id , next_stage);
     modify_field(vdp_metadata.inst_id , next_prog);
-    modify_field(vdp_metadata.action_chain_id , match_result);
-    modify_field(vdp_metadata.match_chain_result , 0);
+    modify_field(vdp_metadata.action_chain_id , vdp_metadata.match_chain_result);
+    modify_field(vdp_metadata.match_chain_result, 0);
 }
     
     
+    action set_action_id(action_bitmap, match_bitmap, next_stage, next_prog) {
+        set_stage_and_bitmap(action_bitmap, match_bitmap, next_stage, next_prog);
+    }
 
     action end(next_prog) {
-        set_action_id(0,0,0,next_prog,0);
+        set_action_id(0,0,0,next_prog);
     }
     
     table table_header_match_stage1_1 {
@@ -270,18 +273,15 @@ control ingress{
     apply(table_config_at_initial);
     if ((vdp_metadata.stage_id & CONST_NUM_OF_STAGE) == 1) {
         if (vdp_metadata.match_chain_bitmap&4 != 0) {
-       if(vdp_metadata.table_chain&1 != 0)
-                apply(table_header_match_stage1_1);
-       else if(vdp_metadata.table_chain&2 != 0)
-      apply(table_header_match_stage1_2);
+            if(vdp_metadata.table_chain&1 != 0)
+            apply(table_header_match_stage1_1);
+            else if(vdp_metadata.table_chain&2 != 0)
+            apply(table_header_match_stage1_2);
         }
         if (vdp_metadata.match_chain_bitmap&1 != 0) {
             apply(table_std_meta_match_stage1);
         }
         
-        if (vdp_metadata.action_chain_bitmap&1  != 0) {
-            apply(table_mod_std_meta_stage1);
-        }
     }
 
     if ((vdp_metadata.stage_id & CONST_NUM_OF_STAGE) == 2) {
@@ -290,9 +290,6 @@ control ingress{
         }
         if (vdp_metadata.match_chain_bitmap&1 != 0) {
             apply(table_std_meta_match_stage2);
-        }
-        if (vdp_metadata.action_chain_bitmap&1  != 0) {
-                apply(table_mod_std_meta_stage2);
         }
     }
 
@@ -303,9 +300,6 @@ control ingress{
         if (vdp_metadata.match_chain_bitmap&1 != 0) {
             apply(table_std_meta_match_stage3);
         }
-        if (vdp_metadata.action_chain_bitmap&1  != 0) {
-                apply(table_mod_std_meta_stage3);
-        }
      }
      if ((vdp_metadata.stage_id & CONST_NUM_OF_STAGE) == 4) {
          if (vdp_metadata.match_chain_bitmap&4 != 0) {
@@ -314,9 +308,6 @@ control ingress{
          if (vdp_metadata.match_chain_bitmap&1 != 0) {
             apply(table_std_meta_match_stage4);
         }
-        if (vdp_metadata.action_chain_bitmap&1  != 0) {
-                apply(table_mod_std_meta_stage4);
-         }
      }
 
 }
