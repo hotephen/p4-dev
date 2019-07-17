@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 pd-test
 pd table_config_at_initial add_entry set_initial_config desc_hdr_vdp_id 1 vdp_metadata_inst_id 0 vdp_metadata_stage_id 0 action_progid 1 action_stageid 1 action_match_bitmap 4 action_table_chain 1
 pd table_header_match_stage1_1 add_entry set_action_id vdp_metadata_inst_id 1 vdp_metadata_stage_id 1 hdr1_buf 0x0000000000010000000000000000 hdr1_buf_mask 0xFFFFFFFFFFFF0000000000000000 priority 1 action_action_bitmap 1 action_match_bitmap 0 action_next_stage 0 action_next_prog 0xFF action_match_result 0x200000000
@@ -10,3 +11,8 @@ port-add 5/- 10G NONE
 an-set 5/- 2
 port-enb 5/-
 exit
+=======
+table_add table_config_at_initial set_initial_config 0 0 0 => 1 1 4 1
+table_add table_header_match_stage1_1 set_action_id 1 1 0x00010000000000000000&&&0xFFFF0000000000000000 => 0x200000000 0x2000000000 0 0 0xFF 1
+table_add table_mod_std_meta_stage1 do_forward 0x200000000 => 2
+>>>>>>> 7ab2977762ea190b189a93dd84f5e312d7238f69
