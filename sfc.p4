@@ -56,6 +56,7 @@ struct metadata {
     bit<24>    metadata_spi;
     bit<8>     metadata_si;
     bit<1>     metadata_nsh;
+    bit<48>    time;
 }
 
 struct headers {
@@ -65,6 +66,9 @@ struct headers {
     ipv4_t       ipv4;
 }
 
+register<bit<48>>(16384) ingress_time;
+register<bit<48>>(16384) egress_time;
+register<bit<48>>(16384) delay;
 
 /*************************************************************************
 *********************** P A R S E R  ***********************************
@@ -151,6 +155,8 @@ control MyIngress(inout headers hdr,
     action change_hdr_to_meta() {
 	    meta.metadata_spi = hdr.nsh.spi;
 	    meta.metadata_si = hdr.nsh.si;	
+        ingress_time.write(0,standard_metadata.ingress_global_timestamp);
+
 	}        
 
     action add_nsh() {
@@ -170,6 +176,7 @@ control MyIngress(inout headers hdr,
     action pass() {
         meta.metadata_si = meta.metadata_si - 1;
     }
+
 /*
     table ipv4_lpm {
         key = {
@@ -198,6 +205,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
+/*
     table sc{
         key = {
             hdr.ipv4.srcAddr: exact;
@@ -209,14 +217,16 @@ control MyIngress(inout headers hdr,
         }
         default_action = NoAction();
     }
+*/
 
-    table sf1 {     // FW
+    table sf1 {     
         key = {
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
         }
         actions = {
             si_decrease;
+            pass;
             drop;
             NoAction;
         }
@@ -229,9 +239,9 @@ control MyIngress(inout headers hdr,
         key = {
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
-            hdr.ipv4.srcAddr: lpm;
         }
         actions = {
+            si_decrease;
             pass;
             drop;
             NoAction;
@@ -239,6 +249,7 @@ control MyIngress(inout headers hdr,
         size = 1024;
         default_action = drop();
     }
+
 
     table sff {
         key = {
@@ -252,14 +263,14 @@ control MyIngress(inout headers hdr,
             drop;
             NoAction;
         }
-        size = 1024;
+        
         default_action = NoAction();
     }
 
     apply {
 	    
         precheck.apply();
-        sc.apply();
+        //sc.apply();
 	    sf1.apply();    
 	    sf2.apply();
         sff.apply();
@@ -277,7 +288,11 @@ control MyEgress(inout headers hdr,
 		 inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
     apply {
-
+        bit<48> index;
+        ingress_time.read(index, 0);
+        egress_time.write(0,standard_metadata.egress_global_timestamp);
+        //time_delay = standard_metadata.egress_global_timestamp - time_ingress;
+        delay.write(0,standard_metadata.egress_global_timestamp - index);
     }
 
 }

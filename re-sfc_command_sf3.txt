@@ -1,0 +1,11 @@
+table_add precheck change_hdr_to_meta 0 =>
+
+table_add SF_A si_decrease 1 255 => 2
+
+table_add SF_B si_decrease 1 254 => 2
+
+table_add SF_C si_decrease 1 253 => 2
+
+
+table_add SFF loopback 1 254 =>
+table_add SFF l2_forward 1 252 => 2 00:00:00:00:00:00
