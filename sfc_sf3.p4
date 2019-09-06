@@ -281,7 +281,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
-    apply {
+    afpply {
 	    
         precheck.apply();
         //sc.apply();
