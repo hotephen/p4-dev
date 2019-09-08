@@ -155,6 +155,8 @@ struct metadata {
     // SF2
     nat_metadata_t  nat_metadata;
 
+    // SF3
+    bit<14> ecmp_select;
 }
 
 
@@ -244,15 +246,6 @@ control MyIngress(inout headers hdr,
         mark_to_drop();
     }
 
-    action pass() {
-        meta.metadata_si = meta.metadata_si - 1;
-    }
-
-    action si_decrease(egressSpec_t port) {
-	    meta.metadata_si = meta.metadata_si - 1;
-	    standard_metadata.egress_spec = port;
-    }
-
     action loopback() {  
         resubmit(meta);
     }
@@ -268,16 +261,6 @@ control MyIngress(inout headers hdr,
         meta.ipv4_metadata.lkp_ipv4_da = hdr.ipv4.dstAddr;
         
         } 
-
-/*
-    action add_nsh() {
-        meta.metadata_nsh = 1;
-        hdr.nsh.setValid();
-        hdr.in_ethernet.setValid();
-        standard_metadata.egress_spec = 2;
-    }
-*/
-
    action l2_forward(egressSpec_t port, macAddr_t dstAddr) {
         standard_metadata.egress_spec = port;
         hdr.out_ethernet.srcAddr = hdr.out_ethernet.dstAddr;
@@ -305,6 +288,8 @@ control MyIngress(inout headers hdr,
     action send_to_monitor(egressSpec_t port) {
         set_pkt_id_reg.write(0, 0);
         standard_metadata.egress_spec = port;
+     	meta.metadata_si = meta.metadata_si - 1;
+
     }
 
 //SF2 actions
@@ -326,7 +311,106 @@ control MyIngress(inout headers hdr,
         meta.nat_metadata.nat_hit = 1;  
     }
 
-/************* Ingress Tables**************/
+    action nat_update_l4_checksum() {
+        meta.nat_metadata.update_checksum = 1;
+        meta.nat_metadata.l4_len = hdr.ipv4.totalLen -20;
+    }       
+
+    action set_nat_src_rewrite(bit<32> src_ip) {
+        hdr.ipv4.srcAddr = src_ip;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+
+
+    action set_nat_dst_rewrite(bit<32> dst_ip) {
+        hdr.ipv4.dstAddr = dst_ip;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+
+    action set_nat_src_dst_rewrite(bit<32> src_ip, bit<32> dst_ip) {
+        hdr.ipv4.srcAddr = src_ip;
+        hdr.ipv4.dstAddr = dst_ip;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+
+    action set_nat_src_udp_rewrite(bit<32> src_ip, bit<16> src_port) {
+        hdr.ipv4.srcAddr = src_ip;
+        hdr.udp.srcPort = src_port;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+
+    action set_nat_dst_udp_rewrite(bit<32> dst_ip, bit<16>dst_port) {
+        hdr.ipv4.dstAddr = dst_ip;
+        hdr.udp.dstPort = dst_port;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+
+    action set_nat_src_dst_udp_rewrite(bit<32> src_ip, bit<32> dst_ip, bit<16> src_port, bit<16> dst_port) {
+        hdr.ipv4.srcAddr = src_ip;
+        hdr.ipv4.dstAddr = dst_ip;
+        hdr.udp.srcPort = src_port;
+        hdr.udp.dstPort = dst_port;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+
+    action set_nat_src_tcp_rewrite(bit<32> src_ip, bit<16> src_port) {
+        hdr.ipv4.srcAddr = src_ip;
+        hdr.tcp.srcPort = src_port;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+
+    action set_nat_dst_tcp_rewrite(bit<32> dst_ip, bit<16> dst_port) {
+        hdr.ipv4.dstAddr = dst_ip;
+        hdr.tcp.dstPort = dst_port;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+
+    action set_nat_src_dst_tcp_rewrite(bit<32> src_ip, bit<32> dst_ip, bit<16> src_port, bit<16> dst_port) {
+        hdr.ipv4.srcAddr = src_ip;
+        hdr.ipv4.dstAddr = dst_ip;
+        hdr.tcp.srcPort = src_port;
+        hdr.tcp.dstPort = dst_port;
+        nat_update_l4_checksum();
+        meta.metadata_si = meta.metadata_si - 1;
+    }
+//SF3 actions
+    action set_ecmp_select(bit<16> ecmp_base, bit<32> ecmp_count) {
+        hash(meta.ecmp_select,
+	    HashAlgorithm.crc16,
+	    ecmp_base,
+	    { hdr.ipv4.srcAddr,
+	      hdr.ipv4.dstAddr,
+              hdr.ipv4.protocol,
+              hdr.tcp.srcPort,
+              hdr.tcp.dstPort },
+	    ecmp_count);
+    }
+
+    action set_nhop(bit<48> nhop_dmac, bit<32> nhop_ipv4, bit<9> port) {
+        hdr.out_ethernet.dstAddr = nhop_dmac;
+        hdr.ipv4.dstAddr = nhop_ipv4;
+        standard_metadata.egress_spec = port;
+        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+    }
+    action rewrite_mac(bit<48> smac) {
+        hdr.out_ethernet.srcAddr = smac;
+        meta.metadata_si = meta.metadata_si - 1;
+
+    }
+    
+/****************** Ingress Tables*******************/
+/****************** Ingress Tables*******************/
+/****************** Ingress Tables*******************/
+/****************** Ingress Tables*******************/
+/****************** Ingress Tables*******************/
 // precheck table
 /*    
     table precheck{
@@ -343,9 +427,12 @@ control MyIngress(inout headers hdr,
 */
 
 
-// SF1 : Basic Monitor
+// SF1 Table : Basic Monitor
     table set_pkt_id {
-        key = {}
+        key = {
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
         actions = {
             read_id_from_reg;
             NoAction;
@@ -356,6 +443,33 @@ control MyIngress(inout headers hdr,
     table basic_monitor {
         key = {
             meta.pkt_id.id : exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
+        actions = {
+            send_to_monitor;
+            NoAction;
+        }
+        default_action = NoAction();
+    }
+// SF1' Table : Basic Monitor'
+    table set_pkt_id_copy {
+        key = {
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
+        actions = {
+            read_id_from_reg;
+            NoAction;
+        }
+        default_action = NoAction();
+    }
+
+    table basic_monitor_copy {
+        key = {
+            meta.pkt_id.id : exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
         }
         actions = {
             send_to_monitor;
@@ -364,8 +478,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
-
-// SF2
+// SF2 Table : NAT
     table nat_twice {
         key = {
             meta.ipv4_metadata.lkp_ipv4_sa : exact;
@@ -373,6 +486,8 @@ control MyIngress(inout headers hdr,
             meta.l3_metadata.lkp_ip_proto : exact;
             meta.l3_metadata.lkp_l4_sport : exact;
             meta.l3_metadata.lkp_l4_dport : exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
         }
         actions = {
             on_miss;
@@ -389,6 +504,8 @@ control MyIngress(inout headers hdr,
             meta.ipv4_metadata.lkp_ipv4_da : exact;
             meta.l3_metadata.lkp_ip_proto : exact;
             meta.l3_metadata.lkp_l4_dport : exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
         }
         actions = {
             on_miss;
@@ -405,6 +522,8 @@ control MyIngress(inout headers hdr,
             meta.ipv4_metadata.lkp_ipv4_sa : exact;
             meta.l3_metadata.lkp_ip_proto : exact;
             meta.l3_metadata.lkp_l4_sport : exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
         }
         actions = {
             on_miss;
@@ -423,6 +542,8 @@ control MyIngress(inout headers hdr,
             meta.l3_metadata.lkp_ip_proto : exact; //ternary;
             meta.l3_metadata.lkp_l4_sport : exact; //ternary;
             meta.l3_metadata.lkp_l4_dport : exact; //ternary;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
         }
         actions = {
             
@@ -435,99 +556,11 @@ control MyIngress(inout headers hdr,
         // size = IP_NAT_FLOW_TABLE_SIZE;
     }
 
-    apply{
-        change_hdr_to_meta();
-        
-        //SF1
-        set_pkt_id.apply(); 
-	    basic_monitor.apply(); 
-
-        //SF2
-        nat_twice.apply();
-        nat_dst.apply();
-        nat_src.apply();
-        nat_flow.apply();
-
-    }
-}
-
-/*************************************************************************
-****************  E G R E S S   P R O C E S S I N G   *******************
-*************************************************************************/
-
-control MyEgress(inout headers hdr,
-		         inout metadata meta,
-                 inout standard_metadata_t standard_metadata) {
-    
-    //SF1
-
-    //SF2 actions
-    action nat_update_l4_checksum() {
-        meta.nat_metadata.update_checksum = 1;
-        meta.nat_metadata.l4_len = hdr.ipv4.totalLen -20;
-    }       
-
-    action set_nat_src_rewrite(bit<32> src_ip) {
-        hdr.ipv4.srcAddr = src_ip;
-        nat_update_l4_checksum();
-    }
-
-    action set_nat_dst_rewrite(bit<32> dst_ip) {
-        hdr.ipv4.dstAddr = dst_ip;
-        nat_update_l4_checksum();
-    }
-
-    action set_nat_src_dst_rewrite(bit<32> src_ip, bit<32> dst_ip) {
-        hdr.ipv4.srcAddr = src_ip;
-        hdr.ipv4.dstAddr = dst_ip;
-        nat_update_l4_checksum();
-    }
-
-    action set_nat_src_udp_rewrite(bit<32> src_ip, bit<16> src_port) {
-        hdr.ipv4.srcAddr = src_ip;
-        hdr.udp.srcPort = src_port;
-        nat_update_l4_checksum();
-    }
-
-    action set_nat_dst_udp_rewrite(bit<32> dst_ip, bit<16>dst_port) {
-        hdr.ipv4.dstAddr = dst_ip;
-        hdr.udp.dstPort = dst_port;
-        nat_update_l4_checksum();
-    }
-
-    action set_nat_src_dst_udp_rewrite(bit<32> src_ip, bit<32> dst_ip, bit<16> src_port, bit<16> dst_port) {
-        hdr.ipv4.srcAddr = src_ip;
-        hdr.ipv4.dstAddr = dst_ip;
-        hdr.udp.srcPort = src_port;
-        hdr.udp.dstPort = dst_port;
-        nat_update_l4_checksum();
-    }
-
-    action set_nat_src_tcp_rewrite(bit<32> src_ip, bit<16> src_port) {
-        hdr.ipv4.srcAddr = src_ip;
-        hdr.tcp.srcPort = src_port;
-        nat_update_l4_checksum();
-    }
-
-    action set_nat_dst_tcp_rewrite(bit<32> dst_ip, bit<16> dst_port) {
-        hdr.ipv4.dstAddr = dst_ip;
-        hdr.tcp.dstPort = dst_port;
-        nat_update_l4_checksum();
-    }
-
-    action set_nat_src_dst_tcp_rewrite(bit<32> src_ip, bit<32> dst_ip, bit<16> src_port, bit<16> dst_port) {
-        hdr.ipv4.srcAddr = src_ip;
-        hdr.ipv4.dstAddr = dst_ip;
-        hdr.tcp.srcPort = src_port;
-        hdr.tcp.dstPort = dst_port;
-        nat_update_l4_checksum();
-    }
-    
-
-
     table egress_nat {
         key =  {
             meta.nat_metadata.nat_rewrite_index : exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
         }
         actions = {
             NoAction;
@@ -543,14 +576,91 @@ control MyEgress(inout headers hdr,
         }
         default_action = NoAction();
         // size : EGRESS_NAT_TABLE_SIZE;
-}
-    
-    
-    apply {
-       egress_nat.apply();
     }
 
+// SF3 Table : LB
+    table ecmp_group {
+        key = {
+            hdr.ipv4.dstAddr: lpm;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
+        actions = {
+            drop;
+            set_ecmp_select;
+        }
+        size = 1024;
+    }
+    table ecmp_nhop {
+        key = {
+            meta.ecmp_select: exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
+        actions = {
+            drop;
+            set_nhop;
+        }
+        size = 2;
+    }
+    table send_frame {
+        key = {
+            standard_metadata.egress_spec: exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
+        actions = {
+            rewrite_mac;
+            drop;
+        }
+        size = 256;
+    }
+/******************************* apply *******************************/
+
+    apply{
+        change_hdr_to_meta();
+        
+        //SF1
+        set_pkt_id.apply(); 
+	    basic_monitor.apply(); 
+
+        //SF2
+        nat_twice.apply();
+        nat_dst.apply();
+        nat_src.apply();
+        nat_flow.apply();
+        egress_nat.apply();
+
+        //SF3 : LB
+        ecmp_group.apply();
+        ecmp_nhop.apply();
+        send_frame.apply();
+        
+        //SF1' : BM
+        set_pkt_id_copy.apply(); 
+	    basic_monitor_copy.apply(); 
+
+    }
 }
+
+/*************************************************************************
+****************  E G R E S S   P R O C E S S I N G   *******************
+*************************************************************************/
+
+control MyEgress(inout headers hdr,
+		         inout metadata meta,
+                 inout standard_metadata_t standard_metadata) {
+    
+    
+    
+    
+    apply{}
+    
+    
+}
+
+    
+  
 
 
 
@@ -576,7 +686,7 @@ control MyDeparser(packet_out packet, in headers hdr) {
         packet.emit(hdr.in_ethernet);      
         packet.emit(hdr.ipv4);
         packet.emit(hdr.tcp);
-        packet.emit
+        packet.emit(hdr.udp);
     }
 }
 

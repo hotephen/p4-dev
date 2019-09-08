@@ -257,7 +257,7 @@ control MyIngress(inout headers hdr,
     action loopback() {  
         resubmit(meta);
         resubmit(standard_metadata);
-
+        
     }
 
     action change_hdr_to_meta() {
@@ -432,6 +432,7 @@ control MyIngress(inout headers hdr,
 
     action set_nhop(bit<48> nhop_dmac, bit<32> nhop_ipv4, bit<9> port) {
         hdr.out_ethernet.dstAddr = nhop_dmac;
+        meta.ipv4_metadata.lkp_ipv4_da = nhop_ipv4;
         hdr.ipv4.dstAddr = nhop_ipv4;
         standard_metadata.egress_spec = port;
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
@@ -443,7 +444,12 @@ control MyIngress(inout headers hdr,
 
     }
 
-/************* Ingress Tables**************/
+/****************** Ingress Tables*******************/
+/****************** Ingress Tables*******************/
+/****************** Ingress Tables*******************/
+/****************** Ingress Tables*******************/
+/****************** Ingress Tables*******************/
+
 // precheck table
     table precheck{
         key = {
@@ -484,7 +490,31 @@ control MyIngress(inout headers hdr,
         }
         default_action = NoAction();
     }
+// SF1' Table : Basic Monitor'
+    table set_pkt_id_copy {
+        key = {
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
+        actions = {
+            read_id_from_reg;
+            NoAction;
+        }
+        default_action = NoAction();
+    }
 
+    table basic_monitor_copy {
+        key = {
+            meta.pkt_id.id : exact;
+            meta.metadata_spi: exact;
+            meta.metadata_si: exact;
+        }
+        actions = {
+            send_to_monitor;
+            NoAction;
+        }
+        default_action = NoAction();
+    }
 
 // SF2 Table : NAT
     table nat_twice {
@@ -660,6 +690,10 @@ control MyIngress(inout headers hdr,
         ecmp_group.apply();
         ecmp_nhop.apply();
         send_frame.apply();
+
+        //SF1' : BM
+        set_pkt_id_copy.apply(); 
+	    basic_monitor_copy.apply(); 
 
         //SFF
         sff.apply();
