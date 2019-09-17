@@ -1,5 +1,5 @@
 #include <core.p4>
-#include <tofino.p4>
+#include <tna.p4>
 
 // Basic_monitor - NAT - FW
 
@@ -162,7 +162,8 @@ struct metadata_t {
 }
 
 
-register<bit<32>>(16384) set_pkt_id_reg;
+Register<bit<32>,bit<32>>(1024,0)  set_pkt_id_reg;
+
 
 /*************************************************************************
 *********************** P A R S E R  ***********************************
@@ -171,11 +172,11 @@ register<bit<32>>(16384) set_pkt_id_reg;
 parser SwitchIngressParser(
                 packet_in packet,
                 out headers hdr,
-		        inout metadata_t meta,
-                inout ingress_intrinsic_metadata_t ig_intr_md) {
+	        out metadata_t ig_md,
+                out ingress_intrinsic_metadata_t ig_intr_md) {
 
     state start {
-        tofino_parser.apply(packet, ig_intr_md)
+        
         transition parse_out_ethernet;
     }
 
@@ -227,21 +228,36 @@ parser SwitchIngressParser(
 /*************************************************************************
 ************   C H E C K S U M    V E R I F I C A T I O N   *************
 *************************************************************************/
-
+/*
 control MyVerifyChecksum(inout headers hdr, inout metadata meta
 ) {
     apply {  }
 }
+*/
 
+#define IPV4_HASH_FIELDS { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort }
+/*
+control calc_hash(
+	in headers hdr,
+	in bit<16> ecmp_base,
+	in bit<32> ecmp_count,
+	out bit<14> ecmp_select){
 
+	Hash<bit<14>>(HashAlgorithm_t.CRC16) hash;
+
+	apply{
+		ecmp_select = hash.get(IPV4_HASH_FIELDS,ecmp_base,ecmp_count);
+	}
+}
+*/
 /*************************************************************************
 **************  I N G R E S S   P R O C E S S I N G   *******************
 *************************************************************************/
 
 control SwitchIngress(
         inout headers hdr,
-        inout metadata meta,
-        in ingress_intrinsic_metadata_t ig_md,
+        inout metadata_t meta,
+        in ingress_intrinsic_metadata_t ig_intr_md,
         in ingress_intrinsic_metadata_from_parser_t ig_prsr_md,
         inout ingress_intrinsic_metadata_for_deparser_t ig_dprsr_md,
         inout ingress_intrinsic_metadata_for_tm_t ig_tm_md
@@ -250,7 +266,7 @@ control SwitchIngress(
 
 // essential actions
     action drop() {
-        mark_to_drop();
+        
     }
 
     action pass() {
@@ -262,11 +278,12 @@ control SwitchIngress(
     }
 
     action loopback() {  
-        resubmit(meta);
-        resubmit(ig_md);
-        resubmit(ig_prsr_md);
-        resubmit(ig_dprsr_md);
-        resubmit(ig_tm_md);
+
+      ig_dprsr_md.resubmit_type = 7;
+//	Resubmit(ig_intr_md);
+//       Resubmit(ig_prsr_md);
+//        Resubmit(ig_dprsr_md);
+//        Resubmit(ig_tm_md);
     }
 
     action change_hdr_to_meta() {
@@ -309,14 +326,14 @@ control SwitchIngress(
 //SF1 actions
     action read_id_from_reg() {
         // read id from register
-        set_pkt_id_reg.read(meta.pkt_id.id, 0);
+//        set_pkt_id_reg.read(meta.pkt_id.id, 0);
         // plus the register value
         meta.pkt_id.next_id = meta.pkt_id.id + 1;
-        set_pkt_id_reg.write(0, meta.pkt_id.next_id);
+//        set_pkt_id_reg.write(0, meta.pkt_id.next_id);
     }
 
     action send_to_monitor(egressSpec_t port) {
-        set_pkt_id_reg.write(0, 0);
+//        set_pkt_id_reg.write(0, 0);
         ig_tm_md.ucast_egress_port = port;
 	    meta.metadata_si = meta.metadata_si - 1;
 
@@ -427,18 +444,11 @@ control SwitchIngress(
     }
 
 //SF3 actions
+/*
     action set_ecmp_select(bit<16> ecmp_base, bit<32> ecmp_count) {
-        hash(meta.ecmp_select,
-	    HashAlgorithm.crc16,
-	    ecmp_base,
-	    { hdr.ipv4.srcAddr,
-	      hdr.ipv4.dstAddr,
-              hdr.ipv4.protocol,
-              hdr.tcp.srcPort,
-              hdr.tcp.dstPort },
-	    ecmp_count);
+	calc_hash.apply(hdr, ecmp_base, ecmp_count, meta.ecmp_select);
     }
-
+*/
     action set_nhop(bit<48> nhop_dmac, bit<32> nhop_ipv4, bit<9> port) {
         hdr.out_ethernet.dstAddr = nhop_dmac;
         meta.ipv4_metadata.lkp_ipv4_da = nhop_ipv4;
@@ -634,7 +644,7 @@ control SwitchIngress(
         }
         actions = {
             drop;
-            set_ecmp_select;
+#            set_ecmp_select;
         }
         size = 1024;
     }
@@ -716,6 +726,39 @@ control SwitchIngress(
 ****************  E G R E S S   P R O C E S S I N G   *******************
 *************************************************************************/
 
+parser EgressParser(
+	packet_in packet,
+	out headers hdr,
+	out metadata_t meta,
+	out egress_intrinsic_metadata_t eg_intr_md){
+	
+	state start {
+ 
+		transition accept;
+	}
+}
+
+control Egress(
+	inout headers hdr,
+	inout metadata_t meta,
+	in egress_intrinsic_metadata_t eg_intr_md,
+	in egress_intrinsic_metadata_from_parser_t eg_prsr_md,
+	inout egress_intrinsic_metadata_for_deparser_t eg_dprsr_md,
+	inout egress_intrinsic_metadata_for_output_port_t eg_intr_md_for_oport){
+
+	apply{}
+}
+
+control EgressDeparser(
+	packet_out packet,
+	inout headers hdr,
+	in metadata_t eg_md,
+	in egress_intrinsic_metadata_for_deparser_t eg_dprsr_md) {
+
+	apply{
+
+	}
+}
 
 
 
@@ -730,13 +773,14 @@ control SwitchIngress(
 
 control SwitchIngressDeparser(
         packet_out packet,
-        in headers hdr
-        in metadata_t ig_md
+        inout headers hdr,
+        in metadata_t meta,
         in ingress_intrinsic_metadata_for_deparser_t ig_dprsr_md) {
     
-    apply {
+    apply{
+
         packet.emit(hdr.out_ethernet);
-	    packet.emit(hdr.nsh);
+        packet.emit(hdr.nsh);
         packet.emit(hdr.in_ethernet);      
         packet.emit(hdr.ipv4);
         packet.emit(hdr.tcp);
@@ -753,8 +797,8 @@ control SwitchIngressDeparser(
 Pipeline(SwitchIngressParser(),
          SwitchIngress(),
          SwitchIngressDeparser(),
-         EmptyEgressParser<headers, metadata_t>(),
-         EmptyEgress<headers, metadata_t>(),
-         EmptyEgressDeparser<headers, metadata_t>()) pipe;
+         EgressParser(),
+         Egress(),
+         EgressDeparser()) pipe;
 
 Switch(pipe) main;
