@@ -179,8 +179,7 @@ parser SwitchIngressParser(
                 out ingress_intrinsic_metadata_t ig_intr_md) {
 
     state start {
-        packet.extract(ig_intr_md);
-	packet.advance(PORT_METADATA_SIZE);
+        
         transition parse_out_ethernet;
     }
 
@@ -329,23 +328,20 @@ RegisterAction<bit<32>, bit<16>, bit<32>>(set_pkt_id_reg) write_0 = {
 
 
 //SF1 actions
-
-/*    action read_id_from_reg() {
+    action read_id_from_reg() {
         // read id from register
 	meta.pkt_id.id = read.execute(0);     //set_pkt_id_reg.read(meta.pkt_id.id, 0);
 	meta.pkt_id.next_id = meta.pkt_id.id + 1 ;
         // plus the register value
 
     }
-*/
 
     action send_to_monitor(egressSpec_t port) {
-//	write_0.execute(0);//        set_pkt_id_reg.write(0, 0);
+	write_0.execute(0);//        set_pkt_id_reg.write(0, 0);
         ig_tm_md.ucast_egress_port = port;
         meta.metadata_si = meta.metadata_si - 1;
 
     }
-
 
 //SF2 actions
     
@@ -498,8 +494,7 @@ RegisterAction<bit<32>, bit<16>, bit<32>>(set_pkt_id_reg) write_0 = {
 
 
 // SF1 Table : Basic Monitor
-
-/*    table set_pkt_id {
+    table set_pkt_id {
         key = {
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
@@ -510,7 +505,6 @@ RegisterAction<bit<32>, bit<16>, bit<32>>(set_pkt_id_reg) write_0 = {
         }
         default_action = NoAction();
     }
-*/
 
     table basic_monitor {
         key = {
@@ -525,7 +519,7 @@ RegisterAction<bit<32>, bit<16>, bit<32>>(set_pkt_id_reg) write_0 = {
         default_action = NoAction();
     }
 // SF1' Table : Basic Monitor'
-/*    table set_pkt_id_copy {
+    table set_pkt_id_copy {
         key = {
             meta.metadata_spi: exact;
             meta.metadata_si: exact;
@@ -536,7 +530,7 @@ RegisterAction<bit<32>, bit<16>, bit<32>>(set_pkt_id_reg) write_0 = {
         }
         default_action = NoAction();
     }
-*/
+
     table basic_monitor_copy {
         key = {
             meta.pkt_id.id : exact;
@@ -659,7 +653,7 @@ RegisterAction<bit<32>, bit<16>, bit<32>>(set_pkt_id_reg) write_0 = {
         }
         actions = {
             drop;
-            set_ecmp_select;
+#            set_ecmp_select;
         }
         size = 1024;
     }
@@ -712,8 +706,8 @@ RegisterAction<bit<32>, bit<16>, bit<32>>(set_pkt_id_reg) write_0 = {
         }
 
         
-        //SF1 : BM
-//        set_pkt_id.apply(); 
+        //SF1
+        set_pkt_id.apply(); 
 	basic_monitor.apply(); 
 
         //SF2
@@ -729,7 +723,7 @@ RegisterAction<bit<32>, bit<16>, bit<32>>(set_pkt_id_reg) write_0 = {
         send_frame.apply();
 
         //SF1' : BM
-//        set_pkt_id_copy.apply(); 
+        set_pkt_id_copy.apply(); 
 	basic_monitor_copy.apply(); 
 
         //SFF
