@@ -62,7 +62,7 @@ def main():
 
     pkt1 = out_ether / NSH() / in_ether / IP(src=addr,dst=addr1) / "hi"
     pkt1.show()
-    hexdump(pkt1)
+    #hexdump(pkt1)
     
     for i in range(1, num_pkts):
         sendp(pkt1, iface=iface, verbose=False)
