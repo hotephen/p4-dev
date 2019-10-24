@@ -50,7 +50,7 @@ def main():
     iface = sys.argv[3]
     spi = sys.argv[4]
     si = sys.argv[5]
-    num_pkts = sys.agrv[6]
+    num_pkts = sys.argv[6]
 
     
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
