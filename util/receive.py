@@ -9,27 +9,8 @@ from scapy.all import IP, UDP, Raw, hexdump, BitField, BitFieldLenField, ShortEn
 from scapy.layers.inet import _IPOption_HDR
 
 
-#sys.path.append("~/p4-dev/util")
-#from send_nsh_manual import NSH
-
-class NSH(Packet):
-    """Network Service Header.
-       NSH MD-type 1 if there is no ContextHeaders"""
-    name = "NSH"
-
-    fields_desc = [
-        BitField('Ver', 0, 2),
-        BitField('OAM', 0, 1),
-        BitField('Un1', 0, 1),
-        BitField('TTL', 0, 6),
-        BitField('Len', None, 6),
-	    BitField('Un4', 1, 4),
-        BitField('MDType', 1, 4),
-        ByteField("NextProto", 0x65),
-        ByteField("NextProto_2", 0x58),
-        X3BytesField('SPI', 1),
-        ByteField('SI', 255)
-    ]
+sys.path.append("~/p4-dev/util")
+from send_nsh_manual import NSH
 
 def get_if():
     ifs=get_if_list()
