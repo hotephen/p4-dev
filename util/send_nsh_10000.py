@@ -31,7 +31,7 @@ class NSH(Packet):
         BitField('MDType', 1, 4),
         ByteField("NextProto", 0x65),
         ByteField("NextProto_2", 0x58),
-        X3BytesField('SPI', spi]),
+        X3BytesField('SPI', spi),
         ByteField('SI', si)
     ]
 
