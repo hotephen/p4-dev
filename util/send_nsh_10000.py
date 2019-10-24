@@ -64,7 +64,7 @@ def main():
     pkt1.show()
     hexdump(pkt1)
     
-    for i in range(1, num_pkts):
+    for i in range(1, num_pkts+1):
         sendp(pkt1, iface=iface, verbose=False)
         print "sending %s th SFC %s packets to interface %s " % (i, spi, iface)
 
