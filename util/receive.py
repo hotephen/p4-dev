@@ -7,7 +7,25 @@ from scapy.all import sniff, sendp, hexdump, get_if_list, get_if_hwaddr
 from scapy.all import Packet
 from scapy.all import IP, UDP, Raw
 from scapy.layers.inet import _IPOption_HDR
-from NSH import *
+
+class NSH(Packet):
+    """Network Service Header.
+       NSH MD-type 1 if there is no ContextHeaders"""
+    name = "NSH"
+
+    fields_desc = [
+        BitField('Ver', 0, 2),
+        BitField('OAM', 0, 1),
+        BitField('Un1', 0, 1),
+        BitField('TTL', 0, 6),
+        BitField('Len', None, 6),
+	    BitField('Un4', 1, 4),
+        BitField('MDType', 1, 4),
+        ByteField("NextProto", 0x65),
+        ByteField("NextProto_2", 0x58),
+        X3BytesField('SPI', 1),
+        ByteField('SI', 255)
+    ]
 
 def get_if():
     ifs=get_if_list()
