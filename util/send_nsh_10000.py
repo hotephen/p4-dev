@@ -60,9 +60,9 @@ def main():
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
     in_ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
 
-    pkt1 = out_ether / NSH(spi=spi, si=si) / in_ether / IP(src=addr,dst=addr1) / "hi"
+    pkt1 = out_ether / NSH(SPI=spi, SI=si) / in_ether / IP(src=addr,dst=addr1) / "hi"
     pkt1.show()
-    #hexdump(pkt1)
+    hexdump(pkt1)
     
     for i in range(1, num_pkts):
         sendp(pkt1, iface=iface, verbose=False)
