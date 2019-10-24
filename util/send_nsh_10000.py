@@ -31,8 +31,8 @@ class NSH(Packet):
         BitField('MDType', 1, 4),
         ByteField("NextProto", 0x65),
         ByteField("NextProto_2", 0x58),
-        X3BytesField('SPI', sys.args[4]),
-        ByteField('SI', sys.args[5])
+        X3BytesField('SPI', spi]),
+        ByteField('SI', si)
     ]
 
 def main():
@@ -50,7 +50,7 @@ def main():
     iface = sys.argv[3]
     spi = sys.argv[4]
     si = sys.argv[5]
-    num_pkts = sys.agrs[6]
+    num_pkts = sys.agrv[6]
 
     
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
