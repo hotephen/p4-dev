@@ -10,6 +10,7 @@ from scapy.all import Packet
 from scapy.all import Ether, IP, UDP, TCP
 from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3BytesField, ByteField, XByteField
 
+
 """
 usage : send_nsh_10000.py [src] [dst] [interface] [spi] [si] [number of packets]
 
@@ -49,12 +50,7 @@ def main():
     si = int(sys.argv[5])
     num_pkts = int(sys.argv[6])
 
-    print(addr,
-    addr1,
-    iface,
-    spi,
-    si,
-    num_pkts)
+    print(addr, addr1, iface, spi, si, num_pkts)
 
     
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
