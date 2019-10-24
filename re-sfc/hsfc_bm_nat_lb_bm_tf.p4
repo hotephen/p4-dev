@@ -72,6 +72,13 @@ header udp_t {
     bit<16>    dstPort;
     bit<16>    length_;
     bit<16>    checksum;
+}
+
+header resubmit_metadata_t {
+// Maximum 64 bits
+    bit<24>   spi;
+    bit<8>    si;
+    bit<9>    out_port;
     
 }
 struct headers {
@@ -82,6 +89,10 @@ struct headers {
     tcp_t        tcp;
     udp_t        udp;
 }
+
+//////////////////* Metadata *//////////////////
+//////////////////* Metadata *//////////////////
+//////////////////* Metadata *//////////////////
 
 struct l3_metadata_t {
     bit<2> lkp_ip_type;
@@ -163,7 +174,16 @@ struct metadata_t {
 
 
 Register<bit<32>,bit<32>>(1024,0)  set_pkt_id_reg;
-
+RegisterAction<bit<32>, bit<32>, 1024>(set_pkt_id_reg) read_id_from_reg = {
+    void apply(inout bit<32> register_data) {
+        register_data = register_data + 1;
+    }
+};
+RegisterAction<bit<32>, bit<32>, 1024>(set_pkt_id_reg) write = {
+    void apply(inout bit<32> register_data) {
+        register_data = 0;
+    }
+};
 
 /*************************************************************************
 *********************** P A R S E R  ***********************************
@@ -172,11 +192,23 @@ Register<bit<32>,bit<32>>(1024,0)  set_pkt_id_reg;
 parser SwitchIngressParser(
                 packet_in packet,
                 out headers hdr,
-	        out metadata_t ig_md,
+	            out metadata_t meta,
                 out ingress_intrinsic_metadata_t ig_intr_md) {
 
     state start {
-        
+        pkt.extract(ig_intr_md);
+        transition select(ig_intr_md.resubmit_flag)
+            1 : parse_resubmit;
+            0 : parse_port_metadata;
+    }
+
+    state parse_resubmit {
+        pkt.extract<resubmit_metadata_t>(resubmit_meta);
+        transition parse_out_ethernet;
+    }
+
+    state parse_port_metadata {
+        pkt.advance(PORT_METADATA_SIZE);
         transition parse_out_ethernet;
     }
 

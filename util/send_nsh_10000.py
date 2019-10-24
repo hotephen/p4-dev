@@ -10,6 +10,11 @@ from scapy.all import Packet
 from scapy.all import Ether, IP, UDP, TCP
 from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3BytesField, ByteField, XByteField
 
+"""
+usage : send_nsh_10000.py [src] [dst] [interface] [spi] [si] [number of packets]
+
+the 6 arguments are needed
+"""
 
 class NSH(Packet):
     """Network Service Header.
@@ -26,14 +31,14 @@ class NSH(Packet):
         BitField('MDType', 1, 4),
         ByteField("NextProto", 0x65),
         ByteField("NextProto_2", 0x58),
-        X3BytesField('NSP', 1),
-        ByteField('NSI', 255)
+        X3BytesField('SPI', sys.args[4]),
+        ByteField('SI', sys.args[5])
     ]
 
 def main():
 
-    if len(sys.argv)<3:
-        print 'pass 1 arguments: <destination> '
+    if len(sys.argv)<6:
+        print '[src] [dst] [interface] [spi] [si] [number of packets]'
         exit(1)
 
 #src addr
@@ -43,6 +48,9 @@ def main():
     addr1 = socket.gethostbyname(sys.argv[2])
 
     iface = sys.argv[3]
+    spi = sys.argv[4]
+    si = sys.argv[5]
+    num_pkts = sys.agrs[6]
 
     
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
@@ -52,9 +60,9 @@ def main():
     pkt1.show()
     hexdump(pkt1)
     
-    for i in range(1,1000):
+    for i in range(1,num_pkts):
         sendp(pkt1, iface=iface, verbose=False)
-        print "sending %s th packets on interface %s (Bmv2 port 0) to dmac=00:00:00:00:00:01" % (i, iface)
+        print "sending %s th SFC %s packets to interface %s " % (i, spi, iface)
 
 
 if __name__ == '__main__':
