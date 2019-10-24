@@ -8,6 +8,10 @@ from scapy.all import Packet
 from scapy.all import IP, UDP, Raw
 from scapy.layers.inet import _IPOption_HDR
 
+
+#sys.path.append("~/p4-dev/util")
+#from send_nsh_manual import NSH
+
 class NSH(Packet):
     """Network Service Header.
        NSH MD-type 1 if there is no ContextHeaders"""
