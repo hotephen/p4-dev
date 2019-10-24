@@ -49,6 +49,13 @@ def main():
     si = int(sys.argv[5])
     num_pkts = int(sys.argv[6])
 
+    print(''' addr = socket.gethostbyname(sys.argv[1])
+    addr1 = socket.gethostbyname(sys.argv[2])
+    iface = sys.argv[3]
+    spi = int(sys.argv[4])
+    si = int(sys.argv[5])
+    num_pkts = int(sys.argv[6]) ''')
+
     
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
     in_ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
