@@ -32,7 +32,7 @@ class NSH(Packet):
         ByteField("NextProto", 0x65),
         ByteField("NextProto_2", 0x58),
         X3BytesField('SPI', sys.argv[4]),
-        ByteField('SI', sys.argv[5])
+        ByteField('SI', hex(int(sys.argv[5])))
     ]
 
 def main():
@@ -43,14 +43,11 @@ def main():
 
 #src addr
     addr = socket.gethostbyname(sys.argv[1])
-
-#dst addr
     addr1 = socket.gethostbyname(sys.argv[2])
-
     iface = sys.argv[3]
-    spi = sys.argv[4]
-    si = sys.argv[5]
-    num_pkts = sys.argv[6]
+    spi = int(sys.argv[4])
+    si = int(sys.argv[5])
+    num_pkts = int(sys.argv[6])
 
     
     out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
@@ -60,7 +57,7 @@ def main():
     pkt1.show()
     hexdump(pkt1)
     
-    for i in range(1,num_pkts):
+    for i in range(1, num_pkts):
         sendp(pkt1, iface=iface, verbose=False)
         print "sending %s th SFC %s packets to interface %s " % (i, spi, iface)
 
