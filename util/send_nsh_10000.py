@@ -16,7 +16,7 @@ usage : send_nsh_10000.py [src] [dst] [interface] [spi] [si] [number of packets]
 the 6 arguments are needed
 """
 
-class NSH(Packet, spi, si):
+class NSH(Packet):
     """Network Service Header.
        NSH MD-type 1 if there is no ContextHeaders"""
     name = "NSH"
@@ -31,8 +31,8 @@ class NSH(Packet, spi, si):
         BitField('MDType', 1, 4),
         ByteField("NextProto", 0x65),
         ByteField("NextProto_2", 0x58),
-        X3BytesField('SPI', spi),
-        ByteField('SI', hex(si))
+        X3BytesField('SPI', 1),
+        ByteField('SI', 255)
     ]
 
 def main():
