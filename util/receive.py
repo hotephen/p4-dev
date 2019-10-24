@@ -7,6 +7,7 @@ from scapy.all import sniff, sendp, hexdump, get_if_list, get_if_hwaddr
 from scapy.all import Packet
 from scapy.all import IP, UDP, Raw
 from scapy.layers.inet import _IPOption_HDR
+from NSH import *
 
 def get_if():
     ifs=get_if_list()

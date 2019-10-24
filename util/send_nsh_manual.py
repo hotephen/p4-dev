@@ -10,6 +10,8 @@ from scapy.all import Packet
 from scapy.all import Ether, IP, UDP, TCP
 from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3BytesField, ByteField, XByteField
 
+sys.path.append("~/p4-dev/util")
+
 """
 usage : send_nsh_10000.py [src] [dst] [interface] [spi] [si] [number of packets]
 
