@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# option
+# <src_ip> | <dst_ip> | <interface> | <vdp_id>
+
 import argparse
 import sys
 import socket
@@ -10,45 +14,28 @@ from scapy.all import Packet
 from scapy.all import Ether, IP, UDP, TCP
 from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3BytesField, ByteField, XByteField
 
-#def get_if():
-#    ifs=get_if_list()
-#    iface=None # "h1-eth0"
-#    for i in get_if_list():
-#        if "eth0" in i:
-#            iface=i
-#            break;
-#    if not iface:
-#        print "Cannot find eth0 interface"
-#        exit(1)
-#    return iface
-
 class DH(Packet):
     """Description Header"""
        
     name = "DH"
 
     fields_desc = [
-        BitField('field1',0, 8),
-        BitField('field2',0, 8),
-        BitField('field3',0, 8),
-        BitField('field4',0, 8)
+        BitField('flag',0, 8),
+        BitField('len',0, 8),
+        BitField('vdp_id',0, 16)
    ]
 
 def main():
 
 
-#src addr
+
     addr = socket.gethostbyname(sys.argv[1])
-
-#dst addr
     addr1 = socket.gethostbyname(sys.argv[2])
-
     iface = sys.argv[3]
-
+    vdp_id = int(sys.argv[4])
    
     ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
-
-    pkt = DH() / ether / IP(src=addr,dst=addr1) / "hi"
+    pkt = DH(vdp_id=vdp_id) / ether / IP(src=addr,dst=addr1) / "hi"
     pkt.show()
     hexdump(pkt)
     sendp(pkt, iface=iface, verbose=False)
