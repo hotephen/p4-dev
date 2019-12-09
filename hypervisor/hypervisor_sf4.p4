@@ -145,14 +145,14 @@ parser MyParser(packet_in packet,
                 inout standard_metadata_t standard_metadata) {
 
     state start {
-        transition parse_112;
+        transition parse_desc;
     }
 
-    state parse_112 {
+    /* state parse_112 {
         packet.extract(hdr.hdr_112);
 
         transition parse_desc;
-    }
+    } */
 
     state parse_desc {
         packet.extract(hdr.desc_hdr);
@@ -166,21 +166,24 @@ parser MyParser(packet_in packet,
     }
 
     state parse_vPDP1 {
-        packet.extract(hdr.hdr_224);
+        packet.extract(hdr.hdr_112);
         transition accept;
     }
 
     state parse_vPDP2 {
+        packet.extract(hdr.hdr_112);
+        packet.extract(hdr.hdr_160[0]);
         transition accept;
     }
 
     state parse_vPDP3 {
-        packet.extract(hdr.hdr_160.next);
+        packet.extract(hdr.hdr_112);
+        packet.extract(hdr.hdr_160[0]);
         transition parse_vPDP3_1;        
     }
 
     state parse_vPDP3_1 {
-        packet.extract(hdr.hdr_160.next);
+        packet.extract(hdr.hdr_160[1]);
         transition accept;
     }
 
@@ -820,8 +823,8 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
-        packet.emit(hdr.hdr_112);
         packet.emit(hdr.desc_hdr);
+        packet.emit(hdr.hdr_112);
         packet.emit(hdr.hdr_224);
         packet.emit(hdr.hdr_160[0]);
         packet.emit(hdr.hdr_160[1]);
