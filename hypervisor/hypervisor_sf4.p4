@@ -298,40 +298,14 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        const entries = { 
+        /* const entries = { 
         //#define def_mask_224_opcode  224w0x000000000000FFFF0000000000000000000000000000000000000000
         // set_action_id = 48w0b(0001 1111 1000 0001) = 48w0x1F81
             (4, 224w0x00000000000000010000000000000000000000000000000000000000 &&& 224w0x000000000000FFFF0000000000000000000000000000000000000000) : set_action_id(0x00001F81);
-        }
+        } */
+        // opcode==1 이면, 
     }
-    //? escape? 
-
-    /* table table_std_meta_match_ingress_port_stage3 {
-        key = {
-            meta.vdp_metadata.inst_id : exact ;
-            standard_metadata.ingress_port : ternary ;
-        }
-        actions = {
-            set_action_id();
-        }
-        const entries = {
-            (3, 3) : set_action_id(0x00000001);
-        }
-    }
-    table table_std_meta_match_ingress_port_stage4 {
-        key = {
-            meta.vdp_metadata.inst_id : exact ;
-            standard_metadata.ingress_port : ternary ;
-        }
-        actions = {
-            set_action_id();
-        }
-        const entries = {
-        // set_action_id = 48w0b(0001 1111 1000 0001) = 48w0x1F81
-            (4, 4) : set_action_id(0x00001F81);
-        }
-    } */
-
+   
 /////primitive actions + tables + entries /////
 	action action_forward(bit<9> port) { // 1st primitive
 		standard_metadata.egress_spec = port;

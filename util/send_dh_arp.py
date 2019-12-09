@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# option
-# <src_ip> | <dst_ip> | <interface> | <vdp_id> | src_mac | dst_mac | src_port | dst_port 
+
+# <src_mac>
 
 import argparse
 import sys
@@ -26,24 +26,16 @@ class DH(Packet):
    ]
 
 def main():
+    
+    src_mac = sys.argv[1]
+    src_addr = socket.gethostbyname(sys.argv[2])
+    dst_addr = socket.gethostbyname(sys.argv[3])
+    iface = sys.argv[4]
+    vdp_id = sys.argv[5]
 
-    src_addr = socket.gethostbyname(sys.argv[1])
-    dst_addr = socket.gethostbyname(sys.argv[2])
-    iface = sys.argv[3]
-    vdp_id = int(sys.argv[4])
-    src_mac = sys.argv[5]
-    dst_mac = sys.argv[6]
-    src_port = int(sys.argv[7])
-    dst_port = int(sys.argv[8])
-    
-    if len(sys.argv)<:
-        
-        ether =  Ether(src=src_mac, dst=dst_mac, type=0x800)
-        pkt = DH(vdp_id=vdp_id) / ether / IP(src=src_addr,dst=dst_addr) / TCP(sport=src_port , dport=dst_port) / ARP()    
-    else:
-        ether =  Ether(src=src_mac, dst=dst_mac, type=0x800)
-        pkt = DH(vdp_id=vdp_id) / ether / IP(src=src_addr,dst=dst_addr) / TCP(sport=src_port , dport=dst_port) /"hi"
-    
+
+    ether =  Ether(src=src_mac, dst="FF:FF:FF:FF:FF:FF", type=0x0806)
+    pkt = DH(vdp_id=vdp_id) / ether / ARP(op=1,hwsrc=src_mac, psrc=src_addr, pdst=dst_addr) 
     pkt.show()
     hexdump(pkt)
     sendp(pkt, iface=iface, verbose=False)
