@@ -1,7 +1,14 @@
-// 1 : L2
-// 2 : L3
-// 3 : FW 
-// 4 : ARP_PROXY
+// 1. L2 : dstMAC이 00:00:00:00:00:02이면 => port 1로 forward
+// 2. L3 : dstIP가 10.10.2.1/24 => port 2로 forward
+// 3. FW : 	
+//  src IP : 10.0.1.1/24 => Pass (forward to port 3)
+//  src IP : 10.0.2.1/24 => Drop
+//	dst port : 80 => Pass (forward to port 3)
+//  dst port : 22 => Drop
+// 4. ARP_PROXY :
+//
+//
+//
 
 table_add table_header_match_112_stage1 set_action_id 1 112w0x0000000000020000000000000000 &&& 112w0xFFFFFFFFFFFF0000000000000000 => 0x00000001
 table_add table_action_forward_stage1 action_forward 1 => 1
