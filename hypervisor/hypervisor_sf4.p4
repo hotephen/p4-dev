@@ -601,7 +601,7 @@ control MyIngress(inout headers hdr,
 
 
     action action_drop() { //48th primitive
-		mark_to_drop(standard_metadata);
+		mark_to_drop();
 	}
     
     table table_action_drop_stage1 {
