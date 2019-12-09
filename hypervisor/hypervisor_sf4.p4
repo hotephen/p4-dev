@@ -188,7 +188,8 @@ parser MyParser(packet_in packet,
     }
 
     state parse_vPDP4 {
-        packet.extract(hdr.hdr_160.next);
+        packet.extract(hdr.hdr_112);
+        packet.extract(hdr.hdr_224);
         transition accept;
     }
 }
