@@ -732,9 +732,9 @@ control MyIngress(inout headers hdr,
                     // if(meta.vdp_metadata.table_chain&8 != 0)
                     //   table_header_match_224_1_stage1.apply();
                 }
-				if (meta.vdp_metadata.match_chain_bitmap & BIT_MASK_STD_META !=0 ){
+				/* if (meta.vdp_metadata.match_chain_bitmap & BIT_MASK_STD_META !=0 ){
 						table_std_meta_match_ingress_port_stage3.apply();
-				}
+				} */
 				// if (meta.vdp_metadata.match_chain_bitmap & BIT_MASK_USER_META !=0){
 				// 		table_user_meta_stage1.apply();
 				// }
@@ -759,9 +759,9 @@ control MyIngress(inout headers hdr,
                     if(meta.vdp_metadata.header_chain_bitmap&8 != 0)
                         table_header_match_224_stage4.apply();
                 }
-				if (meta.vdp_metadata.match_chain_bitmap & BIT_MASK_STD_META !=0 ){
+				/* if (meta.vdp_metadata.match_chain_bitmap & BIT_MASK_STD_META !=0 ){
 						table_std_meta_match_ingress_port_stage4.apply();
-				}
+				} */
             }
             if(ACTION_BITMAP != 0) {
                 if ((ACTION_BITMAP & BIT_MASK_DO_FORWARD) != 0) {	
