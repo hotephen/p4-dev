@@ -31,7 +31,7 @@ def main():
     src_addr = socket.gethostbyname(sys.argv[2])
     dst_addr = socket.gethostbyname(sys.argv[3])
     iface = sys.argv[4]
-    vdp_id = sys.argv[5]
+    vdp_id = int(sys.argv[5])
 
 
     ether =  Ether(src=src_mac, dst="FF:FF:FF:FF:FF:FF", type=0x0806)
