@@ -36,13 +36,9 @@ def main():
     src_port = int(sys.argv[7])
     dst_port = int(sys.argv[8])
     
-    if len(sys.argv)<:
-        
-        ether =  Ether(src=src_mac, dst=dst_mac, type=0x800)
-        pkt = DH(vdp_id=vdp_id) / ether / IP(src=src_addr,dst=dst_addr) / TCP(sport=src_port , dport=dst_port) / ARP()    
-    else:
-        ether =  Ether(src=src_mac, dst=dst_mac, type=0x800)
-        pkt = DH(vdp_id=vdp_id) / ether / IP(src=src_addr,dst=dst_addr) / TCP(sport=src_port , dport=dst_port) /"hi"
+    
+    ether =  Ether(src=src_mac, dst=dst_mac, type=0x800)
+    pkt = DH(vdp_id=vdp_id) / ether / IP(src=src_addr,dst=dst_addr) / TCP(sport=src_port , dport=dst_port) /"hi"
     
     pkt.show()
     hexdump(pkt)
