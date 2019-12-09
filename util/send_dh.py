@@ -45,7 +45,7 @@ def main():
     args = parser.parse_args()
     """
     
-    ether =  Ether(src=src_mac, dst='00:00:00:00:00:01', type=0x800)
+    ether =  Ether(src=src_mac, dst=dst_mac, type=0x800)
     pkt = DH(vdp_id=vdp_id) / ether / IP(src=src_addr,dst=dst_addr) / TCP(sport=src_port , dport=dst_port) /"hi"
     pkt.show()
     hexdump(pkt)
