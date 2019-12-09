@@ -157,10 +157,10 @@ parser MyParser(packet_in packet,
     state parse_desc {
         packet.extract(hdr.desc_hdr);
         transition select(hdr.desc_hdr.vdp_id) {
-            1:  parse_vPDP1; //Arp Proxy
-            2:  parse_vPDP2; //L2switching
-            3:  parse_vPDP3; //Firewall
-            4:  parse_vPDP4; //NAT
+            1:  parse_vPDP1; //L2
+            2:  parse_vPDP2; //L3
+            3:  parse_vPDP3; //FW
+            4:  parse_vPDP4; //ARP_proxy
             default:  accept;
         }
     }
@@ -383,10 +383,10 @@ control MyIngress(inout headers hdr,
                              |(value_112_dstAddr&def_mask_112_dstAddr);
     }
 
-    action action_modify_Ethernet(bit<112> Ethernet_dstAddr) {
+/*     action action_modify_Ethernet(bit<112> Ethernet_dstAddr) {
         hdr.hdr_Ethernet.all = (hdr.hdr_Ethernet.all&(~mask_Ethernet_dstAddr))|
                               (Ethernet_dstAddr&mask_Ethernet_dstAddr);
-    }
+    } */
 
     table table_action_mod_112_dstAddr_stage1 {
         key = {
