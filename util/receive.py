@@ -25,7 +25,7 @@ def get_if():
     return iface
 
 def handle_pkt(pkt):
-    print "##############################got a packet##############################"
+    print "############################## got a packet ##############################"
     pkt.show()
     hexdump(pkt)
     sys.stdout.flush()

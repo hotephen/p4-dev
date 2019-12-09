@@ -7,10 +7,13 @@
  dst port : 22 => Drop
 4. ARP_PROXY :
  src MAC : 00:00:00:00:00:01
- dst MAC : FF:FF:FF:FF:FF:FF
+ dst MAC : FF:FF:FF:FF:FF:FF (broadcast)
+ src IP : 10.0.0.1
+ dst IP : 10.0.4.1 (아무거나 상관없음)
+ switch MAC : 00:00:00:00:01:01
+ switch IP : 10.0.0.10
 
 
-arp.opcode = 2
 
 
 
@@ -37,10 +40,7 @@ table_add table_action_mod_112_dstAddr_stage3 action_mod_112_dstAddr 3 => 0x0000
 table_add table_action_mod_112_srcAddr_stage3 action_mod_112_srcAddr 3 => 0x0000000000000000000000010000
 table_add table_action_drop_stage3 action_drop 3 =>
 
-table_add table_header_match_224_stage4 set_action_id 4 0x00000000000000010000000000000000000000000000000000000000&&&0x000000000000FFFF0000000000000000000000000000000000000000 => 0x00001F81 1
-//table_add table_action_forward_stage4 action_forward 4 => 4
-table_add table_action_mod_112_dstAddr_stage4 action_mod_112_dstAddr 4 => 0x0000000005000000000000000000
-table_add table_action_mod_112_srcAddr_stage4 action_mod_112_srcAddr 4 => 0x0000000000000000000000010000
+
 
 table_add table_action_mod_224_opcode_n_response_stage4 action_mod_224_opcode_n_response 4 => 2
   // opcode에 2 넣어줌 , egress_spec = ingress_port
@@ -50,11 +50,11 @@ table_add table_action_mod_112_bothAddr_stage4 action_mod_112_bothAddr 4 => 0x00
   // eth src_MAC에 스위치의 src_MAC 대입
 
 table_add table_action_extract_n_shift_224_srcMAC_stage4 action_extract_n_shift_224_srcMAC 4 =>
-  // arp.target_MAC 에 arp.sender_MAC (00:00:00:00:00:01) 대입
+  // arp.target_MAC 에 arp.sender_MAC (00:00:00:00:00:01, host1) 대입
 table_add table_action_mod_224_bothMAC_stage4 action_mod_224_bothMAC 4 => 0x00000000000000000000000001010000000000000000000000000000
   // arp.sender_MAC 에 스위치 MAC주소 (00:00:00:00:01:01) 대입
 table_add table_action_extract_n_shift_224_srcIP_stage4 action_extract_n_shift_224_srcIP 4 =>
-  // arp.target_IP 에 arp.sender_IP 대입
+  // arp.target_IP 에 arp.sender_IP (10.0.0.1, host1) 대입 
 table_add table_action_mod_224_bothIP_stage4 action_mod_224_bothIP 4 => 0x00000000000000000000000000000A00010A00000000000000000000
   // arp.sender_IP 에 스위치 IP주소 (10.0.1.10) 대입
 table_add table_action_drop_stage4 action_drop 4 =>
