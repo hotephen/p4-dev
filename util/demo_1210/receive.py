@@ -77,11 +77,11 @@ def handle_pkt(pkt):
 def main():
     global host
     host = int(sys.argv[1])
-    ifaces = filter(lambda i: 'veth1' in i, os.listdir('/sys/class/net/'))
+    ifaces = filter(lambda i: host in i, os.listdir('/sys/class/net/'))
     iface = ifaces[0]
     print "sniffing on %s" % iface
     sys.stdout.flush()
-    sniff(iface = 'veth1',
+    sniff(iface = host,
         prn = lambda x: handle_pkt(x))
 
 if __name__ == '__main__':
