@@ -255,7 +255,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x0x80000000);
+        default_action = set_action_id(0x80000000);
         /* const entries = { 
             (2, 160w0x000000000000000000000000000000000A000201 &&& 160w0x00000000000000000000000000000000FFFFFF00) : set_action_id(0x00000111);
         } */
@@ -269,7 +269,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x0x80000000);
+        default_action = set_action_id(0x80000000);
         /* const entries = {
             (3, 160w0x0000000000000000000000000A00010000000000 &&& 160w0x000000000000000000000000FFFFFF0000000000) : set_action_id(0x00000001);
             (3, 160w0x0000000000000000000000000A00020000000000 &&& 160w0x000000000000000000000000FFFFFF0000000000) : set_action_id(0x80000000);
@@ -285,7 +285,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x0x80000000);
+        default_action = set_action_id(0x80000000);
         /* const entries = {
             (3, 160w0x0000005000000000000000000000000000000000 &&& 160w0x0000FFFF00000000000000000000000000000000) : set_action_id(0x00000001);
             (3, 160w0x0000001600000000000000000000000000000000 &&& 160w0x0000FFFF00000000000000000000000000000000) : set_action_id(0x80000000);
@@ -303,7 +303,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x0x80000000);
+        default_action = set_action_id(0x80000000);
         /* const entries = { 
         //#define def_mask_224_opcode  224w0x000000000000FFFF0000000000000000000000000000000000000000
         // set_action_id = 48w0b(0001 1111 1000 0001) = 48w0x1F81
