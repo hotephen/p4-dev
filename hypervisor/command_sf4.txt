@@ -9,10 +9,19 @@
  src MAC : 00:00:00:00:00:01
  dst MAC : FF:FF:FF:FF:FF:FF (broadcast)
  src IP : 10.0.0.1
- dst IP : 10.0.4.1 (아무거나 상관없음)
+ dst IP : 10.0.4.1 
  switch MAC : 00:00:00:00:01:01
  switch IP : 10.0.0.10
 
+arp.target_IP : 스위치 주소 => ingress port 로 forward
+arp.opcode : 1 => 
+   arp.target_MAC 에 arp.sender_MAC 대입
+   arp.target_IP 에 arp.sender_IP 대입
+   ethernet.dest 에 ethernet.src 대입
+   arp.sender_MAC 에 어떤 값 넣기 (00:00:00:00:00:05)
+   arp.sender_IP 에 어떤 값 넣기 (10.0.4.1)
+   ethernet.src 에 어떤 값 넣게 (00:00:00:00:01:01)
+arp.opcode = 2
 
 
 
@@ -40,21 +49,24 @@ table_add table_action_mod_112_dstAddr_stage3 action_mod_112_dstAddr 3 => 0x0000
 table_add table_action_mod_112_srcAddr_stage3 action_mod_112_srcAddr 3 => 0x0000000000000000000000010000
 table_add table_action_drop_stage3 action_drop 3 =>
 
+// arp헤더의 opcode 필드가 : 1, arp.target_IP : 10.0.4.1  => arp.sender_MAC : 00:00:00:00:00:05
 
-
+table_add table_header_match_224_stage4 set_action_id 4 0x00000000000000010000000000000000000000000000000000000000&&&0x000000000000FFFF0000000000000000000000000000000000000000 => 0x00001F81 1
 table_add table_action_mod_224_opcode_n_response_stage4 action_mod_224_opcode_n_response 4 => 2
   // opcode에 2 넣어줌 , egress_spec = ingress_port
 table_add table_action_extract_n_shift_112_srcAddr_stage4 action_extract_n_shift_112_srcAddr 4 =>
-  // eth dst_MAC에 받은패킷의 src_MAC 대입 (되돌려주기 위해)
+  // eth dst_MAC에 host1 MAC 대입 (되돌려주기 위해)
 table_add table_action_mod_112_bothAddr_stage4 action_mod_112_bothAddr 4 => 0x0000000000000000000001010000
-  // eth src_MAC에 스위치의 src_MAC 대입
+  // eth src_MAC에 Switch의 MAC주소 (00:00:00:00:01:01) 대입
 
 table_add table_action_extract_n_shift_224_srcMAC_stage4 action_extract_n_shift_224_srcMAC 4 =>
-  // arp.target_MAC 에 arp.sender_MAC (00:00:00:00:00:01, host1) 대입
-table_add table_action_mod_224_bothMAC_stage4 action_mod_224_bothMAC 4 => 0x00000000000000000000000001010000000000000000000000000000
-  // arp.sender_MAC 에 스위치 MAC주소 (00:00:00:00:01:01) 대입
+  // arp.target_MAC 에 host1 MAC주소 (00:00:00:00:00:01, host1) 대입
+table_add table_action_mod_224_bothMAC_stage4 action_mod_224_bothMAC 4 => 0x00000000000000000000000000050000000000000000000000000000
+  // arp.sender_MAC 에 host4 MAC주소 (00:00:00:00:00:05) 대입
+
 table_add table_action_extract_n_shift_224_srcIP_stage4 action_extract_n_shift_224_srcIP 4 =>
-  // arp.target_IP 에 arp.sender_IP (10.0.0.1, host1) 대입 
-table_add table_action_mod_224_bothIP_stage4 action_mod_224_bothIP 4 => 0x00000000000000000000000000000A00010A00000000000000000000
-  // arp.sender_IP 에 스위치 IP주소 (10.0.1.10) 대입
+  // arp.target_IP 에 host1 IP주소 (10.0.0.1) 대입 
+table_add table_action_mod_224_bothIP_stage4 action_mod_224_bothIP 4 => 0x00000000000000000000000000000A00040100000000000000000000
+  // arp.sender_IP 에 host4 IP주소 (10.0.4.1) 대입
+
 table_add table_action_drop_stage4 action_drop 4 =>
