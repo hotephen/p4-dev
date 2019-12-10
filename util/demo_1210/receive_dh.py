@@ -65,8 +65,8 @@ def handle_pkt(pkt):
         tgtIP="%d.%d.%d.%d" %(b[42], b[43], b[44], b[45])
         print("srcMAC = " + srcMAC + "\tdstMAC = " + dstMAC)
         print("\t-- [ arp information ] --")
-        print("srcMAC = " + sdrMAC + "\ttgtMAC = " + tgtMAC)
-        print("srcIP = " + sdrIP + "\t\ttgtIP = " + tgtIP)
+        print("sdrMAC = " + sdrMAC + "\ttgtMAC = " + tgtMAC)
+        print("sdrIP = " + sdrIP + "\t\ttgtIP = " + tgtIP)
     else:
         sport = b[38] * 256 + b[39]
         dport = b[40] * 256 + b[41]
