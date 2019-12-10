@@ -594,9 +594,9 @@ control MyIngress(inout headers hdr,
         actions = {
             action_drop();
         }
-        /* const entries = {
+        const entries = {
             1 : action_drop();
-        } */
+        }
     }
     table table_action_drop_stage2 {
         key = {
@@ -605,9 +605,9 @@ control MyIngress(inout headers hdr,
         actions = {
             action_drop();
         }
-        /* const entries = {
+        const entries = {
             2 : action_drop();
-        } */
+        }
     }
     table table_action_drop_stage3 {
         key = {
@@ -616,9 +616,9 @@ control MyIngress(inout headers hdr,
         actions = {
             action_drop();
         }
-        /* const entries = {
+        const entries = {
             3 : action_drop();
-        } */
+        }
     }
     table table_action_drop_stage4 {
         key = {
@@ -627,9 +627,9 @@ control MyIngress(inout headers hdr,
         actions = {
             action_drop();
         }
-        /* const entries = {
+        const entries = {
             4 : action_drop();
-        } */
+        }
     }
     
 
