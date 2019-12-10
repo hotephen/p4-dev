@@ -57,16 +57,19 @@ def handle_pkt(pkt):
     dstIP="%d.%d.%d.%d" %(b[34], b[35], b[36], b[37])
 
     print('\n----- Host%d received packet with vdp_id %d' % (host, vid))
-
+    
     if vid == 4:
-        sdrMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[26], b[27], b[28], b[29], b[30], b[31])   
-        sdrIP="%d.%d.%d.%d" %(b[32], b[33], b[34], b[35])
-        tgtMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[36], b[37], b[38], b[39], b[40], b[41])   
-        tgtIP="%d.%d.%d.%d" %(b[42], b[43], b[44], b[45])
-        print("srcMAC = " + srcMAC + "\tdstMAC = " + dstMAC)
-        print("\t-- [ arp information ] --")
-        print("sdrMAC = " + sdrMAC + "\ttgtMAC = " + tgtMAC)
-        print("sdrIP = " + sdrIP + "\t\ttgtIP = " + tgtIP)
+        if dstMAC == "FF:FF:FF:FF:FF:FF" :
+            pass
+        else :
+            sdrMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[26], b[27], b[28], b[29], b[30], b[31])   
+            sdrIP="%d.%d.%d.%d" %(b[32], b[33], b[34], b[35])
+            tgtMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[36], b[37], b[38], b[39], b[40], b[41])   
+            tgtIP="%d.%d.%d.%d" %(b[42], b[43], b[44], b[45])
+            print("srcMAC = " + srcMAC + "\tdstMAC = " + dstMAC)
+            print("\t-- [ arp information ] --")
+            print("sdrMAC = " + sdrMAC + "\ttgtMAC = " + tgtMAC)
+            print("sdrIP = " + sdrIP + "\t\ttgtIP = " + tgtIP)
     else:
         sport = b[38] * 256 + b[39]
         dport = b[40] * 256 + b[41]
