@@ -285,7 +285,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000);
+        
         /* const entries = {
             (3, 160w0x0000005000000000000000000000000000000000 &&& 160w0x0000FFFF00000000000000000000000000000000) : set_action_id(0x00000001);
             (3, 160w0x0000001600000000000000000000000000000000 &&& 160w0x0000FFFF00000000000000000000000000000000) : set_action_id(0x80000000);
