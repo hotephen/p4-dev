@@ -58,7 +58,7 @@ def handle_pkt(pkt):
     
     if host == 1 and vid != 4:
         pass
-    else
+    else:
         if vid == 4:
             if dstMAC == "FF:FF:FF:FF:FF:FF" :
                 pass
