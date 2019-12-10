@@ -56,30 +56,27 @@ def handle_pkt(pkt):
     srcIP="%d.%d.%d.%d" %(b[30], b[31], b[32], b[33])
     dstIP="%d.%d.%d.%d" %(b[34], b[35], b[36], b[37])
     
-    if host == 1 and vid !=4 :
-        pass
-    
-    else:        
-        if vid == 4:
-            if dstMAC == "FF:FF:FF:FF:FF:FF" :
-                pass
-            else :
-                print('\n----- Host%d received packet with vdp_id %d' % (host, vid))
-                sdrMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[26], b[27], b[28], b[29], b[30], b[31])   
-                sdrIP="%d.%d.%d.%d" %(b[32], b[33], b[34], b[35])
-                tgtMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[36], b[37], b[38], b[39], b[40], b[41])   
-                tgtIP="%d.%d.%d.%d" %(b[42], b[43], b[44], b[45])
-                print("srcMAC = " + srcMAC + "\tdstMAC = " + dstMAC)
-                print("\t-- [ arp information ] --")
-                print("sdrMAC = " + sdrMAC + "\ttgtMAC = " + tgtMAC)
-                print("sdrIP = " + sdrIP + "\t\ttgtIP = " + tgtIP)
-        else:
+       
+    if vid == 4:
+        if dstMAC == "FF:FF:FF:FF:FF:FF" :
+            pass
+        else :
             print('\n----- Host%d received packet with vdp_id %d' % (host, vid))
-            sport = b[38] * 256 + b[39]
-            dport = b[40] * 256 + b[41]
+            sdrMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[26], b[27], b[28], b[29], b[30], b[31])   
+            sdrIP="%d.%d.%d.%d" %(b[32], b[33], b[34], b[35])
+            tgtMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[36], b[37], b[38], b[39], b[40], b[41])   
+            tgtIP="%d.%d.%d.%d" %(b[42], b[43], b[44], b[45])
             print("srcMAC = " + srcMAC + "\tdstMAC = " + dstMAC)
-            print("srcIP = " + srcIP + "\t\tdstIP = " + dstIP)
-            print("srcPORT = " + str(sport) + "\t\t\tdstPORT = " + str(dport))
+            print("\t-- [ arp information ] --")
+            print("sdrMAC = " + sdrMAC + "\ttgtMAC = " + tgtMAC)
+            print("sdrIP = " + sdrIP + "\t\ttgtIP = " + tgtIP)
+    else:
+        print('\n----- Host%d received packet with vdp_id %d' % (host, vid))
+        sport = b[38] * 256 + b[39]
+        dport = b[40] * 256 + b[41]
+        print("srcMAC = " + srcMAC + "\tdstMAC = " + dstMAC)
+        print("srcIP = " + srcIP + "\t\tdstIP = " + dstIP)
+        print("srcPORT = " + str(sport) + "\t\t\tdstPORT = " + str(dport))
 
 def main():
     global host
