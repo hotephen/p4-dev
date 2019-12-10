@@ -49,7 +49,7 @@ def translateRules(input_text):
   # make P4 ruleset file
   vals = input_text.split()
 
-  f1 = open('rule_form/' + vals[0], 'r')
+  f1 = open('rule_form_bmv2/' + vals[0], 'r')
   f2 = open('tmp', 'w')
 
   forms = []
