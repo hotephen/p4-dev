@@ -3,7 +3,7 @@ from curses.textpad import Textbox, rectangle
 import time
 import os
 
-padding = 0
+padding = 4
 MAX_RESOURCE_NUM = 50
 BAR_SIZE = 50
 ratio = BAR_SIZE / MAX_RESOURCE_NUM
