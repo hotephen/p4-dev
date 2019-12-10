@@ -1,0 +1,5 @@
+p4.SwitchIngress.table_header_match_112_stage1.add_with_set_action_id(inst_id=1, buffer=112w0x0000000000020000000000000000 &&& 112w0xFFFFFFFFFFFF0000000000000000, action_bitmap=0x00000001)
+p4.SwitchIngress.table_action_mod_112_srcAddr_stage1.add_with_action_mod_112_srcAddr(inst_id=1, value_112_srcAddr=0x0000000000000000000000010000)
+p4.SwitchIngress.table_action_drop_stage1.add_with_action_drop(inst_id=1)
+p4.SwitchIngress.table_action_forward_stage1.add_with_action_forward(inst_id=1, port=%d)
+p4.SwitchIngress.table_action_mod_112_dstAddr_stage1.add_with_action_mod_112_dstAddr(inst_id=1, value_112_dstAddr=0x%02X%02X%02X%02X%02X%02X0000000000000000)

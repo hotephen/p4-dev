@@ -46,7 +46,7 @@ table_add table_action_mod_224_opcode_n_response_stage4 action_mod_224_opcode_n_
   // opcode에 2 넣어줌 , egress_spec = ingress_port
 table_add table_action_extract_n_shift_112_srcAddr_stage4 action_extract_n_shift_112_srcAddr 4 =>
   // eth dst_MAC에 받은패킷의 src_MAC 대입 (되돌려주기 위해)
-table_add table_action_mod_112_bothAddr_stage4 action_mod_112_bothAddr 4 => 0x00000000000000000000000A0000
+table_add table_action_mod_112_bothAddr_stage4 action_mod_112_bothAddr 4 => 0x0000000000000000000001010000
   // eth src_MAC에 스위치의 src_MAC 대입
 
 table_add table_action_extract_n_shift_224_srcMAC_stage4 action_extract_n_shift_224_srcMAC 4 =>
