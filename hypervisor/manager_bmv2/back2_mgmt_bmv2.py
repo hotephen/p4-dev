@@ -3,9 +3,9 @@ from curses.textpad import Textbox, rectangle
 import time
 import os
 
-padding = 0
+padding = 3
 MAX_RESOURCE_NUM = 50
-BAR_SIZE = 50
+BAR_SIZE = 100 
 ratio = BAR_SIZE / MAX_RESOURCE_NUM
 resourceNum = 0
 resourceStatus = {'L2 Forwarding' : [0, 0, 0, 0, 0], 'L3 Forwarding' : [0, 0, 0, 0, 1], 'Firewall' : [0, 0, 0, 0, 2], 'ARP Proxy' : [0, 0, 0, 0, 3]}
@@ -38,7 +38,7 @@ def printResourceBar(screen):
   for i in range(4):
     for j in range(cnt[i], BAR_SIZE):
       screen.addstr(padding + i + 3, padding + j + 9, '#')
-    screen.addstr(padding + 3 + i, padding + BAR_SIZE + 10, '(' + str(cnt[i] * 100 / MAX_RESOURCE_NUM) + '%/100%)')
+    screen.addstr(padding + 3 + i, padding + BAR_SIZE + 10, '(' + str(cnt[i]) + '%/100%)')
 
 l2fwd = {}
 l3fwd = {}
@@ -88,13 +88,13 @@ def translateRules(input_text):
       cfg += forms[2]  
       l3fwd['cfg'] = cfg
       resourceStatus['L3 Forwarding'][1] += 3
-    if 'dstIP' + vals[1] not in l3fwd: 
+    if 'dstIP' not in l3fwd: 
       ipnum = vals[1].split('.')
       rule = forms[3] % (int(ipnum[0]), int(ipnum[1]), int(ipnum[2]), int(ipnum[3]))
       dstIP += rule
       l3fwd['dstIP' + vals[1]] = dstIP
       resourceStatus['L3 Forwarding'][1] += 1
-    if 'fwdport' + vals[2] not in l3fwd:
+    if 'fwdport' not in l3fwd:
       rule = forms[4] % (int(vals[2]))
       fwdport += rule
       l3fwd['fwdport' + vals[2]] = fwdport
@@ -217,5 +217,6 @@ curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_YELLOW)
 curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_GREEN)
 curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_MAGENTA)
 curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_CYAN)
+
 
 curses.wrapper(main)
