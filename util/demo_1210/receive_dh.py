@@ -58,7 +58,7 @@ def handle_pkt(pkt):
 
     print('\n----- Host%d received packet with vdp_id %d' % (host, vid))
 
-    if vid == 1:
+    if vid == 4:
         sdrMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[26], b[27], b[28], b[29], b[30], b[31])   
         sdrIP="%d.%d.%d.%d" %(b[32], b[33], b[34], b[35])
         tgtMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[36], b[37], b[38], b[39], b[40], b[41])   

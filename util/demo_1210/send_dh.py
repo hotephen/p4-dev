@@ -57,7 +57,7 @@ def main():
     global pkt
   
     print('\n---------- Send pakcet with vdp_id : %d ----------' % a.vid)
-    if a.vid == 1:
+    if a.vid == 4:
         pkt = desc_hdr(vdp_id=a.vid) / Ether(src=a.sm, dst=a.dm) / arp(opcode=1, sender_MAC=macToN(a.sm), sender_IP=ipToN(a.si), target_MAC=macToN(a.dm), target_IP=ipToN(a.di))
         print("srcMAC = " + a.sm + "\tdstMAC = " + a.dm)
         print("\t-- [ arp information ] --")
