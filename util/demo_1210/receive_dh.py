@@ -56,7 +56,9 @@ def handle_pkt(pkt):
     srcIP="%d.%d.%d.%d" %(b[30], b[31], b[32], b[33])
     dstIP="%d.%d.%d.%d" %(b[34], b[35], b[36], b[37])
     
-    if host == 1 and vid != 4:
+    if vid == 0 :
+        pass
+    elif host == 1 and vid != 4:
         pass
     else:
         if vid == 4:
