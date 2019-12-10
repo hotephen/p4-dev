@@ -16,8 +16,8 @@ parser.add_argument('--sm', required=False, default='00:00:00:00:00:01', help='s
 parser.add_argument('--dm', required=False, default='00:00:00:00:00:02', help='destination MAC address')
 parser.add_argument('--si', required=False, default='10.0.0.1', help='source IP address')
 parser.add_argument('--di', required=False, default='10.0.1.1', help='destination IP address')
-parser.add_argument('--sp', required=False, type=int, default=0, help='source PORT number')
-parser.add_argument('--dp', required=False, type=int, default=0, help='destination PORT number')
+parser.add_argument('--sp', required=False, type=int, default=1234, help='source PORT number')
+parser.add_argument('--dp', required=False, type=int, default=6789, help='destination PORT number')
 
 class desc_hdr(Packet):
     """Description Header"""
