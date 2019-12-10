@@ -48,7 +48,7 @@ def get_if():
     return iface
 
 def handle_pkt(pkt):
-    hexdump(pkt)
+    #hexdump(pkt)
     b = map(ord, str(pkt))
     vid = b[2] * 256 + b[3]    
     dstMAC="%02X:%02X:%02X:%02X:%02X:%02X" % (b[4], b[5], b[6], b[7], b[8], b[9])
@@ -65,8 +65,8 @@ def handle_pkt(pkt):
         tgtIP="%d.%d.%d.%d" %(b[42], b[43], b[44], b[45])
         print("srcMAC = " + srcMAC + "\tdstMAC = " + dstMAC)
         print("\t-- [ arp information ] --")
-        print("\tsrcMAC = " + sdrMAC + "\ttgtMAC = " + tgtMAC)
-        print("\tsrcIP = " + sdrIP + "\t\ttgtIP = " + tgtIP)
+        print("srcMAC = " + sdrMAC + "\ttgtMAC = " + tgtMAC)
+        print("srcIP = " + sdrIP + "\t\ttgtIP = " + tgtIP)
     else:
         sport = b[38] * 256 + b[39]
         dport = b[40] * 256 + b[41]
