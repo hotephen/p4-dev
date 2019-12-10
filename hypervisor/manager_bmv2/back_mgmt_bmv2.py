@@ -43,7 +43,6 @@ def printResourceBar(screen):
 l2fwd = {}
 l3fwd = {}
 fw = {}
-arp = {}
 def translateRules(input_text):
   # import rule template
   # make new p4 ruleset
@@ -59,7 +58,7 @@ def translateRules(input_text):
 
   output = ''
   cfg = ''; dstMAC = ''; fwdport = ''; dstIP = ''
-  tgtIP = ''; srcIP = ''; dstport = ''; opcode = ''
+  srcIP = ''; dstport = ''
   # l2fwd [dstMAC] [fwdport]
   if vals[0] == 'l2fwd':
     if 'cfg' not in l2fwd:
@@ -88,7 +87,7 @@ def translateRules(input_text):
       cfg += forms[2]  
       l3fwd['cfg'] = cfg
       resourceStatus['L3 Forwarding'][1] += 3
-    if 'dstIP' not in l3fwd: 
+    if 'dstIP' not in l3fwd:
       ipnum = vals[1].split('.')
       rule = forms[3] % (int(ipnum[0]), int(ipnum[1]), int(ipnum[2]), int(ipnum[3]))
       dstIP += rule
@@ -142,35 +141,7 @@ def translateRules(input_text):
         fw['fwdport' + vals[4]] = fwdport
         resourceStatus['Firewall'][2] += 1
 
-  # arp [opcode] [tgtIP] [dstMAC]
-  elif vals[0] == 'arp':
-    if 'cfg' not in arp:
-      cfg += forms[1]  
-      cfg += forms[2]  
-      cfg += forms[3]  
-      cfg += forms[4]  
-      cfg += forms[6]  
-      cfg += forms[8]  
-      l3fwd['cfg'] = cfg
-      resourceStatus['ARP Proxy'][3] += 6
-    if 'op' + vals[1] not in arp:
-      rule = forms[0] % int(vals[1])
-      opcode += rule
-      arp['op' + vals[1]] = opcode
-      resourceStatus['ARP Proxy'][3] += 1
-    if 'ip' + vals[2] + 'mac' + vals[3] not in arp:
-      # tgtIP
-      ipnum = vals[2].split('.')
-      rule = forms[7] % (int(ipnum[0]), int(ipnum[1]), int(ipnum[2]), int(ipnum[3]))
-      tgtIP += rule
-      # dstMAC
-      macnum = vals[3].split(':')
-      rule = forms[5] % (int(macnum[0], 16), int(macnum[1], 16), int(macnum[2], 16), int(macnum[3], 16), int(macnum[4], 16), int(macnum[5], 16))
-      dstMAC += rule
-      arp['ip' + vals[2] + 'mac' + vals[3]] = tgtIP + dstMAC
-      resourceStatus['ARP Proxy'][3] += 2
-
-  f2.write(cfg + opcode + dstMAC + srcIP + tgtIP + dstIP + fwdport + dstport)
+  f2.write(cfg + srcIP + dstMAC + dstIP + fwdport + dstport)
 
   f2.close()
   f1.close()
@@ -179,8 +150,7 @@ def translateRules(input_text):
 def populateRulesetToDP():
   # rule population command (P4Runtime)
   # $SDE/run_bfshell.sh -f tmp
-  os.system('sudo /home/ubuntu4/p4/behavioral-model/tools/runtime_CLI.py --thrift-port 9090 < tmp')
-  pass
+  os.system('sudo /home/ubuntu4/p4/behavioral-model/tools/runtime_CLI.py --thrift-port 9090 < tmp > bmv2_logs')   # Warning! : Direct route needed
  
 def main(screen):
   while True:
