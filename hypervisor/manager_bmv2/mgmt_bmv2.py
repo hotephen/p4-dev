@@ -99,7 +99,7 @@ def translateRules(reqop, vals):
         resourceStatus['L2 Forwarding'][pcnt] += 1 
     else: # reqop == 'delete'
       if 'dstMAC' + vals[1] + '/' + vals[3] in l2fwd:
-        resourceStatus['L2 Forwarding'][l2fwd['dstMAC' + vals[1] + '/' + vals[3]][1]] -= 1 
+        resourceStatus['L2 Forwarding'][l2fwd['dstMAC' + vals[1] + '/' + vals[3]][1]] -= 2 
         del l2fwd['dstMAC' + vals[1] + '/' + vals[3]]
       if 'fwdport' + vals[2] + '/' + vals[3] in l2fwd:
         resourceStatus['L2 Forwarding'][l2fwd['fwdport' + vals[2] + '/' + vals[3]][1]] -= 1 
