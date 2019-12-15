@@ -241,7 +241,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000, 0x8000000000);
+        //default_action = set_action_id(0x80000000, 0x8000000000);
         /* const entries = {
             (1, 112w0x0000000000020000000000000000 &&& 112w0xFFFFFFFFFFFF0000000000000000) : set_action_id(0x00000001);
             
@@ -256,7 +256,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000, 0x8000000000);
+        //default_action = set_action_id(0x80000000, 0x8000000000);
         /* const entries = { 
             (2, 160w0x000000000000000000000000000000000A000201 &&& 160w0x00000000000000000000000000000000FFFFFF00) : set_action_id(0x00000111);
         } */
@@ -270,7 +270,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000, 0x8000000000);
+        //default_action = set_action_id(0x80000000, 0x8000000000);
         /* const entries = {
             (3, 160w0x0000000000000000000000000A00010000000000 &&& 160w0x000000000000000000000000FFFFFF0000000000) : set_action_id(0x00000001);
             (3, 160w0x0000000000000000000000000A00020000000000 &&& 160w0x000000000000000000000000FFFFFF0000000000) : set_action_id(0x80000000, 0x8000000000);
@@ -304,7 +304,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000, 0x8000000000);
+        //default_action = set_action_id(0x80000000, 0x8000000000);
         /* const entries = { 
         //#define def_mask_224_opcode  224w0x000000000000FFFF0000000000000000000000000000000000000000
         // set_action_id = 48w0b(0001 1111 1000 0001) = 48w0x1F81
@@ -667,7 +667,9 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage1.apply();						
 	            }
-                
+            else {
+                mark_to_drop();
+            }
             }
 
             if(meta.vdp_metadata.stage_id == CONST_STAGE_2){
@@ -702,6 +704,9 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage2.apply();						
 	            }
+            else {
+                mark_to_drop();
+            }
             }
 
             if(meta.vdp_metadata.stage_id == CONST_STAGE_3){
@@ -730,6 +735,9 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage3.apply();						
 	            }
+            else {
+                mark_to_drop();
+            }
             }
 
             if(meta.vdp_metadata.stage_id == CONST_STAGE_4){
@@ -773,6 +781,9 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage4.apply();						
 	            }
+            else {
+                mark_to_drop();
+            }
             }
         }
     }
