@@ -65,8 +65,8 @@ local function fillNshPacket(buf, len)
         un4 = 0,
         MDtype = 0,
         Nextpro = 0,
-        spi = SPI,
-        si = SI
+        spi = 0,
+        si = 0
     }
 end
 
