@@ -110,15 +110,14 @@ function loadSlave(queue, rxDev, size, flows)
 		for i, buf in ipairs(bufs) do
             -- local pkt = buf:getUdpPacket()
 			local pkt = buf:getNshPacket()
-				pkt.nsh.spi = SPI
-				pkt.nsh.si = SI
+				pkt.nsh.spi = 0x0001
+				pkt.nsh.si = 0xff
 				pkt.ipv4.src:set(srcIP)
 				pkt.ipv4.dst:set(dstIP)
 				pkt.udp:setDst(80)
 			counter = incAndWrap(counter, flows)
 		end
 		-- UDP checksums are optional, so using just IPv4 checksums would be sufficient here
-		bufs:offloadUdpChecksums()
 		queue:send(bufs)
 		txCtr:update()
 		rxCtr:update()
