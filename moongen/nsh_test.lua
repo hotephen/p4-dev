@@ -70,17 +70,7 @@ local function fillNshPacket(buf, len)
     }
 end
 
-local function doArp()
-	if not DST_MAC then
-		log:info("Performing ARP lookup on %s", GW_IP)
-		DST_MAC = arp.blockingLookup(GW_IP, 5)
-		if not DST_MAC then
-			log:info("ARP lookup failed, using default destination mac address")
-			return
-		end
-	end
-	log:info("Destination mac: %s", DST_MAC)
-end
+
 
 function loadSlave(queue, rxDev, size, flows)
 	-- doArp()
@@ -127,7 +117,6 @@ function timerSlave(txQueue, rxQueue, size, flows)
 	mg.sleepMillis(1000) -- ensure that the load task is running
 	local counter = 0
 	local rateLimit = timer:new(0.001)
-	local baseIP = parseIPAddress(SRC_IP_BASE)
 	while mg.running() do
 		hist:update(timestamper:measureLatency(size, function(buf)
 			fillNshPacket(buf, size)
@@ -139,7 +128,6 @@ function timerSlave(txQueue, rxQueue, size, flows)
 		rateLimit:reset()
 	end
 	-- print the latency stats after all the other stuff
-	mg.sleepMillis(300)
-	hist:print()
-	hist:save("histogram.csv")
+
+
 end
