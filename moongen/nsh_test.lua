@@ -70,18 +70,6 @@ local function fillNshPacket(buf, len)
     }
 end
 
-local function fillUdpPacket(buf, len)
-	buf:getUdpPacket():fill{
-		ethSrc = queue,
-		ethDst = DST_MAC,
-		ip4Src = SRC_IP,
-		ip4Dst = DST_IP,
-		udpSrc = SRC_PORT,
-		udpDst = DST_PORT,
-		pktLength = len
-	}
-end
-
 local function doArp()
 	if not DST_MAC then
 		log:info("Performing ARP lookup on %s", GW_IP)
