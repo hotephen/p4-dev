@@ -671,9 +671,7 @@ control MyIngress(inout headers hdr,
 		            table_action_drop_stage1.apply();						
 	            }
             }
-            if(ACTION_BITMAP == 0) {
-                mark_to_drop();
-            }
+            
             
 
             if(meta.vdp_metadata.stage_id == CONST_STAGE_2){
@@ -709,9 +707,7 @@ control MyIngress(inout headers hdr,
 		            table_action_drop_stage2.apply();						
 	            }
             }
-            if(ACTION_BITMAP == 0) {
-                mark_to_drop();
-            }
+            
             
 
             if(meta.vdp_metadata.stage_id == CONST_STAGE_3) {
@@ -741,9 +737,7 @@ control MyIngress(inout headers hdr,
 		            table_action_drop_stage3.apply();						
 	            }
             }
-            if(ACTION_BITMAP == 0) {
-                mark_to_drop();
-            }
+            
             
 
             if(meta.vdp_metadata.stage_id == CONST_STAGE_4){
@@ -791,7 +785,7 @@ control MyIngress(inout headers hdr,
             if(ACTION_BITMAP == 0) {
                 mark_to_drop();
             }
-            }
+            
         }
     }
 
