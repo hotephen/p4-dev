@@ -104,7 +104,7 @@ function loadSlave(queue, rxDev, size, flows)
 				pkt.nsh.si = 0xff
 				pkt.ip4.src:set(srcIP)
 				pkt.ip4.dst:set(dstIP)
-				pkt.udp:setDst(80)
+				pkt.udp:setDstPort(80)
 			counter = incAndWrap(counter, flows)
 		end
 		-- UDP checksums are optional, so using just IPv4 checksums would be sufficient here
