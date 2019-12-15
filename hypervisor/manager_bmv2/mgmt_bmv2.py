@@ -209,7 +209,7 @@ def translateRules(reqop, vals):
 
 def populateRulesetToDP():
   # rule population command (P4Runtime)
-  # os.system('sudo /home/ubuntu4/p4/behavioral-model/tools/runtime_CLI.py --thrift-port 9090 < tmp')
+  os.system('sudo /home/ubuntu4/p4/behavioral-model/tools/runtime_CLI.py --thrift-port 9090 < tmp')
   pass
  
 def main(screen):
