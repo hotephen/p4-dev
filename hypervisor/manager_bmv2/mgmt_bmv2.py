@@ -4,7 +4,7 @@ import time
 import os
 
 padding = 0
-MAX_RESOURCE_NUM = 50
+MAX_RESOURCE_NUM = 30
 BAR_SIZE = 50
 ratio = BAR_SIZE / MAX_RESOURCE_NUM
 resourceNum = 0

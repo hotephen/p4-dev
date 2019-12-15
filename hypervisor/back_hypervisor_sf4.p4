@@ -319,7 +319,6 @@ control MyIngress(inout headers hdr,
     table table_action_forward_stage1 {
         key = {
             meta.vdp_metadata.inst_id : exact;
-            meta.match_chain_result : exact;
         }
         actions = {
             action_forward();
@@ -375,7 +374,6 @@ control MyIngress(inout headers hdr,
     table table_action_mod_112_dstAddr_stage1 {
         key = {
             meta.vdp_metadata.inst_id : exact;
-            meta.match_chain_result : exact;
         }
         actions = {
             action_mod_112_dstAddr();
