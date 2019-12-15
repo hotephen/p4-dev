@@ -781,7 +781,7 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage4.apply();						
 	            }
-            else {
+            if(ACTION_BITMAP == 0) {
                 mark_to_drop();
             }
             }
