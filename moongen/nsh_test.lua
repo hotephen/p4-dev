@@ -98,7 +98,9 @@ function loadSlave(queue, rxDev, size, flows)
 		for i, buf in ipairs(bufs) do
             -- local pkt = buf:getUdpPacket()
 			local pkt = buf:getNshPacket()
-				pkt.nsh.spi = 0x010000 -- 00 00 01
+				pkt.nsh.spi[0] = 0x01 -- 00 00 01
+				pkt.nsh.spi[1] = 0x00
+				pkt.nsh.spi[2] = 0x00
 				pkt.nsh.si = 0xff
 				pkt.ip4.src:set(srcIP)
 				pkt.ip4.dst:set(dstIP)
