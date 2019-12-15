@@ -22,7 +22,7 @@ def printResourceBar(screen):
   # stageN : 
   screen.addstr(padding + 2, padding + 0, 'CfgStage' + ' : ') # configuration stage
   for i in range(0, 4):
-    screen.addstr(padding + 3 + i, padding + 0, 'Stage' + str(i) + '   : ')
+    screen.addstr(padding + 3 + i, padding + 0, 'Stage' + str(i+1) + '   : ')
 
   cnt = [0, 0, 0, 0]
   for reqName, resource in resourceStatus.items():
@@ -109,7 +109,7 @@ def translateRules(reqop, vals):
         resourceStatus['L2 Forwarding'][l2fwd['fwdport' + vals[2]][1]] -= 1 
         del l2fwd['fwdport' + vals[2]]
       if len(l2fwd) == 1: # if all of the rules deleted
-        resourceStatus['L2 Forwarding'][l2fwd['cfg'][1]] -= 3 
+        resourceStatus['L2 Forwarding'][l2fwd['cfg'][1]] -= 2 
         del l2fwd['cfg']
 
   # l3fwd [dstIP] [fwdport]
