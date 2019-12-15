@@ -3,8 +3,8 @@ from curses.textpad import Textbox, rectangle
 import time
 import os
 
-padding = 2
-MAX_RESOURCE_NUM = 50
+padding = 0
+MAX_RESOURCE_NUM = 30
 BAR_SIZE = 50
 ratio = BAR_SIZE / MAX_RESOURCE_NUM
 resourceNum = 0
@@ -76,34 +76,33 @@ def translateRules(reqop, vals):
   output = ''
   cfg = ''; dstMAC = ''; fwdport = ''; dstIP = ''
   tgtIP = ''; srcIP = ''; dstport = ''; opcode = ''
-  # l2fwd [dstMAC] [fwdport] [seq_num]
+  # l2fwd [dstMAC] [fwdport]
   if vals[0] == 'l2fwd':
     if reqop == 'insert':
       if 'cfg' not in l2fwd:
+        cfg += forms[0]  
         cfg += forms[1]  
         cfg += forms[2]  
         l2fwd['cfg'] = [cfg, pcnt]
-        resourceStatus['L2 Forwarding'][pcnt] += 2 
-      if 'dstMAC' + vals[1] + '/' + vals[3] not in l2fwd:
+        resourceStatus['L2 Forwarding'][pcnt] += 3 
+      if 'dstMAC' + vals[1] not in l2fwd:
         macnum = vals[1].split(':')
-        rule = forms[4] % (int(vals[3]), int(macnum[0], 16), int(macnum[1], 16), int(macnum[2], 16), int(macnum[3], 16), int(macnum[4], 16), int(macnum[5], 16))
+        rule = forms[4] % (int(macnum[0], 16), int(macnum[1], 16), int(macnum[2], 16), int(macnum[3], 16), int(macnum[4], 16), int(macnum[5], 16))
         dstMAC += rule
-        rule = forms[0] % (int(macnum[0], 16), int(macnum[1], 16), int(macnum[2], 16), int(macnum[3], 16), int(macnum[4], 16), int(macnum[5], 16))
-        dstMAC += rule
-        l2fwd['dstMAC' + vals[1] + '/' + vals[3]] = [dstMAC, pcnt]
-        resourceStatus['L2 Forwarding'][pcnt] += 2 
-      if 'fwdport' + vals[2] + '/' + vals[3] not in l2fwd:
-        rule = forms[3] % (int(vals[3]), int(vals[2]))
+        l2fwd['dstMAC' + vals[1]] = [dstMAC, pcnt]
+        resourceStatus['L2 Forwarding'][pcnt] += 1 
+      if 'fwdport' + vals[2] not in l2fwd:
+        rule = forms[3] % (int(vals[2]))
         fwdport += rule
-        l2fwd['fwdport' + vals[2] + '/' + vals[3]] = [fwdport, pcnt]
+        l2fwd['fwdport' + vals[2]] = [fwdport, pcnt]
         resourceStatus['L2 Forwarding'][pcnt] += 1 
     else: # reqop == 'delete'
-      if 'dstMAC' + vals[1] + '/' + vals[3] in l2fwd:
-        resourceStatus['L2 Forwarding'][l2fwd['dstMAC' + vals[1] + '/' + vals[3]][1]] -= 1 
-        del l2fwd['dstMAC' + vals[1] + '/' + vals[3]]
-      if 'fwdport' + vals[2] + '/' + vals[3] in l2fwd:
-        resourceStatus['L2 Forwarding'][l2fwd['fwdport' + vals[2] + '/' + vals[3]][1]] -= 1 
-        del l2fwd['fwdport' + vals[2] + '/' + vals[3]]
+      if 'dstMAC' + vals[1] in l2fwd:
+        resourceStatus['L2 Forwarding'][l2fwd['dstMAC' + vals[1]][1]] -= 1 
+        del l2fwd['dstMAC' + vals[1]]
+      if 'fwdport' + vals[2] in l2fwd:
+        resourceStatus['L2 Forwarding'][l2fwd['fwdport' + vals[2]][1]] -= 1 
+        del l2fwd['fwdport' + vals[2]]
       if len(l2fwd) == 1: # if all of the rules deleted
         resourceStatus['L2 Forwarding'][l2fwd['cfg'][1]] -= 3 
         del l2fwd['cfg']
@@ -200,8 +199,7 @@ def translateRules(reqop, vals):
 
   ruleset = cfg + opcode + dstMAC + srcIP + tgtIP + dstIP + fwdport + dstport
   f2.write(ruleset)
-
-  if reqop == 'insert' and ruleset != '': pcnt = (pcnt + 1) % 4
+  if ruleset != '': pcnt = (pcnt + 1) % 4
 
   f2.close()
   f1.close()
@@ -209,7 +207,7 @@ def translateRules(reqop, vals):
 
 def populateRulesetToDP():
   # rule population command (P4Runtime)
-  # os.system('sudo /home/ubuntu4/p4/behavioral-model/tools/runtime_CLI.py --thrift-port 9090 < tmp')
+  os.system('sudo /home/ubuntu4/p4/behavioral-model/tools/runtime_CLI.py --thrift-port 9090 < tmp')
   pass
  
 def main(screen):
@@ -221,7 +219,7 @@ def main(screen):
     screen.addstr(padding + 15, padding + 0, 'Ctrl-G or Enter : send request / Ctrl-C : exit')
 
     # current resource usage
-    screen.addstr(padding + 0, padding + 0, '* Current resource usage of P4 Hypervisor')
+    screen.addstr(padding + 0, padding + 0, '* Current Usage of Entries')
     printResourceBar(screen)
 
     # input request
