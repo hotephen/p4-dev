@@ -15,7 +15,7 @@ local DST_MAC		= nil -- resolved via ARP on GW_IP or DST_IP, can be overriden wi
 local SRC_IP		= "10.0.0.1" -- actual address will be SRC_IP_BASE + random(0, flows)
 local DST_IP		= "10.0.0.2"
 local SRC_PORT		= 1234
-local DST_PORT		= 319
+local DST_PORT		= 80
 local SPI			= 1
 local SI 			= 255
 -- answer ARP requests for this IP on the rx port
@@ -103,13 +103,18 @@ function loadSlave(queue, rxDev, size, flows)
 	local counter = 0
 	local txCtr = stats:newDevTxCounter(queue, "plain")
 	local rxCtr = stats:newDevRxCounter(rxDev, "plain")
-	local baseIP = parseIPAddress(SRC_IP_BASE)
+	local srcIP = parseIPAddress(SRC_IP)
+	local dstIP = parseIPAddress(DST_IP)
 	while mg.running() do
 		bufs:alloc(size)
 		for i, buf in ipairs(bufs) do
             -- local pkt = buf:getUdpPacket()
-            local pkt = buf:getNshPacket()
-			pkt.ip4.src:set(baseIP + counter)
+			local pkt = buf:getNshPacket()
+				pkt.nsh.spi = SPI
+				pkt.nsh.si = SI
+				pkt.ipv4.src:set(srcIP)
+				pkt.ipv4.dst:set(dstIP)
+				pkt.udp:setDst(80)
 			counter = incAndWrap(counter, flows)
 		end
 		-- UDP checksums are optional, so using just IPv4 checksums would be sufficient here
@@ -139,7 +144,6 @@ function timerSlave(txQueue, rxQueue, size, flows)
 			fillNshPacket(buf, size)
             -- local pkt = buf:getUdpPacket()
             local pkt = buf:getNshPacket()
-			pkt.ip4.src:set(baseIP + counter)
 			counter = incAndWrap(counter, flows)
 		end))
 		rateLimit:wait()
