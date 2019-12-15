@@ -670,7 +670,8 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage1.apply();						
 	            }
-            else{
+            }
+            else(ACTION_BITMAP == 0) {
                 mark_to_drop();
             }
             }
@@ -707,6 +708,7 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage2.apply();						
 	            }
+            }
             if(ACTION_BITMAP == 0) {
                 mark_to_drop();
             }
@@ -738,6 +740,7 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage3.apply();						
 	            }
+            }
             if(ACTION_BITMAP == 0) {
                 mark_to_drop();
             }
@@ -784,6 +787,7 @@ control MyIngress(inout headers hdr,
                 if ((ACTION_BITMAP & BIT_MASK_DROP) != 0) {	
 		            table_action_drop_stage4.apply();						
 	            }
+            }
             if(ACTION_BITMAP == 0) {
                 mark_to_drop();
             }
