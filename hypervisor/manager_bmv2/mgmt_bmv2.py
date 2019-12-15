@@ -92,7 +92,7 @@ def translateRules(reqop, vals):
         macnum = vals[1].split(':')
         rule = forms[4] % (seqnum[insnum], int(macnum[0], 16), int(macnum[1], 16), int(macnum[2], 16), int(macnum[3], 16), int(macnum[4], 16), int(macnum[5], 16))
         dstMAC += rule
-        rule = forms[0] % (int(macnum[0], 16), int(macnum[1], 16), int(macnum[2], 16), int(macnum[3], 16), int(macnum[4], 16), int(macnum[5], 16))
+        rule = forms[0] % (int(macnum[0], 16), int(macnum[1], 16), int(macnum[2], 16), int(macnum[3], 16), int(macnum[4], 16), int(macnum[5], 16), seqnum[insnum])
         dstMAC += rule
         l2fwd['dstMAC' + vals[1]] = [dstMAC, pcnt]
         resourceStatus['L2 Forwarding'][pcnt] += 2 
