@@ -228,9 +228,8 @@ control MyIngress(inout headers hdr,
 
 
     // stage entering
-    action set_action_id(bit<32> action_bitmap, bit<48> match_chain_result) { 
+    action set_action_id(bit<32> action_bitmap) { 
         meta.vdp_metadata.action_chain_bitmap = action_bitmap;
-        meta.vdp_metadata.match_chain_result = match_chain_result;
     }
 
     table table_header_match_112_stage1 {
@@ -241,7 +240,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000, 0x8000000000);
+        default_action = set_action_id(0x80000000);
         /* const entries = {
             (1, 112w0x0000000000020000000000000000 &&& 112w0xFFFFFFFFFFFF0000000000000000) : set_action_id(0x00000001);
             
@@ -256,7 +255,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000, 0x8000000000);
+        default_action = set_action_id(0x80000000);
         /* const entries = { 
             (2, 160w0x000000000000000000000000000000000A000201 &&& 160w0x00000000000000000000000000000000FFFFFF00) : set_action_id(0x00000111);
         } */
@@ -270,10 +269,10 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000, 0x8000000000);
+        default_action = set_action_id(0x80000000);
         /* const entries = {
             (3, 160w0x0000000000000000000000000A00010000000000 &&& 160w0x000000000000000000000000FFFFFF0000000000) : set_action_id(0x00000001);
-            (3, 160w0x0000000000000000000000000A00020000000000 &&& 160w0x000000000000000000000000FFFFFF0000000000) : set_action_id(0x80000000, 0x8000000000);
+            (3, 160w0x0000000000000000000000000A00020000000000 &&& 160w0x000000000000000000000000FFFFFF0000000000) : set_action_id(0x80000000);
             // srcIP : 10.0.1.0/24 :Pass
             // srcIP : 10.0.2.0/24 :drop
         }*/
@@ -289,7 +288,7 @@ control MyIngress(inout headers hdr,
         
         /* const entries = {
             (3, 160w0x0000005000000000000000000000000000000000 &&& 160w0x0000FFFF00000000000000000000000000000000) : set_action_id(0x00000001);
-            (3, 160w0x0000001600000000000000000000000000000000 &&& 160w0x0000FFFF00000000000000000000000000000000) : set_action_id(0x80000000, 0x8000000000);
+            (3, 160w0x0000001600000000000000000000000000000000 &&& 160w0x0000FFFF00000000000000000000000000000000) : set_action_id(0x80000000);
             // dstPort : 80 : Pass 
             // dstPort : 22 : drop
             
@@ -304,7 +303,7 @@ control MyIngress(inout headers hdr,
         actions = {
             set_action_id(); // enabling primitive actions
         }
-        default_action = set_action_id(0x80000000, 0x8000000000);
+        default_action = set_action_id(0x80000000);
         /* const entries = { 
         //#define def_mask_224_opcode  224w0x000000000000FFFF0000000000000000000000000000000000000000
         // set_action_id = 48w0b(0001 1111 1000 0001) = 48w0x1F81
