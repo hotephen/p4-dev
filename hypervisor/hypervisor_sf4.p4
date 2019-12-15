@@ -671,7 +671,7 @@ control MyIngress(inout headers hdr,
 		            table_action_drop_stage1.apply();						
 	            }
             }
-            else(ACTION_BITMAP == 0) {
+            if(ACTION_BITMAP == 0) {
                 mark_to_drop();
             }
             }
