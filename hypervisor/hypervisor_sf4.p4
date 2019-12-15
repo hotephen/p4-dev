@@ -332,6 +332,7 @@ control MyIngress(inout headers hdr,
     table table_action_forward_stage2 {
         key = {
             meta.vdp_metadata.inst_id : exact;
+            meta.vdp_metadata.match_chain_result : exact;
         }
         actions = {
             action_forward();
@@ -343,6 +344,7 @@ control MyIngress(inout headers hdr,
     table table_action_forward_stage3 {
         key = {
             meta.vdp_metadata.inst_id : exact;
+            meta.vdp_metadata.match_chain_result : exact;
         }
         actions = {
             action_forward();
@@ -354,6 +356,7 @@ control MyIngress(inout headers hdr,
     table table_action_forward_stage4 {
         key = {
             meta.vdp_metadata.inst_id : exact;
+            meta.vdp_metadata.match_chain_result : exact;
         }
         actions = {
             action_forward();
