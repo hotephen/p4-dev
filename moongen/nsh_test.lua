@@ -9,15 +9,16 @@ local timer  = require "timer"
 local arp    = require "proto.arp"
 local nsh    = require "proto.nsh"
 local log    = require "log"
-
+local eth    = require "proto.ethernet"
+local tcp    = require "proto.tcp"
 -- set addresses here
 local DST_MAC		= nil -- resolved via ARP on GW_IP or DST_IP, can be overriden with a string here
-local SRC_IP		= "10.0.0.1" -- actual address will be SRC_IP_BASE + random(0, flows)
-local DST_IP		= "10.0.0.2"
+local SRC_IP		= "10.10.1.1" -- actual address will be SRC_IP_BASE + random(0, flows)
+local DST_IP		= "10.10.1.2"
 local SRC_PORT		= 1234
 local DST_PORT		= 80
-local SPI			= 1
-local SI 			= 255
+local SPI		= 1
+local SI 		= 255
 -- answer ARP requests for this IP on the rx port
 -- change this if benchmarking something like a NAT device
 local RX_IP		= DST_IP
@@ -32,7 +33,7 @@ function configure(parser)
 	parser:argument("rxDev", "Device to receive from."):convert(tonumber)
 	parser:option("-r --rate", "Transmit rate in Mbit/s."):default(10000):convert(tonumber)
 	parser:option("-f --flows", "Number of flows (randomized source IP)."):default(4):convert(tonumber)
-	parser:option("-s --size", "Packet size."):default(60):convert(tonumber)
+	parser:option("-s --size", "Packet size."):default(90):convert(tonumber)
 end
 
 function master(args)
@@ -46,12 +47,12 @@ function master(args)
 	end
 	mg.startTask("loadSlave", txDev:getTxQueue(0), rxDev, args.size, args.flows)
 	mg.startTask("timerSlave", txDev:getTxQueue(1), rxDev:getRxQueue(1), args.size, args.flows)
-	arp.startArpTask{
+--	arp.startArpTask{
 		-- run ARP on both ports
-		{ rxQueue = rxDev:getRxQueue(2), txQueue = rxDev:getTxQueue(2), ips = RX_IP },
+--		{ rxQueue = rxDev:getRxQueue(2), txQueue = rxDev:getTxQueue(2), ips = RX_IP },
 		-- we need an IP address to do ARP requests on this interface
-		{ rxQueue = txDev:getRxQueue(2), txQueue = txDev:getTxQueue(2), ips = ARP_IP }
-	}
+--		{ rxQueue = txDev:getRxQueue(2), txQueue = txDev:getTxQueue(2), ips = ARP_IP }
+--	}
 	mg.waitForTasks()
 end
 
@@ -70,6 +71,21 @@ local function fillNshPacket(buf, len)
     }
 end
 
+local function fillTcpPacket(buf, len)
+    buf:getTcpPacket():fill{
+	src = 0,
+	dst = 0,
+	seq = 1,
+	ack = 1,
+	offset = 0,
+	flags = 0,
+	window = 0,
+	cs = 0,
+	urg = 0,
+	options = 0
+
+    }
+end
 
 
 function loadSlave(queue, rxDev, size, flows)
@@ -86,19 +102,32 @@ function loadSlave(queue, rxDev, size, flows)
 	while mg.running() do
 		bufs:alloc(size)
 		for i, buf in ipairs(bufs) do
-            -- local pkt = buf:getUdpPacket()
 			local pkt = buf:getNshPacket()
-				pkt.nsh.spi[0] = 0x01 -- 00 00 01
+				pkt.eth.type = 0x4f89
+				pkt.nsh.spi[0] = 0x00 -- 00 00 01
 				pkt.nsh.spi[1] = 0x00
-				pkt.nsh.spi[2] = 0x00
+--				pkt.nsh.spi[2] = 0x03
+				pkt.nsh.Nextpro = 0x5865
 				pkt.nsh.si = 0xff
+				pkt.innerEth.type = 0x0008
 				pkt.ip4.src:set(srcIP)
 				pkt.ip4.dst:set(dstIP)
-				pkt.udp:setDstPort(80)
-			counter = incAndWrap(counter, flows)
+				pkt.ip4.protocol = 0x06
+				pkt.tcp:setSrc(20)
+				pkt.tcp:setDst(80)
+			if i % 3  == 0 then
+				pkt.nsh.spi[2] = 0x01
+				queue:send(bufs)
+			elseif i % 3 == 1 then
+				pkt.nsh.spi[2] = 0x02
+				queue:send(bufs)
+			else
+				pkt.nsh.spi[2] = 0x03
+				queue:send(bufs)
+			end
 		end
 		-- UDP checksums are optional, so using just IPv4 checksums would be sufficient here
-		queue:send(bufs)
+		--queue:send(bufs)
 		txCtr:update()
 		rxCtr:update()
 	end
@@ -121,8 +150,9 @@ function timerSlave(txQueue, rxQueue, size, flows)
 		hist:update(timestamper:measureLatency(size, function(buf)
 			fillNshPacket(buf, size)
             -- local pkt = buf:getUdpPacket()
-            local pkt = buf:getNshPacket()
-			counter = incAndWrap(counter, flows)
+--		local pkt = buf:getNshPacket()
+--		buf:dump()
+		--	counter = incAndWrap(counter, flows)
 		end))
 		rateLimit:wait()
 		rateLimit:reset()
@@ -131,3 +161,5 @@ function timerSlave(txQueue, rxQueue, size, flows)
 
 
 end
+
+
