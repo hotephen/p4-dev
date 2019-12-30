@@ -23,9 +23,10 @@ function dumpSlave(queue)
 		local rx = queue:tryRecv(bufs, 100)
 		for i = 1, rx do
 			local buf = bufs[i]
-			buf:dump()
-			s = buf.string()
-			print(s)
+			local pkt = buf:getEthernetPacket()
+			print(pkt)
+			print(type(pkt))
+			
 			
 			pktCtr:countPacket(buf)
 		end
