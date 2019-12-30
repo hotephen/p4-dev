@@ -24,8 +24,8 @@ function dumpSlave(queue)
 		for i = 1, rx do
 			local buf = bufs[i]
 			buf:dump()
-			buf:_read()
-            --s = buf.string()
+			s = buf.string()
+			print(s)
 			
 			pktCtr:countPacket(buf)
 		end
