@@ -20,6 +20,7 @@ function dumpSlave(queue)
 	local bufs = memory.bufArray()
 	local pktCtr = stats:newPktRxCounter("Packets counted", "plain")
 	local total_latency = 0
+	local count = 0
 	while mg.running() do
 		local rx = queue:tryRecv(bufs, 100)
 		for i = 1, rx do
@@ -41,11 +42,11 @@ function dumpSlave(queue)
 			dint = tonumber(db,16)
 			latency = dint-sint
 			total_latency = total_latency + latency
-			print(i)
-			if i % 100 == 0 then
-				print(total_latency/i)
-			end
+			count = count + 1
 			pktCtr:countPacket(buf)
+		end
+		if count % 100 == 0 then
+			print(total_latency/count)
 		end
 		bufs:free(rx)
 		pktCtr:update()
