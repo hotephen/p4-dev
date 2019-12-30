@@ -31,7 +31,10 @@ function dumpSlave(queue)
 			print(type(srcmac))
 			print(srcmac)
 			print(dstmac)
-			
+			s = srcmac.tohex(srcmac)
+			d = dstmac.tohex(dstmac)
+			print(s)
+			print(d)
 			
 			
 			pktCtr:countPacket(buf)
@@ -42,4 +45,8 @@ function dumpSlave(queue)
 	pktCtr:finalize()
 end
 
---
+function string.tohex(str)
+    return (str:gsub('.', function (c)
+        return string.format('%02X', string.byte(c))
+    end))
+end
