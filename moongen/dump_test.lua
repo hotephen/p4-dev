@@ -26,22 +26,23 @@ function dumpSlave(queue)
 			local buf = bufs[i]
 			-- buf:dump()
 			local pkt = buf:getEthernetPacket()
-			print(pkt)
+			-- print(pkt)
 			local srcmac = pkt.eth:getSrcString()
 			local dstmac = pkt.eth:getDstString()
-			print(srcmac)
-			print(dstmac)
+			-- print(srcmac)
+			-- print(dstmac)
 			-- s = srcmac.tohex(srcmac)
 			-- d = dstmac.tohex(dstmac)
 			sb = string.gsub(srcmac,":","")
 			db = string.gsub(dstmac,":","")
-			print(sb)
-			print(db)
+			-- print(sb)
+			-- print(db)
 			sint = tonumber(sb,16)
 			dint = tonumber(db,16)
 			latency = dint-sint
 			total_latency = total_latency + latency
-			if i % 100000 == 0 then
+			print(i)
+			if i % 100 == 0 then
 				print(total_latency/i)
 			end
 			pktCtr:countPacket(buf)
