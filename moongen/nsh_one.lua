@@ -46,7 +46,7 @@ function master(args)
 	if args.rate > 0 then
 		txDev:getTxQueue(0):setRate(args.rate - (args.size + 4) * 8 / 1000)
 	end
-	mg.startTask("loadSlave", txDev:getTxQueue(0), rxDev, args.size, args.flows)
+	mg.startTask("loadSlave", txDev:getTxQueue(0), rxDev, args.size, args.flows, args.spi)
 	mg.startTask("timerSlave", txDev:getTxQueue(1), rxDev:getRxQueue(1), args.size, args.flows)
 --	arp.startArpTask{
 		-- run ARP on both ports
@@ -89,7 +89,7 @@ local function fillTcpPacket(buf, len)
 end
 
 
-function loadSlave(queue, rxDev, size, flows)
+function loadSlave(queue, rxDev, size, flows, spi)
 	-- doArp()
 	local mempool = memory.createMemPool(function(buf)
 		fillNshPacket(buf, size)
@@ -100,7 +100,6 @@ function loadSlave(queue, rxDev, size, flows)
 	local rxCtr = stats:newDevRxCounter(rxDev, "plain")
 	local srcIP = parseIPAddress(SRC_IP)
 	local dstIP = parseIPAddress(DST_IP)
-	local spi = args.spi
 	while mg.running() do
 		bufs:alloc(size)
 		for i, buf in ipairs(bufs) do
