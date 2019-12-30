@@ -47,6 +47,7 @@ function dumpSlave(queue)
 		end
 		if count % 100 == 0 then
 			print(total_latency/count)
+			count = total_latency = 0
 		end
 		bufs:free(rx)
 		pktCtr:update()
