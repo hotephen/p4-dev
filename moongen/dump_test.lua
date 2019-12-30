@@ -23,11 +23,10 @@ function dumpSlave(queue)
 		local rx = queue:tryRecv(bufs, 100)
 		for i = 1, rx do
 			local buf = bufs[i]
-            buf:dump()
-            print(type(buf))
-			print(buf[0])
-			print(buf[1])
-			print(buf[2])
+			buf:dump()
+			buf:read()
+            --s = buf.string()
+			
 			pktCtr:countPacket(buf)
 		end
 		bufs:free(rx)
@@ -35,3 +34,5 @@ function dumpSlave(queue)
 	end
 	pktCtr:finalize()
 end
+
+--
