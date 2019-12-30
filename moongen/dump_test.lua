@@ -36,7 +36,9 @@ function dumpSlave(queue)
 			db = string.gsub(dstmac,":","")
 			print(sb)
 			print(db)
-			print(sb-db)
+			sint = tonumber(sb,16)
+			dint = tonumber(db,16)
+			print(dint-sint)
 
 			
 			
