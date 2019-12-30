@@ -23,7 +23,7 @@ function dumpSlave(queue)
 		local rx = queue:tryRecv(bufs, 100)
 		for i = 1, rx do
 			local buf = bufs[i]
-			dump(buf)
+			buf.dump()
 			local pkt = buf:getEthernetPacket()
 			print(pkt)
 			local srcmac = pkt.eth:getSrcString()
