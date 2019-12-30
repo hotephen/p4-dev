@@ -28,6 +28,7 @@ function dumpSlave(queue)
 			print(pkt)
 			local srcmac = pkt.eth:getSrcString()
 			local dstmac = pkt.eth:getDstString()
+			print(type(srcmac))
 			print(srcmac)
 			print(dstmac)
 			
