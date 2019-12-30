@@ -25,7 +25,9 @@ function dumpSlave(queue)
 			local buf = bufs[i]
             buf:dump()
             print(type(buf))
-            print(buf)
+			print(buf[0])
+			print(buf[1])
+			print(buf[2])
 			pktCtr:countPacket(buf)
 		end
 		bufs:free(rx)
