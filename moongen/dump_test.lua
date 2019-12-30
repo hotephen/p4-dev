@@ -33,8 +33,11 @@ function dumpSlave(queue)
 			-- s = srcmac.tohex(srcmac)
 			-- d = dstmac.tohex(dstmac)
 			sb = string.gsub(srcmac,":","")
-			
+			db = string.gsub(dstmac,":","")
 			print(sb)
+			print(db)
+			print(sb-db)
+
 			
 			
 			
