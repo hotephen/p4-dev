@@ -30,7 +30,7 @@ function dumpSlave(queue)
 			local dstmac = pkt.eth:getDstString()
 			print(srcmac)
 			print(dstmac)
-			print(srcmac - dstmac)
+			
 			
 			
 			pktCtr:countPacket(buf)
