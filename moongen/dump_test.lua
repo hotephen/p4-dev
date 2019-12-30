@@ -30,12 +30,12 @@ function dumpSlave(queue)
 			local dstmac = pkt.eth:getDstString()
 			print(srcmac)
 			print(dstmac)
-			s = srcmac.tohex(srcmac)
-			d = dstmac.tohex(dstmac)
-			sint = tonumber(s,16)
-			dint = tonumber(d,16)
-			print(sint)
-			print(dint)
+			-- s = srcmac.tohex(srcmac)
+			-- d = dstmac.tohex(dstmac)
+			sb = string.gsub(srcmac,":","")
+			
+			print(sb)
+			
 			
 			
 			pktCtr:countPacket(buf)
