@@ -34,14 +34,14 @@ function dumpSlave(queue)
 			-- print(dstmac)
 			-- s = srcmac.tohex(srcmac)
 			-- d = dstmac.tohex(dstmac)
-			src_pure = string.gsub(srcmac,":","")
-			dst_pure = string.gsub(dstmac,":","")
-			sb = string.sub(src_pure,5)
-			db = string.sub(dst_pure,5)
+			src_pure = string.gsub(srcmac,":","") --src_pure = 1234567890AB (: -> blank)
+			dst_pure = string.gsub(dstmac,":","") --dst_pure = 234567890AB1
+			sb = string.sub(src_pure,5) --sb = 67890AB
+			db = string.sub(dst_pure,5) --db = 7890AB1
 			-- print(sb)
 			-- print(db)
-			sint = tonumber(sb,16)
-			dint = tonumber(db,16)
+			sint = tonumber(sb,16) -- 10진수로 변환
+			dint = tonumber(db,16) 
 			latency = dint-sint
 			total_latency = total_latency + latency
 			count = count + 1
