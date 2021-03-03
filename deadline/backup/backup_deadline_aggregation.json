@@ -1,0 +1,6336 @@
+{
+  "header_types" : [
+    {
+      "name" : "scalars_0",
+      "id" : 0,
+      "fields" : [
+        ["tmp", 32, false],
+        ["tmp_0", 32, false],
+        ["tmp_1", 32, false],
+        ["tmp_2", 32, false],
+        ["tmp_3", 32, false],
+        ["tmp_4", 32, false],
+        ["tmp_5", 32, false],
+        ["tmp_6", 32, false],
+        ["tmp_7", 32, false],
+        ["tmp_8", 32, false],
+        ["tmp_9", 32, false],
+        ["tmp_10", 32, false],
+        ["tmp_11", 32, false],
+        ["tmp_12", 32, false],
+        ["tmp_13", 32, false],
+        ["tmp_14", 32, false],
+        ["tmp_15", 32, false],
+        ["tmp_16", 32, false],
+        ["tmp_17", 32, false],
+        ["tmp_18", 32, false],
+        ["tmp_19", 32, false],
+        ["tmp_20", 32, false],
+        ["tmp_21", 32, false],
+        ["tmp_22", 32, false],
+        ["tmp_23", 32, false],
+        ["tmp_24", 32, false],
+        ["tmp_25", 32, false],
+        ["tmp_26", 32, false],
+        ["tmp_27", 32, false],
+        ["tmp_28", 32, false],
+        ["tmp_29", 32, false],
+        ["tmp_30", 32, false],
+        ["tmp_31", 32, false],
+        ["tmp_32", 32, false],
+        ["tmp_33", 32, false],
+        ["tmp_34", 32, false],
+        ["tmp_35", 32, false],
+        ["tmp_36", 32, false],
+        ["tmp_37", 32, false],
+        ["tmp_38", 32, false],
+        ["tmp_39", 32, false],
+        ["tmp_40", 32, false],
+        ["tmp_41", 32, false],
+        ["tmp_42", 32, false],
+        ["tmp_43", 32, false],
+        ["tmp_44", 32, false],
+        ["tmp_45", 32, false],
+        ["tmp_46", 32, false],
+        ["tmp_47", 32, false],
+        ["tmp_48", 32, false],
+        ["tmp_49", 32, false],
+        ["tmp_50", 32, false],
+        ["tmp_51", 32, false],
+        ["tmp_52", 32, false],
+        ["userMetadata.number_of_entries", 32, false],
+        ["userMetadata.end_flag", 8, false],
+        ["userMetadata.seg_number", 32, false],
+        ["userMetadata.counter_value", 8, false],
+        ["userMetadata.gradient_value", 32, false]
+      ]
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "fields" : [
+        ["ingress_port", 9, false],
+        ["egress_spec", 9, false],
+        ["egress_port", 9, false],
+        ["instance_type", 32, false],
+        ["packet_length", 32, false],
+        ["enq_timestamp", 32, false],
+        ["enq_qdepth", 19, false],
+        ["deq_timedelta", 32, false],
+        ["deq_qdepth", 19, false],
+        ["ingress_global_timestamp", 48, false],
+        ["egress_global_timestamp", 48, false],
+        ["mcast_grp", 16, false],
+        ["egress_rid", 16, false],
+        ["checksum_error", 1, false],
+        ["parser_error", 32, false],
+        ["priority", 3, false],
+        ["_padding", 3, false]
+      ]
+    },
+    {
+      "name" : "ethernet_t",
+      "id" : 2,
+      "fields" : [
+        ["dstAddr", 48, false],
+        ["srcAddr", 48, false],
+        ["etherType", 16, false]
+      ]
+    },
+    {
+      "name" : "ipv4_t",
+      "id" : 3,
+      "fields" : [
+        ["version", 4, false],
+        ["ihl", 4, false],
+        ["diffserv", 8, false],
+        ["totalLen", 16, false],
+        ["identification", 16, false],
+        ["flags", 3, false],
+        ["fragOffset", 13, false],
+        ["ttl", 8, false],
+        ["protocol", 8, false],
+        ["hdrChecksum", 16, false],
+        ["srcAddr", 32, false],
+        ["dstAddr", 32, false]
+      ]
+    },
+    {
+      "name" : "udp_t",
+      "id" : 4,
+      "fields" : [
+        ["srcPort", 16, false],
+        ["dstPort", 16, false],
+        ["len", 16, false],
+        ["checksum", 16, false]
+      ]
+    },
+    {
+      "name" : "frame_type_t",
+      "id" : 5,
+      "fields" : [
+        ["frame_type", 8, false]
+      ]
+    },
+    {
+      "name" : "preamble_t",
+      "id" : 6,
+      "fields" : [
+        ["number_of_entries", 32, false],
+        ["seg_number", 32, false]
+      ]
+    },
+    {
+      "name" : "entry_t",
+      "id" : 7,
+      "fields" : [
+        ["key", 32, false],
+        ["value", 32, false]
+      ]
+    }
+  ],
+  "headers" : [
+    {
+      "name" : "scalars",
+      "id" : 0,
+      "header_type" : "scalars_0",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "header_type" : "standard_metadata",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "ethernet",
+      "id" : 2,
+      "header_type" : "ethernet_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "ipv4",
+      "id" : 3,
+      "header_type" : "ipv4_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "udp",
+      "id" : 4,
+      "header_type" : "udp_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "frame_type",
+      "id" : 5,
+      "header_type" : "frame_type_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "preamble",
+      "id" : 6,
+      "header_type" : "preamble_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[0]",
+      "id" : 7,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[1]",
+      "id" : 8,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[2]",
+      "id" : 9,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[3]",
+      "id" : 10,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[4]",
+      "id" : 11,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[5]",
+      "id" : 12,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[6]",
+      "id" : 13,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[7]",
+      "id" : 14,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[8]",
+      "id" : 15,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "entry[9]",
+      "id" : 16,
+      "header_type" : "entry_t",
+      "metadata" : false,
+      "pi_omit" : true
+    }
+  ],
+  "header_stacks" : [
+    {
+      "name" : "entry",
+      "id" : 0,
+      "header_type" : "entry_t",
+      "size" : 10,
+      "header_ids" : [7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    }
+  ],
+  "header_union_types" : [],
+  "header_unions" : [],
+  "header_union_stacks" : [],
+  "field_lists" : [],
+  "errors" : [
+    ["NoError", 0],
+    ["PacketTooShort", 1],
+    ["NoMatch", 2],
+    ["StackOutOfBounds", 3],
+    ["HeaderTooShort", 4],
+    ["ParserTimeout", 5],
+    ["ParserInvalidArgument", 6]
+  ],
+  "enums" : [],
+  "parsers" : [
+    {
+      "name" : "parser",
+      "id" : 0,
+      "init_state" : "start",
+      "parse_states" : [
+        {
+          "name" : "start",
+          "id" : 0,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "ethernet"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x0800",
+              "mask" : null,
+              "next_state" : "parse_ipv4"
+            },
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["ethernet", "etherType"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_ipv4",
+          "id" : 1,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "ipv4"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x11",
+              "mask" : null,
+              "next_state" : "parse_udp"
+            },
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "protocol"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_udp",
+          "id" : 2,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "udp"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "frame_type"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x00",
+              "mask" : null,
+              "next_state" : "parse_preamble"
+            },
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["frame_type", "frame_type"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_preamble",
+          "id" : 3,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "preamble"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "userMetadata.number_of_entries"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["preamble", "number_of_entries"]
+                }
+              ],
+              "op" : "set"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "userMetadata.seg_number"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["preamble", "seg_number"]
+                }
+              ],
+              "op" : "set"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[0]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[1]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[2]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[3]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[4]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[5]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[6]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[7]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[8]"
+                }
+              ],
+              "op" : "extract"
+            },
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "entry[9]"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : []
+        }
+      ]
+    }
+  ],
+  "parse_vsets" : [],
+  "deparsers" : [
+    {
+      "name" : "deparser",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+        "line" : 316,
+        "column" : 8,
+        "source_fragment" : "MyDeparser"
+      },
+      "order" : ["ethernet", "ipv4", "udp", "frame_type", "preamble", "entry[0]", "entry[1]", "entry[2]", "entry[3]", "entry[4]", "entry[5]", "entry[6]", "entry[7]", "entry[8]", "entry[9]"],
+      "primitives" : []
+    }
+  ],
+  "meter_arrays" : [],
+  "counter_arrays" : [],
+  "register_arrays" : [
+    {
+      "name" : "MyIngress.parameter_pool1",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+        "line" : 180,
+        "column" : 28,
+        "source_fragment" : "parameter_pool1"
+      },
+      "size" : 1024,
+      "bitwidth" : 32
+    },
+    {
+      "name" : "MyIngress.parameter_pool2",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+        "line" : 181,
+        "column" : 28,
+        "source_fragment" : "parameter_pool2"
+      },
+      "size" : 1024,
+      "bitwidth" : 32
+    },
+    {
+      "name" : "MyIngress.counter_num_workers",
+      "id" : 2,
+      "source_info" : {
+        "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+        "line" : 182,
+        "column" : 25,
+        "source_fragment" : "counter_num_workers"
+      },
+      "size" : 10,
+      "bitwidth" : 8
+    }
+  ],
+  "calculations" : [],
+  "learn_lists" : [],
+  "actions" : [
+    {
+      "name" : "NoAction",
+      "id" : 0,
+      "runtime_data" : [],
+      "primitives" : []
+    },
+    {
+      "name" : "MyIngress.drop",
+      "id" : 1,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "mark_to_drop",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "standard_metadata"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 187,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop(standard_metadata)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.forward",
+      "id" : 2,
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 192,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.forward_to_2",
+      "id" : 3,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0002"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 196,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = 2"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.broadcast",
+      "id" : 4,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "mcast_grp"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0001"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 200,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.mcast_grp = 1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "ttl"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["ipv4", "ttl"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0xff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 201,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl + 8w255"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.broadcast",
+      "id" : 5,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "mcast_grp"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0001"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 200,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.mcast_grp = 1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "ttl"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["ipv4", "ttl"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0xff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 201,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl + 8w255"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "backup_deadline_aggregation250",
+      "id" : 6,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 250,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 251,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+1"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 251,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+1,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_0"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000002"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 252,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+2"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_0"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 252,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+2,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_1"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000003"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 253,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+3"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_1"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 253,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+3,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_2"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000004"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 254,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+4"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_2"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 254,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+4,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_3"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 255,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+5"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_3"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 255,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+5,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_4"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000006"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 256,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+6"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_4"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 256,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+6,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_5"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000007"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 257,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+7"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_5"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 257,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+7,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_6"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000008"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 258,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+8"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_6"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 258,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+8,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_7"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000009"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 259,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+9"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_7"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 259,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+9,0)"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.counter_num_workers"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 260,
+            "column" : 16,
+            "source_fragment" : "counter_num_workers.write(meta.seg_number, 0)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "backup_deadline_aggregation233",
+      "id" : 7,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 233,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[0]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 233,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[0].value"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 233,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+0,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[0]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 233,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[0].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_8"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 234,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+1"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_8"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 234,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+1)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[1]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 234,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[1].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_9"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 234,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+1"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_9"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 234,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+1,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[1]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 234,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[1].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_10"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000002"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 235,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+2"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_10"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 235,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+2)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[2]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 235,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[2].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_11"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000002"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 235,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+2"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_11"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 235,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+2,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[2]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 235,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[2].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_12"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000003"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 236,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+3"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_12"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 236,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+3)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[3]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 236,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[3].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_13"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000003"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 236,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+3"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_13"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 236,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+3,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[3]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 236,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[3].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_14"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000004"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 237,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+4"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_14"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 237,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+4)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[4]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 237,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[4].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_15"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000004"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 237,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+4"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_15"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 237,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+4,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[4]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 237,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[4].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_16"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 238,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+5"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_16"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 238,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+5)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[5]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 238,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[5].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_17"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 238,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+5"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_17"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 238,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+5,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[5]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 238,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[5].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_18"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000006"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 239,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+6"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_18"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 239,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+6)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[6]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 239,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[6].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_19"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000006"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 239,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+6"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_19"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 239,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+6,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[6]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 239,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[6].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_20"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000007"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 240,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+7"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_20"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 240,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+7)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[7]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 240,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[7].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_21"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000007"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 240,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+7"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_21"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 240,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+7,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[7]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 240,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[7].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_22"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000008"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 241,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+8"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_22"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 241,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+8)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[8]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 241,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[8].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_23"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000008"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 241,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+8"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_23"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 241,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+8,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[8]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 241,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[8].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_24"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000009"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 242,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+9"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_24"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 242,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+9)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[9]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 242,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[9].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_25"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000009"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 242,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+9"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool1"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_25"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 242,
+            "column" : 138,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number+9,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[9]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 242,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[9].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.counter_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.counter_num_workers"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 244,
+            "column" : 12,
+            "source_fragment" : "counter_num_workers.read(meta.counter_value, meta.seg_number)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.counter_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.counter_value"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x01"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 245,
+            "column" : 12,
+            "source_fragment" : "meta.counter_value = meta.counter_value + 1"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.counter_num_workers"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.counter_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 246,
+            "column" : 12,
+            "source_fragment" : "counter_num_workers.write(meta.seg_number, meta.counter_value)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "backup_deadline_aggregation289",
+      "id" : 8,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 289,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_26"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 290,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+1"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_26"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 290,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+1,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_27"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000002"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 291,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+2"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_27"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 291,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+2,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_28"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000003"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 292,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+3"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_28"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 292,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+3,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_29"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000004"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 293,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+4"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_29"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 293,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+4,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_30"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 294,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+5"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_30"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 294,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+5,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_31"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000006"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 295,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+6"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_31"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 295,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+6,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_32"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000007"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 296,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+7"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_32"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 296,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+7,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_33"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000008"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 297,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+8"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_33"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 297,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+8,0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_34"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000009"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 298,
+            "column" : 38,
+            "source_fragment" : "meta.seg_number+9"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_34"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 298,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+9,0)"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.counter_num_workers"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 299,
+            "column" : 16,
+            "source_fragment" : "counter_num_workers.write(meta.seg_number, 0)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "backup_deadline_aggregation272",
+      "id" : 9,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 272,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[0]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 272,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[0].value"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 272,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+0,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[0]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 272,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[0].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_35"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 273,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+1"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_35"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 273,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+1)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[1]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 273,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[1].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_36"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 273,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+1"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_36"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 273,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+1,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[1]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 273,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[1].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_37"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000002"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 274,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+2"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_37"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 274,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+2)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[2]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 274,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[2].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_38"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000002"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 274,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+2"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_38"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 274,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+2,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[2]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 274,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[2].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_39"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000003"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 275,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+3"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_39"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 275,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+3)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[3]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 275,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[3].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_40"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000003"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 275,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+3"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_40"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 275,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+3,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[3]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 275,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[3].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_41"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000004"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 276,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+4"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_41"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 276,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+4)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[4]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 276,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[4].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_42"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000004"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 276,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+4"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_42"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 276,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+4,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[4]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 276,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[4].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_43"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 277,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+5"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_43"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 277,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+5)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[5]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 277,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[5].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_44"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 277,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+5"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_44"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 277,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+5,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[5]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 277,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[5].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_45"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000006"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 278,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+6"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_45"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 278,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+6)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[6]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 278,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[6].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_46"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000006"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 278,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+6"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_46"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 278,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+6,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[6]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 278,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[6].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_47"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000007"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 279,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+7"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_47"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 279,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+7)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[7]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 279,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[7].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_48"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000007"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 279,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+7"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_48"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 279,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+7,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[7]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 279,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[7].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_49"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000008"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 280,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+8"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_49"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 280,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+8)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[8]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 280,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[8].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_50"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000008"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 280,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+8"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_50"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 280,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+8,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[8]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 280,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[8].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_51"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000009"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 281,
+            "column" : 54,
+            "source_fragment" : "meta.seg_number+9"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_51"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 281,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+9)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.gradient_value"]
+                      },
+                      "right" : {
+                        "type" : "field",
+                        "value" : ["entry[9]", "value"]
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 281,
+            "column" : 74,
+            "source_fragment" : "meta.gradient_value = meta.gradient_value + hdr.entry[9].value"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_52"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.seg_number"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000009"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 281,
+            "column" : 160,
+            "source_fragment" : "meta.seg_number+9"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.parameter_pool2"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_52"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 281,
+            "column" : 138,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number+9,meta.gradient_value)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["entry[9]", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.gradient_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 281,
+            "column" : 200,
+            "source_fragment" : "hdr.entry[9].value = meta.gradient_value"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.counter_value"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.counter_num_workers"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 283,
+            "column" : 12,
+            "source_fragment" : "counter_num_workers.read(meta.counter_value, meta.seg_number)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.counter_value"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "userMetadata.counter_value"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x01"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 284,
+            "column" : 12,
+            "source_fragment" : "meta.counter_value = meta.counter_value + 1"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.counter_num_workers"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.seg_number"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "userMetadata.counter_value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 285,
+            "column" : 12,
+            "source_fragment" : "counter_num_workers.write(meta.seg_number, meta.counter_value)"
+          }
+        }
+      ]
+    }
+  ],
+  "pipelines" : [
+    {
+      "name" : "ingress",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+        "line" : 164,
+        "column" : 8,
+        "source_fragment" : "MyIngress"
+      },
+      "init_table" : "MyIngress.ipv4_forward",
+      "tables" : [
+        {
+          "name" : "MyIngress.ipv4_forward",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 204,
+            "column" : 10,
+            "source_fragment" : "ipv4_forward"
+          },
+          "key" : [
+            {
+              "match_type" : "lpm",
+              "name" : "hdr.ipv4.dstAddr",
+              "target" : ["ipv4", "dstAddr"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "lpm",
+          "type" : "simple",
+          "max_size" : 2048,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [0, 2, 3, 1],
+          "actions" : ["NoAction", "MyIngress.forward", "MyIngress.forward_to_2", "MyIngress.drop"],
+          "base_default_next" : "node_3",
+          "next_tables" : {
+            "NoAction" : "node_3",
+            "MyIngress.forward" : "node_3",
+            "MyIngress.forward_to_2" : "node_3",
+            "MyIngress.drop" : "node_3"
+          },
+          "default_entry" : {
+            "action_id" : 3,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
+        },
+        {
+          "name" : "tbl_backup_deadline_aggregation233",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 233,
+            "column" : 12,
+            "source_fragment" : "parameter_pool1.read(meta.gradient_value, meta.seg_number+0); meta.gradient_value = meta.gradient_value + hdr.entry[0].value; parameter_pool1.write(meta.seg_number+0,meta.gradient_value); hdr.entry[0].value = meta.gradient_value; ..."
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [7],
+          "actions" : ["backup_deadline_aggregation233"],
+          "base_default_next" : "node_5",
+          "next_tables" : {
+            "backup_deadline_aggregation233" : "node_5"
+          },
+          "default_entry" : {
+            "action_id" : 7,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_broadcast",
+          "id" : 2,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 249,
+            "column" : 16,
+            "source_fragment" : "broadcast()"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [4],
+          "actions" : ["MyIngress.broadcast"],
+          "base_default_next" : "tbl_backup_deadline_aggregation250",
+          "next_tables" : {
+            "MyIngress.broadcast" : "tbl_backup_deadline_aggregation250"
+          },
+          "default_entry" : {
+            "action_id" : 4,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_backup_deadline_aggregation250",
+          "id" : 3,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 250,
+            "column" : 16,
+            "source_fragment" : "parameter_pool1.write(meta.seg_number,0); ..."
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [6],
+          "actions" : ["backup_deadline_aggregation250"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "backup_deadline_aggregation250" : null
+          },
+          "default_entry" : {
+            "action_id" : 6,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_backup_deadline_aggregation272",
+          "id" : 4,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 272,
+            "column" : 12,
+            "source_fragment" : "parameter_pool2.read(meta.gradient_value, meta.seg_number+0); meta.gradient_value = meta.gradient_value + hdr.entry[0].value; parameter_pool2.write(meta.seg_number+0,meta.gradient_value); hdr.entry[0].value = meta.gradient_value; ..."
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [9],
+          "actions" : ["backup_deadline_aggregation272"],
+          "base_default_next" : "node_9",
+          "next_tables" : {
+            "backup_deadline_aggregation272" : "node_9"
+          },
+          "default_entry" : {
+            "action_id" : 9,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_broadcast_0",
+          "id" : 5,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 288,
+            "column" : 16,
+            "source_fragment" : "broadcast()"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [5],
+          "actions" : ["MyIngress.broadcast"],
+          "base_default_next" : "tbl_backup_deadline_aggregation289",
+          "next_tables" : {
+            "MyIngress.broadcast" : "tbl_backup_deadline_aggregation289"
+          },
+          "default_entry" : {
+            "action_id" : 5,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_backup_deadline_aggregation289",
+          "id" : 6,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 289,
+            "column" : 16,
+            "source_fragment" : "parameter_pool2.write(meta.seg_number,0); ..."
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [8],
+          "actions" : ["backup_deadline_aggregation289"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "backup_deadline_aggregation289" : null
+          },
+          "default_entry" : {
+            "action_id" : 8,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        }
+      ],
+      "action_profiles" : [],
+      "conditionals" : [
+        {
+          "name" : "node_3",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 225,
+            "column" : 11,
+            "source_fragment" : "meta.seg_number % 2 == 0"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "==",
+              "left" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "userMetadata.seg_number"]
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0x00000001"
+                  }
+                }
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x00000000"
+              }
+            }
+          },
+          "true_next" : "tbl_backup_deadline_aggregation233",
+          "false_next" : "tbl_backup_deadline_aggregation272"
+        },
+        {
+          "name" : "node_5",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 248,
+            "column" : 15,
+            "source_fragment" : "meta.counter_value == 5"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "==",
+              "left" : {
+                "type" : "field",
+                "value" : ["scalars", "userMetadata.counter_value"]
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x05"
+              }
+            }
+          },
+          "false_next" : null,
+          "true_next" : "tbl_broadcast"
+        },
+        {
+          "name" : "node_9",
+          "id" : 2,
+          "source_info" : {
+            "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+            "line" : 287,
+            "column" : 15,
+            "source_fragment" : "meta.counter_value == 5"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "==",
+              "left" : {
+                "type" : "field",
+                "value" : ["scalars", "userMetadata.counter_value"]
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x05"
+              }
+            }
+          },
+          "false_next" : null,
+          "true_next" : "tbl_broadcast_0"
+        }
+      ]
+    },
+    {
+      "name" : "egress",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4",
+        "line" : 306,
+        "column" : 8,
+        "source_fragment" : "MyEgress"
+      },
+      "init_table" : null,
+      "tables" : [],
+      "action_profiles" : [],
+      "conditionals" : []
+    }
+  ],
+  "checksums" : [],
+  "force_arith" : [],
+  "extern_instances" : [],
+  "field_aliases" : [
+    [
+      "queueing_metadata.enq_timestamp",
+      ["standard_metadata", "enq_timestamp"]
+    ],
+    [
+      "queueing_metadata.enq_qdepth",
+      ["standard_metadata", "enq_qdepth"]
+    ],
+    [
+      "queueing_metadata.deq_timedelta",
+      ["standard_metadata", "deq_timedelta"]
+    ],
+    [
+      "queueing_metadata.deq_qdepth",
+      ["standard_metadata", "deq_qdepth"]
+    ],
+    [
+      "intrinsic_metadata.ingress_global_timestamp",
+      ["standard_metadata", "ingress_global_timestamp"]
+    ],
+    [
+      "intrinsic_metadata.egress_global_timestamp",
+      ["standard_metadata", "egress_global_timestamp"]
+    ],
+    [
+      "intrinsic_metadata.mcast_grp",
+      ["standard_metadata", "mcast_grp"]
+    ],
+    [
+      "intrinsic_metadata.egress_rid",
+      ["standard_metadata", "egress_rid"]
+    ],
+    [
+      "intrinsic_metadata.priority",
+      ["standard_metadata", "priority"]
+    ]
+  ],
+  "program" : "/ssd2/hc/p4-dev/deadline/backup_deadline_aggregation.p4i",
+  "__meta__" : {
+    "version" : [2, 23],
+    "compiler" : "https://github.com/p4lang/p4c"
+  }
+}

@@ -1,0 +1,765 @@
+# 1 "/ssd2/hc/p4-dev/daiet/bmv2/p4src/daiet_bmv2.p4"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "/ssd2/hc/p4-dev/daiet/bmv2/p4src/daiet_bmv2.p4"
+/*
+Author: Amedeo Sapio
+amedeo.sapio@gmail.com
+*/
+
+# 1 "/ssd2/hc/p4-dev/daiet/bmv2/p4src/includes/headers.p4" 1
+/*
+Author: Amedeo Sapio
+amedeo.sapio@gmail.com
+*/
+
+header_type ethernet_t {
+    fields {
+        dstAddr : 48;
+        srcAddr : 48;
+        etherType : 16;
+    }
+}
+
+header_type ipv4_t {
+    fields {
+        version : 4;
+        ihl : 4;
+        diffserv : 8;
+        totalLen : 16;
+        identification : 16;
+        flags : 3;
+        fragOffset : 13;
+        ttl : 8;
+        protocol : 8;
+        hdrChecksum : 16;
+        srcAddr : 32;
+        dstAddr: 32;
+    }
+}
+
+header_type udp_t {
+    fields {
+        srcPort : 16;
+        dstPort : 16;
+        len : 16;
+        checksum : 16;
+    }
+}
+
+header_type end_t {
+    fields {
+        frame_type : 8; /* type=1 */
+        tree_id : 32;
+    }
+}
+
+header_type preamble_t {
+    fields {
+        frame_type : 8; /* type=0 */
+        number_of_entries : 32;
+        tree_id : 32;
+    }
+}
+
+header_type entry_t {
+    fields {
+        key : 128; /* 16 bytes */
+        value : 32;
+    }
+}
+
+header_type metadata_t {
+    fields {
+        number_of_entries : 32;
+        tree_id : 32;
+        original_tree_id : 32;
+        remaining_children : 32;
+        key_index : 20; /* log(REGISTER_SIZE) */
+        value : 32;
+        valid_entries_index : 20; /* log(REGISTER_SIZE) */
+        valid_entries_offset : 20; /* log(REGISTER_SIZE) */
+        actual_index : 20; /* log(REGISTER_SIZE) */
+        conditional_unit : 1;
+        skip : 1;
+    }
+}
+
+header_type intrinsic_metadata_t {
+    fields {
+        ingress_global_timestamp : 48;
+        lf_field_list : 8;
+        mcast_grp : 16;
+        egress_rid : 16;
+        resubmit_flag : 8;
+        recirculate_flag : 8;
+    }
+}
+# 7 "/ssd2/hc/p4-dev/daiet/bmv2/p4src/daiet_bmv2.p4" 2
+# 1 "/ssd2/hc/p4-dev/daiet/bmv2/p4src/includes/parser.p4" 1
+/*
+Author: Amedeo Sapio
+amedeo.sapio@gmail.com
+*/
+
+
+
+
+
+
+parser start {
+    return parse_ethernet;
+}
+
+header ethernet_t ethernet;
+
+parser parse_ethernet {
+    extract(ethernet);
+    return select(latest.etherType) {
+        0x0800 : parse_ipv4;
+        default: ingress;
+    }
+}
+
+header ipv4_t ipv4;
+
+field_list ipv4_checksum_list {
+        ipv4.version;
+        ipv4.ihl;
+        ipv4.diffserv;
+        ipv4.totalLen;
+        ipv4.identification;
+        ipv4.flags;
+        ipv4.fragOffset;
+        ipv4.ttl;
+        ipv4.protocol;
+        ipv4.srcAddr;
+        ipv4.dstAddr;
+}
+
+field_list_calculation ipv4_checksum {
+    input {
+        ipv4_checksum_list;
+    }
+    algorithm : csum16;
+    output_width : 16;
+}
+
+calculated_field ipv4.hdrChecksum {
+    verify ipv4_checksum;
+    update ipv4_checksum;
+}
+
+parser parse_ipv4 {
+    extract(ipv4);
+    return select(latest.protocol) {
+        17 : parse_udp;
+        default: ingress;
+    }
+}
+
+/* Parser exception not yet supported in BMv2
+parser_exception p4_pe_checksum {
+    return parser_drop;
+}*/
+
+header udp_t udp;
+
+parser parse_udp {
+    extract(udp);
+    return select(current(0, 8)) {
+        0x00 : parse_preamble;
+        0x01 : parse_end;
+        default: ingress;
+    }
+}
+
+header preamble_t preamble;
+metadata metadata_t mdata;
+metadata intrinsic_metadata_t intrinsic_metadata;
+
+parser parse_preamble {
+    extract(preamble);
+
+    set_metadata(mdata.number_of_entries, latest.number_of_entries);
+    set_metadata(mdata.original_tree_id, latest.tree_id);
+
+    return select (mdata.number_of_entries) {
+        0 : ingress;
+        default : parse_entry;
+    }
+}
+
+header entry_t entry[10];
+
+parser parse_entry {
+    extract(entry[next]);
+    set_metadata(mdata.number_of_entries, mdata.number_of_entries-1);
+
+    return select (mdata.number_of_entries) {
+        0 : ingress;
+        default : parse_entry;
+    }
+}
+
+header end_t end;
+
+parser parse_end {
+    extract(end);
+
+    set_metadata(mdata.original_tree_id, latest.tree_id);
+
+    return ingress;
+}
+# 8 "/ssd2/hc/p4-dev/daiet/bmv2/p4src/daiet_bmv2.p4" 2
+# 1 "/ssd2/hc/p4-dev/daiet/bmv2/p4src/includes/registers.p4" 1
+/*
+Author: Amedeo Sapio
+amedeo.sapio@gmail.com
+*/
+
+/*
+TOTAL_MEM=2*NUMBER_OF_TREES*NUMBER_OF_CELLS*(KEY_SIZE+VALUE_SIZE) + NUMBER_OF_CELLS * LOG(NUMBER_OF_CELLS)
+*/
+
+
+
+
+register remaining_children {
+    width: 32;
+    instance_count : 12;
+}
+
+register keys {
+    width : 128; /* 16 bytes */
+    instance_count : 196608;
+}
+
+register values {
+    width : 32;
+    instance_count : 196608;
+}
+
+register valid_entries_stack {
+    width : 18; /* log(REGISTER_SIZE) */
+    instance_count : 196608;
+}
+
+/* Index of first empty */
+register valid_entries_index {
+    width : 18; /* log(REGISTER_SIZE) */
+    instance_count : 12;
+}
+
+/* Bitmap */
+register bitmap {
+    width : 1;
+    instance_count : 196608;
+}
+# 9 "/ssd2/hc/p4-dev/daiet/bmv2/p4src/daiet_bmv2.p4" 2
+
+
+
+
+field_list key_hash_fields {
+    entry[0].key;
+}
+
+field_list_calculation key_hash {
+    input {
+        key_hash_fields;
+    }
+    algorithm : crc32;
+    output_width : 32;
+}
+
+field_list clone_fields {
+    standard_metadata;
+}
+
+action _drop(){
+    drop();
+}
+
+/* Read remaining_children from register */
+action load_remaining_children(){
+    register_read(mdata.remaining_children, remaining_children, mdata.tree_id);
+}
+
+action load_valid_entries_index(offset){
+    register_read(mdata.valid_entries_index, valid_entries_index, mdata.tree_id);
+    modify_field(mdata.valid_entries_offset, offset);
+}
+
+action set_child_nodes (child_nodes) {
+    register_write(remaining_children, mdata.tree_id, child_nodes);
+    load_remaining_children();
+}
+
+action set_tree_id (actual_tree_id) {
+    modify_field(mdata.tree_id, actual_tree_id);
+}
+
+action process_single_entry(){
+
+    /* index = Hash(key) */
+    modify_field_with_hash_based_offset(mdata.key_index, mdata.tree_id*16384, key_hash, 16384);
+
+    /* Write key */
+    register_write(keys, mdata.key_index, entry[0].key);
+
+    /* Write bitmap */
+    register_read(mdata.conditional_unit, bitmap, mdata.key_index);
+    register_write(bitmap, mdata.key_index, 1);
+
+    /* Update value */
+    register_read(mdata.value, values, mdata.key_index);
+    add_to_field(mdata.value, entry[0].value);
+    register_write(values, mdata.key_index, mdata.value);
+
+    /* Update valid entries */
+    add(mdata.actual_index, mdata.valid_entries_index, mdata.valid_entries_offset);
+    register_write(valid_entries_stack, mdata.actual_index, mdata.key_index);
+
+    /* cond xor 1 = not cond */
+    bit_xor(mdata.conditional_unit,mdata.conditional_unit, 1);
+
+    add_to_field(mdata.valid_entries_index,mdata.conditional_unit);
+
+    register_write(valid_entries_index, mdata.tree_id, mdata.valid_entries_index);
+
+    pop(entry, 1);
+}
+
+action process_entry_1(){
+    process_single_entry();
+    drop();
+}
+
+action process_entry_2(){
+    process_single_entry();
+    process_entry_1();
+}
+
+action process_entry_3(){
+    process_single_entry();
+    process_entry_2();
+}
+
+action process_entry_4(){
+    process_single_entry();
+    process_entry_3();
+}
+
+action process_entry_5(){
+    process_single_entry();
+    process_entry_4();
+}
+
+action process_entry_6(){
+    process_single_entry();
+    process_entry_5();
+}
+
+action process_entry_7(){
+    process_single_entry();
+    process_entry_6();
+}
+
+action process_entry_8(){
+    process_single_entry();
+    process_entry_7();
+}
+
+action process_entry_9(){
+    process_single_entry();
+    process_entry_8();
+}
+
+action process_entry_10(){
+    process_single_entry();
+    process_entry_9();
+}
+
+action end_action(){
+
+    /* Update remaining children */
+    register_read(mdata.remaining_children, remaining_children, mdata.tree_id);
+    subtract_from_field(mdata.remaining_children, 1);
+    register_write(remaining_children, mdata.tree_id, mdata.remaining_children);
+}
+
+action preamble_setup(entries) {
+    /* We use the entries parameter to limit the entries to the max value */
+    remove_header(end);
+    add_header(preamble);
+
+    modify_field(preamble.frame_type, 0);
+    modify_field(preamble.number_of_entries, entries);
+    modify_field(preamble.tree_id, mdata.original_tree_id);
+}
+
+action next_valid_entry(){
+
+    /* Decrement valid_entries_index */
+    subtract_from_field(mdata.valid_entries_index, 1);
+    register_write(valid_entries_index, mdata.tree_id, mdata.valid_entries_index);
+
+    /* Read valid entry */
+    add(mdata.actual_index, mdata.valid_entries_index, mdata.valid_entries_offset);
+    register_read(mdata.key_index, valid_entries_stack, mdata.actual_index);
+}
+
+action clear_registry(){
+    register_write(keys, mdata.key_index, 0);
+    register_write(values, mdata.key_index, 0);
+    register_write(bitmap, mdata.key_index, 0);
+}
+
+action set_port(port){
+    modify_field(standard_metadata.egress_spec, port);
+}
+
+action _recirculate(){
+    recirculate(clone_fields);
+}
+
+action send_1_entries(){
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[0]);
+    register_read(entry[0].key, keys, mdata.key_index);
+    register_read(entry[0].value, values, mdata.key_index);
+
+    clear_registry();
+
+    /* Not supported by BMv2 */
+    /* clone_ingress_pkt_to_ingress(CLONE_SPEC, clone_fields); */
+
+    /* Clone to egress and recirculate */
+    clone_ingress_pkt_to_egress(100, clone_fields);
+}
+
+action send_2_entries(){
+
+    send_1_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[1]);
+    register_read(entry[1].key, keys, mdata.key_index);
+    register_read(entry[1].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action send_3_entries(){
+
+    send_2_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[2]);
+    register_read(entry[2].key, keys, mdata.key_index);
+    register_read(entry[2].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action send_4_entries(){
+
+    send_3_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[3]);
+    register_read(entry[3].key, keys, mdata.key_index);
+    register_read(entry[3].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action send_5_entries(){
+
+    send_4_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[4]);
+    register_read(entry[4].key, keys, mdata.key_index);
+    register_read(entry[4].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action send_6_entries(){
+
+    send_5_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[5]);
+    register_read(entry[5].key, keys, mdata.key_index);
+    register_read(entry[5].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action send_7_entries(){
+
+    send_6_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[6]);
+    register_read(entry[6].key, keys, mdata.key_index);
+    register_read(entry[6].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action send_8_entries(){
+
+    send_7_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[7]);
+    register_read(entry[7].key, keys, mdata.key_index);
+    register_read(entry[7].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action send_9_entries(){
+
+    send_8_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[8]);
+    register_read(entry[8].key, keys, mdata.key_index);
+    register_read(entry[8].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action send_10_entries(){
+
+    send_9_entries();
+
+    next_valid_entry();
+
+    /* Add header */
+    add_header(entry[9]);
+    register_read(entry[9].key, keys, mdata.key_index);
+    register_read(entry[9].value, values, mdata.key_index);
+
+    clear_registry();
+}
+
+action skip_packet(){
+    modify_field(mdata.skip, 1);
+}
+
+table load_remaining_children_table {
+    actions {
+        load_remaining_children;
+    }
+    size: 0;
+}
+
+table load_valid_entries_index_table {
+    reads {
+        mdata.tree_id : exact;
+    }
+    actions {
+        load_valid_entries_index;
+    }
+    size: 12;
+}
+
+table tree_id_adapter_table {
+    reads {
+        mdata.original_tree_id : exact;
+    }
+    actions {
+        set_tree_id;
+        skip_packet;
+    }
+    size: 12;
+}
+
+table set_child_nodes_table {
+    reads {
+        mdata.tree_id : exact;
+    }
+    actions {
+        set_child_nodes;
+    }
+    size: 12;
+}
+
+table entry_processing_table {
+    reads {
+        preamble.number_of_entries : exact;
+    }
+    actions {
+        process_entry_1;
+        process_entry_2;
+        process_entry_3;
+        process_entry_4;
+        process_entry_5;
+        process_entry_6;
+        process_entry_7;
+        process_entry_8;
+        process_entry_9;
+        process_entry_10;
+        _drop;
+    }
+    size: 10;
+}
+
+table end_table {
+    actions {
+        end_action;
+    }
+    size: 0;
+}
+
+table preamble_setup_table {
+    reads {
+        mdata.valid_entries_index : exact;
+    }
+    actions {
+        preamble_setup;
+    }
+    size: 10;
+}
+
+table flush_table {
+    reads {
+        mdata.valid_entries_index : exact;
+    }
+    actions {
+        send_1_entries;
+        send_2_entries;
+        send_3_entries;
+        send_4_entries;
+        send_5_entries;
+        send_6_entries;
+        send_7_entries;
+        send_8_entries;
+        send_9_entries;
+        send_10_entries;
+    }
+    size: 10;
+}
+
+table forwarding_table {
+    reads{
+        mdata.original_tree_id : exact;
+    }
+    actions {
+        set_port;
+    }
+    size : 12;
+}
+
+table mac_forwarding_table {
+    reads{
+        ethernet.dstAddr : exact;
+    }
+    actions {
+        set_port;
+        _drop;
+    }
+    size : 13;
+}
+
+table recirculate_table {
+    reads {
+        standard_metadata.instance_type : exact;
+    }
+    actions {
+        _recirculate;
+    }
+    size : 1;
+}
+
+control ingress {
+
+    /* Common table 
+    /* Here because of 
+    /* https://github.com/p4lang/p4c/issues/457 */
+    if(valid(preamble) or valid(end)){
+
+        /* Adjust tree_id */
+        apply(tree_id_adapter_table);
+
+        if (mdata.skip!=1){
+            /* Load valid_entries_index */
+            apply(load_valid_entries_index_table);
+        }
+
+    }
+
+    if(valid(preamble) and mdata.skip!=1){
+
+        /* Read remaining_children from register */
+        apply(load_remaining_children_table);
+
+        if (mdata.remaining_children == 0){
+            /* set remaining_children */
+            apply(set_child_nodes_table);
+        }
+
+        /* Load valid_entries_index */
+        /*apply(load_valid_entries_index_table);*/
+
+        /* process entries */
+        apply(entry_processing_table);
+
+    } else if(valid(end) and mdata.skip!=1){
+
+        if (standard_metadata.instance_type==0){
+            /* Not a clone -> decrease remaining children */
+            apply(end_table);
+        }
+
+        if (mdata.remaining_children == 0 or not standard_metadata.instance_type==0){
+            /* Clone or end from the only remaining child */
+
+            /* Load valid_entries_index */
+            /*apply(load_valid_entries_index_table);*/
+
+            if (mdata.valid_entries_index!=0){
+                /* preamble_setup */
+                apply(preamble_setup_table);
+                /* Add valid_entries_index entries */
+                apply(flush_table);
+           }
+        }
+
+        /* Forward the packet */
+        apply(forwarding_table);
+
+    }else{
+
+        apply(mac_forwarding_table);
+    }
+}
+
+control egress {
+    apply(recirculate_table);
+}

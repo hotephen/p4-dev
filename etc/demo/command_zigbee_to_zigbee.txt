@@ -1,0 +1,1 @@
+table_add table_zig_to_zig action_zig_to_zig 0x1a88 0x0000 0x0001 0x30 => 1

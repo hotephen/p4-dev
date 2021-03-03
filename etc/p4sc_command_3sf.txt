@@ -1,0 +1,4 @@
+table_add precheck change_hdr_to_meta 0 =>
+table_add SF_C si_decrease 1 255 => 2
+table_add SF_A2 si_decrease 1 254 => 2
+table_add SF_B2 si_decrease 1 253 => 2

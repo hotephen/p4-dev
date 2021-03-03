@@ -1,0 +1,11 @@
+table_add precheck change_hdr_to_meta 0 =>
+
+table_add basic_monitor send_to_monitor 1 1 254  => 1
+table_add set_pkt_id read_id_from_reg 1 254 =>
+
+
+table_add nat_dst set_dst_nat_nexthop_index 10.10.0.2 6 80 1 255 => 1
+table_add egress_nat set_nat_dst_rewrite 1 1 253 => 10.10.0.22
+
+table_add sff loopback 1 254 =>
+table_add sff l2_forward 1 253 => 2 22:22:22:22:22:22

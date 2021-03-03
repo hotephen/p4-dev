@@ -1,0 +1,12 @@
+pd-test
+pd table_config_at_initial add_entry set_initial_config desc_hdr_vdp_id 1 vdp_metadata_inst_id 0 vdp_metadata_stage_id 0 action_progid 1 action_stageid 1 action_match_bitmap 4 action_table_chain 1
+pd table_header_match_stage1_1 add_entry set_action_id vdp_metadata_inst_id 1 vdp_metadata_stage_id 1 hdr1_buf 0x00010000000000000000 hdr1_buf_mask 0xFFFF0000000000000000 priority 1 action_action_bitmap 1 action_match_bitmap 0 action_next_stage 0 action_next_prog 0xFF action_match_result 0x200000000
+pd table_mod_std_meta_stage1 add_entry do_forward vdp_metadata_action_chain_id 0x200000000 vdp_metadata_action_chain_id_mask 0xFFFFFFFFF priority 1 action_port 161
+
+end
+ucli
+pm
+port-add 5/- 10G NONE
+an-set 5/- 2
+port-enb 5/-
+exit

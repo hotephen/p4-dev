@@ -1,0 +1,9 @@
+
+
+host1 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.1'  --num_flush 1 --dif '10.0.1.1' 
+host3 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.3'  --num_flush 1 --dif '10.0.1.2' 
+host5 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.5'  --num_flush 1 --dif '10.0.1.3' 
+host7 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.7'  --num_flush 1 --dif '10.0.1.4' 
+host9 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.9'  --num_flush 1 --dif '10.0.1.5' 
+host11 nohup sudo python ~/p4-dev/topk/packets/send.py --i eth0 --si '10.0.0.11' --num_flush 1 --dif '10.0.1.6' 
+

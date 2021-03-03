@@ -1,0 +1,2 @@
+table_clear select_k
+table_add select_k set_k => 2

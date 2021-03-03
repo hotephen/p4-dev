@@ -1,0 +1,120 @@
+table_add forwarding_table set_port 1 => 2
+table_set_default load_remaining_children_table load_remaining_children
+table_add tree_id_adapter_table set_tree_id 1 => 1
+table_set_default tree_id_adapter_table skip_packet
+table_add load_valid_entries_index_table load_valid_entries_index 1 => 0
+table_set_default count_child_table count_child
+table_add compare_remaining_children action_flush_tag 1 =>
+table_add entry_processing_table process_entry_1 1 =>
+table_add entry_processing_table process_entry_2 2 =>
+table_add entry_processing_table process_entry_3 3 =>
+table_add entry_processing_table process_entry_4 4 =>
+table_add entry_processing_table process_entry_5 5 =>
+table_add entry_processing_table process_entry_6 6 =>
+table_add entry_processing_table process_entry_7 7 =>
+table_add entry_processing_table process_entry_8 8 =>
+table_add entry_processing_table process_entry_9 9 =>
+table_add entry_processing_table process_entry_10 10 =>
+table_set_default entry_processing_table _drop
+table_set_default end_table end_action
+table_add preamble_setup_table preamble_setup 1 => 1
+table_add preamble_setup_table preamble_setup 2 => 2
+table_add preamble_setup_table preamble_setup 3 => 3
+table_add preamble_setup_table preamble_setup 4 => 4
+table_add preamble_setup_table preamble_setup 5 => 5
+table_add preamble_setup_table preamble_setup 6 => 6
+table_add preamble_setup_table preamble_setup 7 => 7
+table_add preamble_setup_table preamble_setup 8 => 8
+table_add preamble_setup_table preamble_setup 9 => 9
+table_set_default preamble_setup_table preamble_setup 10
+table_add flush_table send_1_entries 1 =>
+table_add flush_table send_2_entries 2 =>
+table_add flush_table send_3_entries 3 =>
+table_add flush_table send_4_entries 4 =>
+table_add flush_table send_5_entries 5 =>
+table_add flush_table send_6_entries 6 =>
+table_add flush_table send_7_entries 7 =>
+table_add flush_table send_8_entries 8 =>
+table_add flush_table send_9_entries 9 =>
+table_set_default flush_table send_10_entries
+table_add recirculate_table _recirculate 1 =>
+mirroring_add 100 3
+
+table_set_default entry_invalid_table entry_invalid
+table_set_default end_signal_table end_signal
+
+
+table_set_default drop_table _drop
+table_set_default load_pushout_count_table load_pushout_count
+table_add load_pushout_table load_pushout_0 1 => 
+table_add load_pushout_table load_pushout_1 2 => 
+table_add load_pushout_table load_pushout_2 3 => 
+table_add load_pushout_table load_pushout_3 4 => 
+table_add load_pushout_table load_pushout_4 5 => 
+table_add load_pushout_table load_pushout_5 6 => 
+table_add load_pushout_table load_pushout_6 7 => 
+table_add load_pushout_table load_pushout_7 8 => 
+table_add load_pushout_table load_pushout_8 9 => 
+table_add load_pushout_table load_pushout_9 10 => 
+table_add load_pushout_table load_pushout_9 11 => 
+table_add load_pushout_table load_pushout_9 12 => 
+table_add load_pushout_table load_pushout_9 13 => 
+table_add load_pushout_table load_pushout_9 14 => 
+table_add load_pushout_table load_pushout_9 15 => 
+table_add load_pushout_table load_pushout_9 16 => 
+table_add load_pushout_table load_pushout_9 17 => 
+table_add load_pushout_table load_pushout_9 18 => 
+table_add load_pushout_table load_pushout_9 19 => 
+
+table_add load_pushout_table2 load_pushout_0 1 => 
+table_add load_pushout_table2 load_pushout_1 2 => 
+table_add load_pushout_table2 load_pushout_2 3 => 
+table_add load_pushout_table2 load_pushout_3 4 => 
+table_add load_pushout_table2 load_pushout_4 5 => 
+table_add load_pushout_table2 load_pushout_5 6 => 
+table_add load_pushout_table2 load_pushout_6 7 => 
+table_add load_pushout_table2 load_pushout_7 8 => 
+table_add load_pushout_table2 load_pushout_8 9 => 
+table_add load_pushout_table2 load_pushout_9 10 => 
+table_add load_pushout_table2 load_pushout_9 11 => 
+table_add load_pushout_table2 load_pushout_9 12 => 
+table_add load_pushout_table2 load_pushout_9 13 => 
+table_add load_pushout_table2 load_pushout_9 14 => 
+table_add load_pushout_table2 load_pushout_9 15 => 
+table_add load_pushout_table2 load_pushout_9 16 => 
+table_add load_pushout_table2 load_pushout_9 17 => 
+table_add load_pushout_table2 load_pushout_9 18 => 
+table_add load_pushout_table2 load_pushout_9 19 => 
+
+table_set_default action1_0_table action1
+table_set_default action1_1_table action1
+table_set_default action1_2_table action1
+table_set_default action1_3_table action1
+table_set_default action1_4_table action1
+table_set_default action1_5_table action1
+table_set_default action1_6_table action1
+table_set_default action1_7_table action1
+table_set_default action1_8_table action1
+table_set_default action1_9_table action1
+
+table_set_default action2_0_table action2
+table_set_default action2_1_table action2
+table_set_default action2_2_table action2
+table_set_default action2_3_table action2
+table_set_default action2_4_table action2
+table_set_default action2_5_table action2
+table_set_default action2_6_table action2
+table_set_default action2_7_table action2
+table_set_default action2_8_table action2
+table_set_default action2_9_table action2
+
+table_set_default action3_0_table action3
+table_set_default action3_1_table action3
+table_set_default action3_2_table action3
+table_set_default action3_3_table action3
+table_set_default action3_4_table action3
+table_set_default action3_5_table action3
+table_set_default action3_6_table action3
+table_set_default action3_7_table action3
+table_set_default action3_8_table action3
+table_set_default action3_9_table action3

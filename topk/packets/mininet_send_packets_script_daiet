@@ -1,0 +1,14 @@
+
+
+host1 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.1'  --num 1000 --num_flush 0 --dif '10.0.1.1' --add 1 --dif2 '10.0.2.7' > ../daiet/logs/host1.log &
+host2 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.2'  --num 1000 --num_flush 0 --dif '10.0.2.1' --add 1 --dif2 '10.0.1.8' > ../daiet/logs/host2.log &
+host3 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.3'  --num 1000 --num_flush 0 --dif '10.0.1.2' > ../daiet/logs/host3.log &
+host4 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.4'  --num 1000 --num_flush 0 --dif '10.0.3.1' > ../daiet/logs/host4.log &
+host5 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.5'  --num 1000 --num_flush 0 --dif '10.0.1.3' > ../daiet/logs/host5.log &
+host6 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.6'  --num 1000 --num_flush 0 --dif '10.0.2.3' > ../daiet/logs/host6.log &
+host7 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.7'  --num 1000 --num_flush 0 --dif '10.0.1.4' > ../daiet/logs/host7.log &
+host8 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.8'  --num 1000 --num_flush 0 --dif '10.0.3.2' > ../daiet/logs/host8.log &
+host9 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.9'  --num 1000 --num_flush 0 --dif '10.0.1.5' > ../daiet/logs/host9.log &
+host10 nohup sudo python ~/p4-dev/topk/packets/send.py --i eth0 --si '10.0.0.10' --num 1000 --num_flush 0 --dif '10.0.2.6' > ../daiet/logs/host10.log &
+host11 nohup sudo python ~/p4-dev/topk/packets/send.py --i eth0 --si '10.0.0.11' --num 1000 --num_flush 0 --dif '10.0.1.6' > ../daiet/logs/host11.log &
+host12 nohup sudo python ~/p4-dev/topk/packets/send.py --i eth0 --si '10.0.0.12' --num 1000 --num_flush 0 --dif '10.0.3.4' --add 1 --dif2 '10.0.2.8' > ../daiet/logs/host12.log &

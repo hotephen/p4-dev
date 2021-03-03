@@ -1,0 +1,40 @@
+table_add forwarding_table set_port 1 => 1
+table_set_default load_remaining_children_table load_remaining_children
+table_add tree_id_adapter_table set_tree_id 1 => 1
+table_set_default tree_id_adapter_table skip_packet
+table_add load_valid_entries_index_table load_valid_entries_index 1 => 0
+table_add set_child_nodes_table set_child_nodes 1 => 1
+table_add entry_processing_table process_entry_1 1 =>
+table_add entry_processing_table process_entry_2 2 =>
+table_add entry_processing_table process_entry_3 3 =>
+table_add entry_processing_table process_entry_4 4 =>
+table_add entry_processing_table process_entry_5 5 =>
+table_add entry_processing_table process_entry_6 6 =>
+table_add entry_processing_table process_entry_7 7 =>
+table_add entry_processing_table process_entry_8 8 =>
+table_add entry_processing_table process_entry_9 9 =>
+table_add entry_processing_table process_entry_10 10 =>
+table_set_default entry_processing_table _drop
+table_set_default end_table end_action
+table_add preamble_setup_table preamble_setup 1 => 1
+table_add preamble_setup_table preamble_setup 2 => 2
+table_add preamble_setup_table preamble_setup 3 => 3
+table_add preamble_setup_table preamble_setup 4 => 4
+table_add preamble_setup_table preamble_setup 5 => 5
+table_add preamble_setup_table preamble_setup 6 => 6
+table_add preamble_setup_table preamble_setup 7 => 7
+table_add preamble_setup_table preamble_setup 8 => 8
+table_add preamble_setup_table preamble_setup 9 => 9
+table_set_default preamble_setup_table preamble_setup 10
+table_add flush_table send_1_entries 1 =>
+table_add flush_table send_2_entries 2 =>
+table_add flush_table send_3_entries 3 =>
+table_add flush_table send_4_entries 4 =>
+table_add flush_table send_5_entries 5 =>
+table_add flush_table send_6_entries 6 =>
+table_add flush_table send_7_entries 7 =>
+table_add flush_table send_8_entries 8 =>
+table_add flush_table send_9_entries 9 =>
+table_set_default flush_table send_10_entries
+table_add recirculate_table _recirculate 1 =>
+mirroring_add 100 3

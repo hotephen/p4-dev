@@ -1,0 +1,12 @@
+host1 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.1'  --num_flush 10 --num 10 --dif '10.0.1.1' --add 1 --dif2 '10.0.2.7' > host1.log &
+host2 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.2'  --num_flush 10 --num 10 --dif '10.0.2.1' --add 1 --dif2 '10.0.1.8' > host2.log &
+host3 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.3'  --num_flush 10 --num 10 --dif '10.0.1.2' > host3.log &
+host4 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.4'  --num_flush 10 --num 10 --dif '10.0.3.1' > host4.log &
+host5 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.5'  --num_flush 10 --num 10 --dif '10.0.1.3' > host5.log &
+host6 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.6'  --num_flush 10 --num 10 --dif '10.0.2.3' > host6.log &
+host7 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.7'  --num_flush 10 --num 10 --dif '10.0.1.4' > host7.log &
+host8 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.8'  --num_flush 10 --num 10 --dif '10.0.3.2' > host8.log &
+host9 nohup sudo python ~/p4-dev/topk/packets/send.py --i  eth0 --si '10.0.0.9'  --num_flush 10 --num 10 --dif '10.0.1.5' > host9.log &
+host10 nohup sudo python ~/p4-dev/topk/packets/send.py --i eth0 --si '10.0.0.10' --num_flush 10 --num 10 --dif '10.0.2.6' > host10.log &
+host11 nohup sudo python ~/p4-dev/topk/packets/send.py --i eth0 --si '10.0.0.11' --num_flush 10 --num 10 --dif '10.0.1.6' > host11.log &
+host12 nohup sudo python ~/p4-dev/topk/packets/send.py --i eth0 --si '10.0.0.12' --num_flush 10 --num 10 --dif '10.0.3.4' --add 1 --dif2 '10.0.2.8' > host12.log &

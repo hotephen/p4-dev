@@ -1,0 +1,13 @@
+table_add flush_pushout_table flush_entry0 1 => 1
+table_add flush_pushout_table flush_entry1 2 => 2
+table_add flush_pushout_table flush_entry2 3 => 3
+table_add flush_pushout_table flush_entry3 4 => 4
+table_add flush_pushout_table flush_entry4 5 => 5
+table_add flush_pushout_table flush_entry5 6 => 6
+table_add flush_pushout_table flush_entry6 7 => 7
+table_add flush_pushout_table flush_entry7 8 => 8
+table_add flush_pushout_table flush_entry8 9 => 9
+table_add flush_pushout_table flush_entry9 10 => 10
+table_add ipv4_forward set_egress 10.0.0.16/16 => 2
+table_add ipv4_forward set_flush 10.0.1.6/32 => 2
+mirroring_add 100 5
