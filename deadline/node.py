@@ -5,6 +5,7 @@ import argparse
 import sys
 import numpy as np
 import os
+import multiprocessing.connection import Listener
 
 # from headers import *
 from scapy.all import *
@@ -19,6 +20,8 @@ parser.add_argument('--id', required=False, type=int, default=1, help='node id')
 args = parser.parse_args()
 
 seg_num = 1
+
+# Packet Header Definition
 
 class frame_type(Packet):
     """ Frame_type Header """
@@ -48,10 +51,11 @@ bind_layers(UDP, frame_type)
 bind_layers(frame_type, preamble)
 bind_layers(preamble, ENTRY)
 
-data = Ether() / IP(dst="10.10.0.1") / UDP(sport=1234, dport=5678) / frame_type(frame_type=1) / preamble(number_of_entries=10, \
-        seg_number=seg_num) / ENTRY(key=1,value=1) / ENTRY(key="b",value=2) / ENTRY(key="c",value=3) / ENTRY(key="d",value=4)/ \
-        ENTRY(key="d",value=5) / ENTRY(key="d",value=6) / ENTRY(key="d",value=7) / ENTRY(key="d",value=8) / ENTRY(key="d", \
-        value=9) / ENTRY(key="d",value=10)
+data = Ether() / IP(dst="10.10.0.1") / UDP(sport=1234, dport=5678) / frame_type(frame_type=1) \ 
+        / preamble(number_of_entries=10, seg_number=seg_num) / ENTRY(key=1,value=1) / \ 
+        ENTRY(key="b",value=2) / ENTRY(key="c",value=3) / ENTRY(key="d",value=4)/ \
+        ENTRY(key="d",value=5) / ENTRY(key="d",value=6) / ENTRY(key="d",value=7) / \
+        ENTRY(key="d",value=8) / ENTRY(key="d", value=9) / ENTRY(key="d",value=10)
 
 
 
@@ -156,6 +160,23 @@ def handle_pkt(pkt):
     except IndexError:
         print('IndexError')
         # pass
+
+
+def wait_local_gradient():
+    # Server which waits for local gradient
+    address = ('localhost', 6000)
+    listener = Listener(address, authkey='password')
+    conn = listener.accept()
+    print('connection accepted from', listener.last_accepted)
+    while True:
+        msg = conn.recv()
+        if msg == 'close':
+            conn.close()
+            break
+    listener.close()
+    
+
+
 
 
 if __name__ == '__main__':
