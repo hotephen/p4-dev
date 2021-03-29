@@ -873,7 +873,6 @@ package V1Switch<H, M>(Parser<H, M> p,
 
 
 
-
 // ----------------------------
 // ---------- header ----------
 // ----------------------------
@@ -926,9 +925,40 @@ header preamble_t {
     // bit<32>     offset; 
 }
 
-header entry_t {
-    bit<32> key; //  FIXME: to be deleted
-    bit<32> value;
+header gradient_t {
+    // bit<KEY_SIZE> key;  //  FIXME: to be deleted
+    bit<32> value0;
+    bit<32> value1;
+    bit<32> value2;
+    bit<32> value3;
+    bit<32> value4;
+    bit<32> value5;
+    bit<32> value6;
+    bit<32> value7;
+    bit<32> value8;
+    bit<32> value9;
+    bit<32> value10;
+    bit<32> value11;
+    bit<32> value12;
+    bit<32> value13;
+    bit<32> value14;
+    bit<32> value15;
+    bit<32> value16;
+    bit<32> value17;
+    bit<32> value18;
+    bit<32> value19;
+    bit<32> value20;
+    bit<32> value21;
+    bit<32> value22;
+    bit<32> value23;
+    bit<32> value24;
+    bit<32> value25;
+    bit<32> value26;
+    bit<32> value27;
+    bit<32> value28;
+    bit<32> value29;
+    bit<32> value30;
+    bit<32> value31;
 }
 
 struct metadata {
@@ -966,7 +996,7 @@ struct headers {
     udp_t udp;
     frame_type_t frame_type;
     preamble_t preamble;
-    entry_t[32] entry;
+    gradient_t gradient;
 }
 
 
@@ -1025,46 +1055,12 @@ parser MyParser(packet_in packet,
         meta.seg_number = hdr.preamble.seg_number;
         meta.end = hdr.preamble.end;
         meta.pool_index = hdr.preamble.pool_index;
-
-
-
-        transition parse_entry;
+        transition parse_gradient;
     }
 
 
-    state parse_entry {
-        packet.extract(hdr.entry[0]);
-        packet.extract(hdr.entry[1]);
-        packet.extract(hdr.entry[2]);
-        packet.extract(hdr.entry[3]);
-        packet.extract(hdr.entry[4]);
-        packet.extract(hdr.entry[5]);
-        packet.extract(hdr.entry[6]);
-        packet.extract(hdr.entry[7]);
-        packet.extract(hdr.entry[8]);
-        packet.extract(hdr.entry[9]);
-        packet.extract(hdr.entry[10]);
-        packet.extract(hdr.entry[11]);
-        packet.extract(hdr.entry[12]);
-        packet.extract(hdr.entry[13]);
-        packet.extract(hdr.entry[14]);
-        packet.extract(hdr.entry[15]);
-        packet.extract(hdr.entry[16]);
-        packet.extract(hdr.entry[17]);
-        packet.extract(hdr.entry[18]);
-        packet.extract(hdr.entry[19]);
-        packet.extract(hdr.entry[20]);
-        packet.extract(hdr.entry[21]);
-        packet.extract(hdr.entry[22]);
-        packet.extract(hdr.entry[23]);
-        packet.extract(hdr.entry[24]);
-        packet.extract(hdr.entry[25]);
-        packet.extract(hdr.entry[26]);
-        packet.extract(hdr.entry[27]);
-        packet.extract(hdr.entry[28]);
-        packet.extract(hdr.entry[29]);
-        packet.extract(hdr.entry[30]);
-        packet.extract(hdr.entry[31]);
+    state parse_gradient {
+        packet.extract(hdr.gradient);
         transition accept;
     }
 }
@@ -1138,8 +1134,8 @@ control MyIngress(inout headers hdr,
     register<bit<32>>(4097) parameter_pool2;
     register<bit<8>>(4097) counter_num_workers_pool1;
     register<bit<8>>(4097) counter_num_workers_pool2;
-    register<bit<1>>(900000) sent_seg_num_pool1;
-    register<bit<1>>(900000) sent_seg_num_pool2;
+    register<bit<1>>(4097) sent_seg_num_pool1;
+    register<bit<1>>(4097) sent_seg_num_pool2;
 
     register<bit<32>>(30000) global_grad_sign;
     register<bit<32>>(30000) global_grad_sign1;
@@ -1243,16 +1239,6 @@ control MyIngress(inout headers hdr,
     action forward_to_cpu(){
         standard_metadata.egress_spec = 3;
         hdr.frame_type.frame_type = 3;
-        hdr.entry[0].setInvalid();
-        hdr.entry[1].setInvalid();
-        hdr.entry[2].setInvalid();
-        hdr.entry[3].setInvalid();
-        hdr.entry[4].setInvalid();
-        hdr.entry[5].setInvalid();
-        hdr.entry[6].setInvalid();
-        hdr.entry[7].setInvalid();
-        hdr.entry[8].setInvalid();
-        hdr.entry[9].setInvalid();
     }
 
     action xor_grad_sign(){ //TODO:
@@ -1290,11 +1276,11 @@ control MyIngress(inout headers hdr,
     /* Aggregation logic */
     /* Aggregation logic */
 
-    // Load current aggregated gradient values
-    // Add new gradient to current gradients
-    // Save aggregated gradient values
-    // Load aggregated gradient values to entry header
-# 492 "/home/hc/p4-dev/deadline/fastest-k.p4"
+    /* Load current aggregated gradient values */
+    /* Add new gradient to current gradients */
+    /* Save aggregated gradient values */
+    /* Load aggregated gradient values to gradient header */
+# 478 "/home/hc/p4-dev/deadline/fastest-k.p4"
     /* Start ingress */
     /* Start ingress */
     /* Start ingress */
@@ -1326,7 +1312,7 @@ control MyIngress(inout headers hdr,
                 counter_num_workers_pool1.read(meta.counter_value, hdr.preamble.pool_index); // Load gradient counter of pool_index
 
                 bit<1> sent_seg_num;
-                sent_seg_num_pool1.read(sent_seg_num, meta.seg_number);
+                sent_seg_num_pool1.read(sent_seg_num, meta.pool_index);
 
                 if(sent_seg_num == 1){
                     // No Actions, because packet is late
@@ -1334,38 +1320,38 @@ control MyIngress(inout headers hdr,
                 }
                 else{ // before K
 
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +0); meta.gradient_value = meta.gradient_value + hdr.entry[0].value; parameter_pool1.write(hdr.preamble.pool_index +0,meta.gradient_value); hdr.entry[0].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +1); meta.gradient_value = meta.gradient_value + hdr.entry[1].value; parameter_pool1.write(hdr.preamble.pool_index +1,meta.gradient_value); hdr.entry[1].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +2); meta.gradient_value = meta.gradient_value + hdr.entry[2].value; parameter_pool1.write(hdr.preamble.pool_index +2,meta.gradient_value); hdr.entry[2].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +3); meta.gradient_value = meta.gradient_value + hdr.entry[3].value; parameter_pool1.write(hdr.preamble.pool_index +3,meta.gradient_value); hdr.entry[3].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +4); meta.gradient_value = meta.gradient_value + hdr.entry[4].value; parameter_pool1.write(hdr.preamble.pool_index +4,meta.gradient_value); hdr.entry[4].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +5); meta.gradient_value = meta.gradient_value + hdr.entry[5].value; parameter_pool1.write(hdr.preamble.pool_index +5,meta.gradient_value); hdr.entry[5].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +6); meta.gradient_value = meta.gradient_value + hdr.entry[6].value; parameter_pool1.write(hdr.preamble.pool_index +6,meta.gradient_value); hdr.entry[6].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +7); meta.gradient_value = meta.gradient_value + hdr.entry[7].value; parameter_pool1.write(hdr.preamble.pool_index +7,meta.gradient_value); hdr.entry[7].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +8); meta.gradient_value = meta.gradient_value + hdr.entry[8].value; parameter_pool1.write(hdr.preamble.pool_index +8,meta.gradient_value); hdr.entry[8].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +9); meta.gradient_value = meta.gradient_value + hdr.entry[9].value; parameter_pool1.write(hdr.preamble.pool_index +9,meta.gradient_value); hdr.entry[9].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +10); meta.gradient_value = meta.gradient_value + hdr.entry[10].value; parameter_pool1.write(hdr.preamble.pool_index +10,meta.gradient_value); hdr.entry[10].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +11); meta.gradient_value = meta.gradient_value + hdr.entry[11].value; parameter_pool1.write(hdr.preamble.pool_index +11,meta.gradient_value); hdr.entry[11].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +12); meta.gradient_value = meta.gradient_value + hdr.entry[12].value; parameter_pool1.write(hdr.preamble.pool_index +12,meta.gradient_value); hdr.entry[12].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +13); meta.gradient_value = meta.gradient_value + hdr.entry[13].value; parameter_pool1.write(hdr.preamble.pool_index +13,meta.gradient_value); hdr.entry[13].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +14); meta.gradient_value = meta.gradient_value + hdr.entry[14].value; parameter_pool1.write(hdr.preamble.pool_index +14,meta.gradient_value); hdr.entry[14].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +15); meta.gradient_value = meta.gradient_value + hdr.entry[15].value; parameter_pool1.write(hdr.preamble.pool_index +15,meta.gradient_value); hdr.entry[15].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +16); meta.gradient_value = meta.gradient_value + hdr.entry[16].value; parameter_pool1.write(hdr.preamble.pool_index +16,meta.gradient_value); hdr.entry[16].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +17); meta.gradient_value = meta.gradient_value + hdr.entry[17].value; parameter_pool1.write(hdr.preamble.pool_index +17,meta.gradient_value); hdr.entry[17].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +18); meta.gradient_value = meta.gradient_value + hdr.entry[18].value; parameter_pool1.write(hdr.preamble.pool_index +18,meta.gradient_value); hdr.entry[18].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +19); meta.gradient_value = meta.gradient_value + hdr.entry[19].value; parameter_pool1.write(hdr.preamble.pool_index +19,meta.gradient_value); hdr.entry[19].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +20); meta.gradient_value = meta.gradient_value + hdr.entry[20].value; parameter_pool1.write(hdr.preamble.pool_index +20,meta.gradient_value); hdr.entry[20].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +21); meta.gradient_value = meta.gradient_value + hdr.entry[21].value; parameter_pool1.write(hdr.preamble.pool_index +21,meta.gradient_value); hdr.entry[21].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +22); meta.gradient_value = meta.gradient_value + hdr.entry[22].value; parameter_pool1.write(hdr.preamble.pool_index +22,meta.gradient_value); hdr.entry[22].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +23); meta.gradient_value = meta.gradient_value + hdr.entry[23].value; parameter_pool1.write(hdr.preamble.pool_index +23,meta.gradient_value); hdr.entry[23].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +24); meta.gradient_value = meta.gradient_value + hdr.entry[24].value; parameter_pool1.write(hdr.preamble.pool_index +24,meta.gradient_value); hdr.entry[24].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +25); meta.gradient_value = meta.gradient_value + hdr.entry[25].value; parameter_pool1.write(hdr.preamble.pool_index +25,meta.gradient_value); hdr.entry[25].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +26); meta.gradient_value = meta.gradient_value + hdr.entry[26].value; parameter_pool1.write(hdr.preamble.pool_index +26,meta.gradient_value); hdr.entry[26].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +27); meta.gradient_value = meta.gradient_value + hdr.entry[27].value; parameter_pool1.write(hdr.preamble.pool_index +27,meta.gradient_value); hdr.entry[27].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +28); meta.gradient_value = meta.gradient_value + hdr.entry[28].value; parameter_pool1.write(hdr.preamble.pool_index +28,meta.gradient_value); hdr.entry[28].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +29); meta.gradient_value = meta.gradient_value + hdr.entry[29].value; parameter_pool1.write(hdr.preamble.pool_index +29,meta.gradient_value); hdr.entry[29].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +30); meta.gradient_value = meta.gradient_value + hdr.entry[30].value; parameter_pool1.write(hdr.preamble.pool_index +30,meta.gradient_value); hdr.entry[30].value = meta.gradient_value;
-                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +31); meta.gradient_value = meta.gradient_value + hdr.entry[31].value; parameter_pool1.write(hdr.preamble.pool_index +31,meta.gradient_value); hdr.entry[31].value = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +0); meta.gradient_value = meta.gradient_value + hdr.gradient.value0; parameter_pool1.write(hdr.preamble.pool_index +0,meta.gradient_value); hdr.gradient.value0 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +1); meta.gradient_value = meta.gradient_value + hdr.gradient.value1; parameter_pool1.write(hdr.preamble.pool_index +1,meta.gradient_value); hdr.gradient.value1 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +2); meta.gradient_value = meta.gradient_value + hdr.gradient.value2; parameter_pool1.write(hdr.preamble.pool_index +2,meta.gradient_value); hdr.gradient.value2 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +3); meta.gradient_value = meta.gradient_value + hdr.gradient.value3; parameter_pool1.write(hdr.preamble.pool_index +3,meta.gradient_value); hdr.gradient.value3 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +4); meta.gradient_value = meta.gradient_value + hdr.gradient.value4; parameter_pool1.write(hdr.preamble.pool_index +4,meta.gradient_value); hdr.gradient.value4 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +5); meta.gradient_value = meta.gradient_value + hdr.gradient.value5; parameter_pool1.write(hdr.preamble.pool_index +5,meta.gradient_value); hdr.gradient.value5 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +6); meta.gradient_value = meta.gradient_value + hdr.gradient.value6; parameter_pool1.write(hdr.preamble.pool_index +6,meta.gradient_value); hdr.gradient.value6 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +7); meta.gradient_value = meta.gradient_value + hdr.gradient.value7; parameter_pool1.write(hdr.preamble.pool_index +7,meta.gradient_value); hdr.gradient.value7 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +8); meta.gradient_value = meta.gradient_value + hdr.gradient.value8; parameter_pool1.write(hdr.preamble.pool_index +8,meta.gradient_value); hdr.gradient.value8 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +9); meta.gradient_value = meta.gradient_value + hdr.gradient.value9; parameter_pool1.write(hdr.preamble.pool_index +9,meta.gradient_value); hdr.gradient.value9 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +10); meta.gradient_value = meta.gradient_value + hdr.gradient.value10; parameter_pool1.write(hdr.preamble.pool_index +10,meta.gradient_value); hdr.gradient.value10 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +11); meta.gradient_value = meta.gradient_value + hdr.gradient.value11; parameter_pool1.write(hdr.preamble.pool_index +11,meta.gradient_value); hdr.gradient.value11 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +12); meta.gradient_value = meta.gradient_value + hdr.gradient.value12; parameter_pool1.write(hdr.preamble.pool_index +12,meta.gradient_value); hdr.gradient.value12 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +13); meta.gradient_value = meta.gradient_value + hdr.gradient.value13; parameter_pool1.write(hdr.preamble.pool_index +13,meta.gradient_value); hdr.gradient.value13 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +14); meta.gradient_value = meta.gradient_value + hdr.gradient.value14; parameter_pool1.write(hdr.preamble.pool_index +14,meta.gradient_value); hdr.gradient.value14 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +15); meta.gradient_value = meta.gradient_value + hdr.gradient.value15; parameter_pool1.write(hdr.preamble.pool_index +15,meta.gradient_value); hdr.gradient.value15 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +16); meta.gradient_value = meta.gradient_value + hdr.gradient.value16; parameter_pool1.write(hdr.preamble.pool_index +16,meta.gradient_value); hdr.gradient.value16 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +17); meta.gradient_value = meta.gradient_value + hdr.gradient.value17; parameter_pool1.write(hdr.preamble.pool_index +17,meta.gradient_value); hdr.gradient.value17 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +18); meta.gradient_value = meta.gradient_value + hdr.gradient.value18; parameter_pool1.write(hdr.preamble.pool_index +18,meta.gradient_value); hdr.gradient.value18 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +19); meta.gradient_value = meta.gradient_value + hdr.gradient.value19; parameter_pool1.write(hdr.preamble.pool_index +19,meta.gradient_value); hdr.gradient.value19 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +20); meta.gradient_value = meta.gradient_value + hdr.gradient.value20; parameter_pool1.write(hdr.preamble.pool_index +20,meta.gradient_value); hdr.gradient.value20 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +21); meta.gradient_value = meta.gradient_value + hdr.gradient.value21; parameter_pool1.write(hdr.preamble.pool_index +21,meta.gradient_value); hdr.gradient.value21 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +22); meta.gradient_value = meta.gradient_value + hdr.gradient.value22; parameter_pool1.write(hdr.preamble.pool_index +22,meta.gradient_value); hdr.gradient.value22 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +23); meta.gradient_value = meta.gradient_value + hdr.gradient.value23; parameter_pool1.write(hdr.preamble.pool_index +23,meta.gradient_value); hdr.gradient.value23 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +24); meta.gradient_value = meta.gradient_value + hdr.gradient.value24; parameter_pool1.write(hdr.preamble.pool_index +24,meta.gradient_value); hdr.gradient.value24 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +25); meta.gradient_value = meta.gradient_value + hdr.gradient.value25; parameter_pool1.write(hdr.preamble.pool_index +25,meta.gradient_value); hdr.gradient.value25 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +26); meta.gradient_value = meta.gradient_value + hdr.gradient.value26; parameter_pool1.write(hdr.preamble.pool_index +26,meta.gradient_value); hdr.gradient.value26 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +27); meta.gradient_value = meta.gradient_value + hdr.gradient.value27; parameter_pool1.write(hdr.preamble.pool_index +27,meta.gradient_value); hdr.gradient.value27 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +28); meta.gradient_value = meta.gradient_value + hdr.gradient.value28; parameter_pool1.write(hdr.preamble.pool_index +28,meta.gradient_value); hdr.gradient.value28 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +29); meta.gradient_value = meta.gradient_value + hdr.gradient.value29; parameter_pool1.write(hdr.preamble.pool_index +29,meta.gradient_value); hdr.gradient.value29 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +30); meta.gradient_value = meta.gradient_value + hdr.gradient.value30; parameter_pool1.write(hdr.preamble.pool_index +30,meta.gradient_value); hdr.gradient.value30 = meta.gradient_value;
+                    parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +31); meta.gradient_value = meta.gradient_value + hdr.gradient.value31; parameter_pool1.write(hdr.preamble.pool_index +31,meta.gradient_value); hdr.gradient.value31 = meta.gradient_value;
 
                     drop();
 
@@ -1374,41 +1360,41 @@ control MyIngress(inout headers hdr,
 
                     if(meta.counter_value >= meta.k){ // When all gradients are received
 
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +0); hdr.entry[0].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +0,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +1); hdr.entry[1].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +1,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +2); hdr.entry[2].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +2,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +3); hdr.entry[3].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +3,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +4); hdr.entry[4].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +4,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +5); hdr.entry[5].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +5,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +6); hdr.entry[6].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +6,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +7); hdr.entry[7].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +7,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +8); hdr.entry[8].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +8,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +9); hdr.entry[9].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +9,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +10); hdr.entry[10].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +10,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +11); hdr.entry[11].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +11,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +12); hdr.entry[12].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +12,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +13); hdr.entry[13].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +13,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +14); hdr.entry[14].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +14,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +15); hdr.entry[15].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +15,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +16); hdr.entry[16].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +16,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +17); hdr.entry[17].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +17,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +18); hdr.entry[18].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +18,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +19); hdr.entry[19].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +19,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +20); hdr.entry[20].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +20,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +21); hdr.entry[21].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +21,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +22); hdr.entry[22].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +22,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +23); hdr.entry[23].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +23,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +24); hdr.entry[24].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +24,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +25); hdr.entry[25].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +25,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +26); hdr.entry[26].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +26,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +27); hdr.entry[27].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +27,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +28); hdr.entry[28].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +28,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +29); hdr.entry[29].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +29,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +30); hdr.entry[30].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +30,0);
-                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +31); hdr.entry[31].value = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +31,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +0); hdr.gradient.value0 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +0,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +1); hdr.gradient.value1 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +1,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +2); hdr.gradient.value2 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +2,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +3); hdr.gradient.value3 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +3,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +4); hdr.gradient.value4 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +4,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +5); hdr.gradient.value5 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +5,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +6); hdr.gradient.value6 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +6,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +7); hdr.gradient.value7 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +7,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +8); hdr.gradient.value8 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +8,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +9); hdr.gradient.value9 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +9,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +10); hdr.gradient.value10 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +10,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +11); hdr.gradient.value11 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +11,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +12); hdr.gradient.value12 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +12,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +13); hdr.gradient.value13 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +13,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +14); hdr.gradient.value14 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +14,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +15); hdr.gradient.value15 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +15,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +16); hdr.gradient.value16 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +16,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +17); hdr.gradient.value17 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +17,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +18); hdr.gradient.value18 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +18,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +19); hdr.gradient.value19 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +19,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +20); hdr.gradient.value20 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +20,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +21); hdr.gradient.value21 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +21,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +22); hdr.gradient.value22 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +22,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +23); hdr.gradient.value23 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +23,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +24); hdr.gradient.value24 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +24,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +25); hdr.gradient.value25 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +25,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +26); hdr.gradient.value26 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +26,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +27); hdr.gradient.value27 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +27,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +28); hdr.gradient.value28 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +28,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +29); hdr.gradient.value29 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +29,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +30); hdr.gradient.value30 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +30,0);
+                        parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +31); hdr.gradient.value31 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +31,0);
 
 
-                        sent_seg_num_pool1.write(meta.seg_number, 1);
+                        sent_seg_num_pool1.write(meta.pool_index, 1);
                         broadcast();
 
                         parameter_pool1.write(hdr.preamble.pool_index + 0,0);
@@ -1448,38 +1434,38 @@ control MyIngress(inout headers hdr,
 
 
                         // Save current sign of global gradients
-                        meta.cur_global_grad_sign[0:0] = hdr.entry[0].value[31:31];
-                        meta.cur_global_grad_sign[1:1] = hdr.entry[1].value[31:31];
-                        meta.cur_global_grad_sign[2:2] = hdr.entry[2].value[31:31];
-                        meta.cur_global_grad_sign[3:3] = hdr.entry[3].value[31:31];
-                        meta.cur_global_grad_sign[4:4] = hdr.entry[4].value[31:31];
-                        meta.cur_global_grad_sign[5:5] = hdr.entry[5].value[31:31];
-                        meta.cur_global_grad_sign[6:6] = hdr.entry[6].value[31:31];
-                        meta.cur_global_grad_sign[7:7] = hdr.entry[7].value[31:31];
-                        meta.cur_global_grad_sign[8:8] = hdr.entry[8].value[31:31];
-                        meta.cur_global_grad_sign[9:9] = hdr.entry[9].value[31:31];
-                        meta.cur_global_grad_sign[10:10] = hdr.entry[10].value[31:31];
-                        meta.cur_global_grad_sign[11:11] = hdr.entry[11].value[31:31];
-                        meta.cur_global_grad_sign[12:12] = hdr.entry[12].value[31:31];
-                        meta.cur_global_grad_sign[13:13] = hdr.entry[13].value[31:31];
-                        meta.cur_global_grad_sign[14:14] = hdr.entry[14].value[31:31];
-                        meta.cur_global_grad_sign[15:15] = hdr.entry[15].value[31:31];
-                        meta.cur_global_grad_sign[16:16] = hdr.entry[16].value[31:31];
-                        meta.cur_global_grad_sign[17:17] = hdr.entry[17].value[31:31];
-                        meta.cur_global_grad_sign[18:18] = hdr.entry[18].value[31:31];
-                        meta.cur_global_grad_sign[19:19] = hdr.entry[19].value[31:31];
-                        meta.cur_global_grad_sign[20:20] = hdr.entry[20].value[31:31];
-                        meta.cur_global_grad_sign[21:21] = hdr.entry[21].value[31:31];
-                        meta.cur_global_grad_sign[22:22] = hdr.entry[22].value[31:31];
-                        meta.cur_global_grad_sign[23:23] = hdr.entry[23].value[31:31];
-                        meta.cur_global_grad_sign[24:24] = hdr.entry[24].value[31:31];
-                        meta.cur_global_grad_sign[25:25] = hdr.entry[25].value[31:31];
-                        meta.cur_global_grad_sign[26:26] = hdr.entry[26].value[31:31];
-                        meta.cur_global_grad_sign[27:27] = hdr.entry[27].value[31:31];
-                        meta.cur_global_grad_sign[28:28] = hdr.entry[28].value[31:31];
-                        meta.cur_global_grad_sign[29:29] = hdr.entry[29].value[31:31];
-                        meta.cur_global_grad_sign[30:30] = hdr.entry[30].value[31:31];
-                        meta.cur_global_grad_sign[31:31] = hdr.entry[31].value[31:31];
+                        meta.cur_global_grad_sign[0:0] = hdr.gradient.value0[31:31];
+                        meta.cur_global_grad_sign[1:1] = hdr.gradient.value1[31:31];
+                        meta.cur_global_grad_sign[2:2] = hdr.gradient.value2[31:31];
+                        meta.cur_global_grad_sign[3:3] = hdr.gradient.value3[31:31];
+                        meta.cur_global_grad_sign[4:4] = hdr.gradient.value4[31:31];
+                        meta.cur_global_grad_sign[5:5] = hdr.gradient.value5[31:31];
+                        meta.cur_global_grad_sign[6:6] = hdr.gradient.value6[31:31];
+                        meta.cur_global_grad_sign[7:7] = hdr.gradient.value7[31:31];
+                        meta.cur_global_grad_sign[8:8] = hdr.gradient.value8[31:31];
+                        meta.cur_global_grad_sign[9:9] = hdr.gradient.value9[31:31];
+                        meta.cur_global_grad_sign[10:10] = hdr.gradient.value10[31:31];
+                        meta.cur_global_grad_sign[11:11] = hdr.gradient.value11[31:31];
+                        meta.cur_global_grad_sign[12:12] = hdr.gradient.value12[31:31];
+                        meta.cur_global_grad_sign[13:13] = hdr.gradient.value13[31:31];
+                        meta.cur_global_grad_sign[14:14] = hdr.gradient.value14[31:31];
+                        meta.cur_global_grad_sign[15:15] = hdr.gradient.value15[31:31];
+                        meta.cur_global_grad_sign[16:16] = hdr.gradient.value16[31:31];
+                        meta.cur_global_grad_sign[17:17] = hdr.gradient.value17[31:31];
+                        meta.cur_global_grad_sign[18:18] = hdr.gradient.value18[31:31];
+                        meta.cur_global_grad_sign[19:19] = hdr.gradient.value19[31:31];
+                        meta.cur_global_grad_sign[20:20] = hdr.gradient.value20[31:31];
+                        meta.cur_global_grad_sign[21:21] = hdr.gradient.value21[31:31];
+                        meta.cur_global_grad_sign[22:22] = hdr.gradient.value22[31:31];
+                        meta.cur_global_grad_sign[23:23] = hdr.gradient.value23[31:31];
+                        meta.cur_global_grad_sign[24:24] = hdr.gradient.value24[31:31];
+                        meta.cur_global_grad_sign[25:25] = hdr.gradient.value25[31:31];
+                        meta.cur_global_grad_sign[26:26] = hdr.gradient.value26[31:31];
+                        meta.cur_global_grad_sign[27:27] = hdr.gradient.value27[31:31];
+                        meta.cur_global_grad_sign[28:28] = hdr.gradient.value28[31:31];
+                        meta.cur_global_grad_sign[29:29] = hdr.gradient.value29[31:31];
+                        meta.cur_global_grad_sign[30:30] = hdr.gradient.value30[31:31];
+                        meta.cur_global_grad_sign[31:31] = hdr.gradient.value31[31:31];
 
                         meta.cur_global_grad_sign = meta.gradient_value; global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 400000){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 10){ k.read(meta.k, 0); meta.k = meta.k + 1; k.write(0,meta.k); } } else{ } sum_grad_sign.write(0,0); }
 
@@ -1536,7 +1522,7 @@ control MyIngress(inout headers hdr,
                 counter_num_workers_pool2.read(meta.counter_value, 1); // Load gradient counter of seg_number
 
                 bit<1> sent_seg_num;
-                sent_seg_num_pool2.read(sent_seg_num,0);
+                sent_seg_num_pool2.read(sent_seg_num,meta.pool_index);
 
                 if(sent_seg_num == 1){
                     // No Actions, because packet is late
@@ -1544,38 +1530,38 @@ control MyIngress(inout headers hdr,
                 }
                 else{
 
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +0); meta.gradient_value = meta.gradient_value + hdr.entry[0].value; parameter_pool2.write(hdr.preamble.pool_index +0,meta.gradient_value); hdr.entry[0].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +1); meta.gradient_value = meta.gradient_value + hdr.entry[1].value; parameter_pool2.write(hdr.preamble.pool_index +1,meta.gradient_value); hdr.entry[1].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +2); meta.gradient_value = meta.gradient_value + hdr.entry[2].value; parameter_pool2.write(hdr.preamble.pool_index +2,meta.gradient_value); hdr.entry[2].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +3); meta.gradient_value = meta.gradient_value + hdr.entry[3].value; parameter_pool2.write(hdr.preamble.pool_index +3,meta.gradient_value); hdr.entry[3].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +4); meta.gradient_value = meta.gradient_value + hdr.entry[4].value; parameter_pool2.write(hdr.preamble.pool_index +4,meta.gradient_value); hdr.entry[4].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +5); meta.gradient_value = meta.gradient_value + hdr.entry[5].value; parameter_pool2.write(hdr.preamble.pool_index +5,meta.gradient_value); hdr.entry[5].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +6); meta.gradient_value = meta.gradient_value + hdr.entry[6].value; parameter_pool2.write(hdr.preamble.pool_index +6,meta.gradient_value); hdr.entry[6].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +7); meta.gradient_value = meta.gradient_value + hdr.entry[7].value; parameter_pool2.write(hdr.preamble.pool_index +7,meta.gradient_value); hdr.entry[7].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +8); meta.gradient_value = meta.gradient_value + hdr.entry[8].value; parameter_pool2.write(hdr.preamble.pool_index +8,meta.gradient_value); hdr.entry[8].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +9); meta.gradient_value = meta.gradient_value + hdr.entry[9].value; parameter_pool2.write(hdr.preamble.pool_index +9,meta.gradient_value); hdr.entry[9].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +10); meta.gradient_value = meta.gradient_value + hdr.entry[10].value; parameter_pool2.write(hdr.preamble.pool_index +10,meta.gradient_value); hdr.entry[10].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +11); meta.gradient_value = meta.gradient_value + hdr.entry[11].value; parameter_pool2.write(hdr.preamble.pool_index +11,meta.gradient_value); hdr.entry[11].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +12); meta.gradient_value = meta.gradient_value + hdr.entry[12].value; parameter_pool2.write(hdr.preamble.pool_index +12,meta.gradient_value); hdr.entry[12].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +13); meta.gradient_value = meta.gradient_value + hdr.entry[13].value; parameter_pool2.write(hdr.preamble.pool_index +13,meta.gradient_value); hdr.entry[13].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +14); meta.gradient_value = meta.gradient_value + hdr.entry[14].value; parameter_pool2.write(hdr.preamble.pool_index +14,meta.gradient_value); hdr.entry[14].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +15); meta.gradient_value = meta.gradient_value + hdr.entry[15].value; parameter_pool2.write(hdr.preamble.pool_index +15,meta.gradient_value); hdr.entry[15].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +16); meta.gradient_value = meta.gradient_value + hdr.entry[16].value; parameter_pool2.write(hdr.preamble.pool_index +16,meta.gradient_value); hdr.entry[16].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +17); meta.gradient_value = meta.gradient_value + hdr.entry[17].value; parameter_pool2.write(hdr.preamble.pool_index +17,meta.gradient_value); hdr.entry[17].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +18); meta.gradient_value = meta.gradient_value + hdr.entry[18].value; parameter_pool2.write(hdr.preamble.pool_index +18,meta.gradient_value); hdr.entry[18].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +19); meta.gradient_value = meta.gradient_value + hdr.entry[19].value; parameter_pool2.write(hdr.preamble.pool_index +19,meta.gradient_value); hdr.entry[19].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +20); meta.gradient_value = meta.gradient_value + hdr.entry[20].value; parameter_pool2.write(hdr.preamble.pool_index +20,meta.gradient_value); hdr.entry[20].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +21); meta.gradient_value = meta.gradient_value + hdr.entry[21].value; parameter_pool2.write(hdr.preamble.pool_index +21,meta.gradient_value); hdr.entry[21].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +22); meta.gradient_value = meta.gradient_value + hdr.entry[22].value; parameter_pool2.write(hdr.preamble.pool_index +22,meta.gradient_value); hdr.entry[22].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +23); meta.gradient_value = meta.gradient_value + hdr.entry[23].value; parameter_pool2.write(hdr.preamble.pool_index +23,meta.gradient_value); hdr.entry[23].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +24); meta.gradient_value = meta.gradient_value + hdr.entry[24].value; parameter_pool2.write(hdr.preamble.pool_index +24,meta.gradient_value); hdr.entry[24].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +25); meta.gradient_value = meta.gradient_value + hdr.entry[25].value; parameter_pool2.write(hdr.preamble.pool_index +25,meta.gradient_value); hdr.entry[25].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +26); meta.gradient_value = meta.gradient_value + hdr.entry[26].value; parameter_pool2.write(hdr.preamble.pool_index +26,meta.gradient_value); hdr.entry[26].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +27); meta.gradient_value = meta.gradient_value + hdr.entry[27].value; parameter_pool2.write(hdr.preamble.pool_index +27,meta.gradient_value); hdr.entry[27].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +28); meta.gradient_value = meta.gradient_value + hdr.entry[28].value; parameter_pool2.write(hdr.preamble.pool_index +28,meta.gradient_value); hdr.entry[28].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +29); meta.gradient_value = meta.gradient_value + hdr.entry[29].value; parameter_pool2.write(hdr.preamble.pool_index +29,meta.gradient_value); hdr.entry[29].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +30); meta.gradient_value = meta.gradient_value + hdr.entry[30].value; parameter_pool2.write(hdr.preamble.pool_index +30,meta.gradient_value); hdr.entry[30].value = meta.gradient_value;
-                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +31); meta.gradient_value = meta.gradient_value + hdr.entry[31].value; parameter_pool2.write(hdr.preamble.pool_index +31,meta.gradient_value); hdr.entry[31].value = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +0); meta.gradient_value = meta.gradient_value + hdr.gradient.value0; parameter_pool2.write(hdr.preamble.pool_index +0,meta.gradient_value); hdr.gradient.value0 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +1); meta.gradient_value = meta.gradient_value + hdr.gradient.value1; parameter_pool2.write(hdr.preamble.pool_index +1,meta.gradient_value); hdr.gradient.value1 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +2); meta.gradient_value = meta.gradient_value + hdr.gradient.value2; parameter_pool2.write(hdr.preamble.pool_index +2,meta.gradient_value); hdr.gradient.value2 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +3); meta.gradient_value = meta.gradient_value + hdr.gradient.value3; parameter_pool2.write(hdr.preamble.pool_index +3,meta.gradient_value); hdr.gradient.value3 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +4); meta.gradient_value = meta.gradient_value + hdr.gradient.value4; parameter_pool2.write(hdr.preamble.pool_index +4,meta.gradient_value); hdr.gradient.value4 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +5); meta.gradient_value = meta.gradient_value + hdr.gradient.value5; parameter_pool2.write(hdr.preamble.pool_index +5,meta.gradient_value); hdr.gradient.value5 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +6); meta.gradient_value = meta.gradient_value + hdr.gradient.value6; parameter_pool2.write(hdr.preamble.pool_index +6,meta.gradient_value); hdr.gradient.value6 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +7); meta.gradient_value = meta.gradient_value + hdr.gradient.value7; parameter_pool2.write(hdr.preamble.pool_index +7,meta.gradient_value); hdr.gradient.value7 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +8); meta.gradient_value = meta.gradient_value + hdr.gradient.value8; parameter_pool2.write(hdr.preamble.pool_index +8,meta.gradient_value); hdr.gradient.value8 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +9); meta.gradient_value = meta.gradient_value + hdr.gradient.value9; parameter_pool2.write(hdr.preamble.pool_index +9,meta.gradient_value); hdr.gradient.value9 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +10); meta.gradient_value = meta.gradient_value + hdr.gradient.value10; parameter_pool2.write(hdr.preamble.pool_index +10,meta.gradient_value); hdr.gradient.value10 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +11); meta.gradient_value = meta.gradient_value + hdr.gradient.value11; parameter_pool2.write(hdr.preamble.pool_index +11,meta.gradient_value); hdr.gradient.value11 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +12); meta.gradient_value = meta.gradient_value + hdr.gradient.value12; parameter_pool2.write(hdr.preamble.pool_index +12,meta.gradient_value); hdr.gradient.value12 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +13); meta.gradient_value = meta.gradient_value + hdr.gradient.value13; parameter_pool2.write(hdr.preamble.pool_index +13,meta.gradient_value); hdr.gradient.value13 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +14); meta.gradient_value = meta.gradient_value + hdr.gradient.value14; parameter_pool2.write(hdr.preamble.pool_index +14,meta.gradient_value); hdr.gradient.value14 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +15); meta.gradient_value = meta.gradient_value + hdr.gradient.value15; parameter_pool2.write(hdr.preamble.pool_index +15,meta.gradient_value); hdr.gradient.value15 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +16); meta.gradient_value = meta.gradient_value + hdr.gradient.value16; parameter_pool2.write(hdr.preamble.pool_index +16,meta.gradient_value); hdr.gradient.value16 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +17); meta.gradient_value = meta.gradient_value + hdr.gradient.value17; parameter_pool2.write(hdr.preamble.pool_index +17,meta.gradient_value); hdr.gradient.value17 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +18); meta.gradient_value = meta.gradient_value + hdr.gradient.value18; parameter_pool2.write(hdr.preamble.pool_index +18,meta.gradient_value); hdr.gradient.value18 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +19); meta.gradient_value = meta.gradient_value + hdr.gradient.value19; parameter_pool2.write(hdr.preamble.pool_index +19,meta.gradient_value); hdr.gradient.value19 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +20); meta.gradient_value = meta.gradient_value + hdr.gradient.value20; parameter_pool2.write(hdr.preamble.pool_index +20,meta.gradient_value); hdr.gradient.value20 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +21); meta.gradient_value = meta.gradient_value + hdr.gradient.value21; parameter_pool2.write(hdr.preamble.pool_index +21,meta.gradient_value); hdr.gradient.value21 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +22); meta.gradient_value = meta.gradient_value + hdr.gradient.value22; parameter_pool2.write(hdr.preamble.pool_index +22,meta.gradient_value); hdr.gradient.value22 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +23); meta.gradient_value = meta.gradient_value + hdr.gradient.value23; parameter_pool2.write(hdr.preamble.pool_index +23,meta.gradient_value); hdr.gradient.value23 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +24); meta.gradient_value = meta.gradient_value + hdr.gradient.value24; parameter_pool2.write(hdr.preamble.pool_index +24,meta.gradient_value); hdr.gradient.value24 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +25); meta.gradient_value = meta.gradient_value + hdr.gradient.value25; parameter_pool2.write(hdr.preamble.pool_index +25,meta.gradient_value); hdr.gradient.value25 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +26); meta.gradient_value = meta.gradient_value + hdr.gradient.value26; parameter_pool2.write(hdr.preamble.pool_index +26,meta.gradient_value); hdr.gradient.value26 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +27); meta.gradient_value = meta.gradient_value + hdr.gradient.value27; parameter_pool2.write(hdr.preamble.pool_index +27,meta.gradient_value); hdr.gradient.value27 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +28); meta.gradient_value = meta.gradient_value + hdr.gradient.value28; parameter_pool2.write(hdr.preamble.pool_index +28,meta.gradient_value); hdr.gradient.value28 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +29); meta.gradient_value = meta.gradient_value + hdr.gradient.value29; parameter_pool2.write(hdr.preamble.pool_index +29,meta.gradient_value); hdr.gradient.value29 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +30); meta.gradient_value = meta.gradient_value + hdr.gradient.value30; parameter_pool2.write(hdr.preamble.pool_index +30,meta.gradient_value); hdr.gradient.value30 = meta.gradient_value;
+                    parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +31); meta.gradient_value = meta.gradient_value + hdr.gradient.value31; parameter_pool2.write(hdr.preamble.pool_index +31,meta.gradient_value); hdr.gradient.value31 = meta.gradient_value;
 
                     drop();
 
@@ -1584,40 +1570,40 @@ control MyIngress(inout headers hdr,
 
                     if(meta.counter_value >= meta.k){ // When all gradients are received : broadcast
 
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +0); hdr.entry[0].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +0,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +1); hdr.entry[1].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +1,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +2); hdr.entry[2].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +2,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +3); hdr.entry[3].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +3,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +4); hdr.entry[4].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +4,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +5); hdr.entry[5].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +5,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +6); hdr.entry[6].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +6,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +7); hdr.entry[7].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +7,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +8); hdr.entry[8].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +8,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +9); hdr.entry[9].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +9,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +10); hdr.entry[10].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +10,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +11); hdr.entry[11].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +11,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +12); hdr.entry[12].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +12,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +13); hdr.entry[13].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +13,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +14); hdr.entry[14].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +14,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +15); hdr.entry[15].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +15,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +16); hdr.entry[16].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +16,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +17); hdr.entry[17].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +17,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +18); hdr.entry[18].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +18,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +19); hdr.entry[19].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +19,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +20); hdr.entry[20].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +20,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +21); hdr.entry[21].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +21,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +22); hdr.entry[22].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +22,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +23); hdr.entry[23].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +23,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +24); hdr.entry[24].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +24,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +25); hdr.entry[25].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +25,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +26); hdr.entry[26].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +26,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +27); hdr.entry[27].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +27,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +28); hdr.entry[28].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +28,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +29); hdr.entry[29].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +29,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +30); hdr.entry[30].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +30,0);
-                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +31); hdr.entry[31].value = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +31,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +0); hdr.gradient.value0 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +0,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +1); hdr.gradient.value1 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +1,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +2); hdr.gradient.value2 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +2,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +3); hdr.gradient.value3 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +3,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +4); hdr.gradient.value4 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +4,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +5); hdr.gradient.value5 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +5,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +6); hdr.gradient.value6 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +6,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +7); hdr.gradient.value7 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +7,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +8); hdr.gradient.value8 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +8,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +9); hdr.gradient.value9 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +9,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +10); hdr.gradient.value10 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +10,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +11); hdr.gradient.value11 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +11,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +12); hdr.gradient.value12 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +12,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +13); hdr.gradient.value13 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +13,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +14); hdr.gradient.value14 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +14,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +15); hdr.gradient.value15 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +15,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +16); hdr.gradient.value16 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +16,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +17); hdr.gradient.value17 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +17,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +18); hdr.gradient.value18 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +18,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +19); hdr.gradient.value19 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +19,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +20); hdr.gradient.value20 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +20,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +21); hdr.gradient.value21 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +21,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +22); hdr.gradient.value22 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +22,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +23); hdr.gradient.value23 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +23,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +24); hdr.gradient.value24 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +24,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +25); hdr.gradient.value25 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +25,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +26); hdr.gradient.value26 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +26,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +27); hdr.gradient.value27 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +27,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +28); hdr.gradient.value28 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +28,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +29); hdr.gradient.value29 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +29,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +30); hdr.gradient.value30 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +30,0);
+                        parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +31); hdr.gradient.value31 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +31,0);
 
-                        sent_seg_num_pool2.write(meta.seg_number, 1);
+                        sent_seg_num_pool2.write(meta.pool_index, 1);
                         broadcast();
 
                         parameter_pool2.write(hdr.preamble.pool_index + 0,0);
@@ -1657,38 +1643,38 @@ control MyIngress(inout headers hdr,
 
                         // Save current sign of global gradients
 
-                        meta.cur_global_grad_sign[0:0] = hdr.entry[0].value[31:31];
-                        meta.cur_global_grad_sign[1:1] = hdr.entry[1].value[31:31];
-                        meta.cur_global_grad_sign[2:2] = hdr.entry[2].value[31:31];
-                        meta.cur_global_grad_sign[3:3] = hdr.entry[3].value[31:31];
-                        meta.cur_global_grad_sign[4:4] = hdr.entry[4].value[31:31];
-                        meta.cur_global_grad_sign[5:5] = hdr.entry[5].value[31:31];
-                        meta.cur_global_grad_sign[6:6] = hdr.entry[6].value[31:31];
-                        meta.cur_global_grad_sign[7:7] = hdr.entry[7].value[31:31];
-                        meta.cur_global_grad_sign[8:8] = hdr.entry[8].value[31:31];
-                        meta.cur_global_grad_sign[9:9] = hdr.entry[9].value[31:31];
-                        meta.cur_global_grad_sign[10:10] = hdr.entry[10].value[31:31];
-                        meta.cur_global_grad_sign[11:11] = hdr.entry[11].value[31:31];
-                        meta.cur_global_grad_sign[12:12] = hdr.entry[12].value[31:31];
-                        meta.cur_global_grad_sign[13:13] = hdr.entry[13].value[31:31];
-                        meta.cur_global_grad_sign[14:14] = hdr.entry[14].value[31:31];
-                        meta.cur_global_grad_sign[15:15] = hdr.entry[15].value[31:31];
-                        meta.cur_global_grad_sign[16:16] = hdr.entry[16].value[31:31];
-                        meta.cur_global_grad_sign[17:17] = hdr.entry[17].value[31:31];
-                        meta.cur_global_grad_sign[18:18] = hdr.entry[18].value[31:31];
-                        meta.cur_global_grad_sign[19:19] = hdr.entry[19].value[31:31];
-                        meta.cur_global_grad_sign[20:20] = hdr.entry[20].value[31:31];
-                        meta.cur_global_grad_sign[21:21] = hdr.entry[21].value[31:31];
-                        meta.cur_global_grad_sign[22:22] = hdr.entry[22].value[31:31];
-                        meta.cur_global_grad_sign[23:23] = hdr.entry[23].value[31:31];
-                        meta.cur_global_grad_sign[24:24] = hdr.entry[24].value[31:31];
-                        meta.cur_global_grad_sign[25:25] = hdr.entry[25].value[31:31];
-                        meta.cur_global_grad_sign[26:26] = hdr.entry[26].value[31:31];
-                        meta.cur_global_grad_sign[27:27] = hdr.entry[27].value[31:31];
-                        meta.cur_global_grad_sign[28:28] = hdr.entry[28].value[31:31];
-                        meta.cur_global_grad_sign[29:29] = hdr.entry[29].value[31:31];
-                        meta.cur_global_grad_sign[30:30] = hdr.entry[30].value[31:31];
-                        meta.cur_global_grad_sign[31:31] = hdr.entry[31].value[31:31];
+                        meta.cur_global_grad_sign[0:0] = hdr.gradient.value0[31:31];
+                        meta.cur_global_grad_sign[1:1] = hdr.gradient.value1[31:31];
+                        meta.cur_global_grad_sign[2:2] = hdr.gradient.value2[31:31];
+                        meta.cur_global_grad_sign[3:3] = hdr.gradient.value3[31:31];
+                        meta.cur_global_grad_sign[4:4] = hdr.gradient.value4[31:31];
+                        meta.cur_global_grad_sign[5:5] = hdr.gradient.value5[31:31];
+                        meta.cur_global_grad_sign[6:6] = hdr.gradient.value6[31:31];
+                        meta.cur_global_grad_sign[7:7] = hdr.gradient.value7[31:31];
+                        meta.cur_global_grad_sign[8:8] = hdr.gradient.value8[31:31];
+                        meta.cur_global_grad_sign[9:9] = hdr.gradient.value9[31:31];
+                        meta.cur_global_grad_sign[10:10] = hdr.gradient.value10[31:31];
+                        meta.cur_global_grad_sign[11:11] = hdr.gradient.value11[31:31];
+                        meta.cur_global_grad_sign[12:12] = hdr.gradient.value12[31:31];
+                        meta.cur_global_grad_sign[13:13] = hdr.gradient.value13[31:31];
+                        meta.cur_global_grad_sign[14:14] = hdr.gradient.value14[31:31];
+                        meta.cur_global_grad_sign[15:15] = hdr.gradient.value15[31:31];
+                        meta.cur_global_grad_sign[16:16] = hdr.gradient.value16[31:31];
+                        meta.cur_global_grad_sign[17:17] = hdr.gradient.value17[31:31];
+                        meta.cur_global_grad_sign[18:18] = hdr.gradient.value18[31:31];
+                        meta.cur_global_grad_sign[19:19] = hdr.gradient.value19[31:31];
+                        meta.cur_global_grad_sign[20:20] = hdr.gradient.value20[31:31];
+                        meta.cur_global_grad_sign[21:21] = hdr.gradient.value21[31:31];
+                        meta.cur_global_grad_sign[22:22] = hdr.gradient.value22[31:31];
+                        meta.cur_global_grad_sign[23:23] = hdr.gradient.value23[31:31];
+                        meta.cur_global_grad_sign[24:24] = hdr.gradient.value24[31:31];
+                        meta.cur_global_grad_sign[25:25] = hdr.gradient.value25[31:31];
+                        meta.cur_global_grad_sign[26:26] = hdr.gradient.value26[31:31];
+                        meta.cur_global_grad_sign[27:27] = hdr.gradient.value27[31:31];
+                        meta.cur_global_grad_sign[28:28] = hdr.gradient.value28[31:31];
+                        meta.cur_global_grad_sign[29:29] = hdr.gradient.value29[31:31];
+                        meta.cur_global_grad_sign[30:30] = hdr.gradient.value30[31:31];
+                        meta.cur_global_grad_sign[31:31] = hdr.gradient.value31[31:31];
 
                         meta.cur_global_grad_sign = meta.gradient_value; global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 400000){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 10){ k.read(meta.k, 0); meta.k = meta.k + 1; k.write(0,meta.k); } } else{ } sum_grad_sign.write(0,0); }
                         // meta.cur_global_grad_sign = meta.gradient_value;
@@ -1744,17 +1730,6 @@ control MyIngress(inout headers hdr,
         }
 
         // else if(meta.frame_type == 3){ // frame_type : 3
-
-        //     // hdr.entry[0].setValid();
-        //     // hdr.entry[1].setValid();
-        //     // hdr.entry[2].setValid();
-        //     // hdr.entry[3].setValid();
-        //     // hdr.entry[4].setValid();
-        //     // hdr.entry[5].setValid();
-        //     // hdr.entry[6].setValid();
-        //     // hdr.entry[7].setValid();
-        //     // hdr.entry[8].setValid();
-        //     // hdr.entry[9].setValid();
 
         //     broadcast();
 
@@ -1875,16 +1850,7 @@ control MyDeparser(packet_out packet, in headers hdr) {
         packet.emit(hdr.udp);
         packet.emit(hdr.frame_type);
         packet.emit(hdr.preamble);
-        packet.emit(hdr.entry[0]);
-        packet.emit(hdr.entry[1]);
-        packet.emit(hdr.entry[2]);
-        packet.emit(hdr.entry[3]);
-        packet.emit(hdr.entry[4]);
-        packet.emit(hdr.entry[5]);
-        packet.emit(hdr.entry[6]);
-        packet.emit(hdr.entry[7]);
-        packet.emit(hdr.entry[8]);
-        packet.emit(hdr.entry[9]);
+        packet.emit(hdr.gradient);
     }
 }
 

@@ -3,7 +3,6 @@
 #include <core.p4>
 #include <v1model.p4>
 
-#define KEY_SIZE 32
 #define VALUE_SIZE 32
 #define NUM_OF_ENTRIES 32 // switchML's size : 32
 #define NUM_OF_WORKERS 5 
@@ -61,9 +60,40 @@ header preamble_t {
     // bit<32>     offset; 
 }
 
-header entry_t {
-    bit<KEY_SIZE> key;  //  FIXME: to be deleted
-    bit<VALUE_SIZE> value;
+header gradient_t {
+    // bit<KEY_SIZE> key;  //  FIXME: to be deleted
+    bit<VALUE_SIZE> value0;
+    bit<VALUE_SIZE> value1;
+    bit<VALUE_SIZE> value2;
+    bit<VALUE_SIZE> value3;
+    bit<VALUE_SIZE> value4;
+    bit<VALUE_SIZE> value5;
+    bit<VALUE_SIZE> value6;
+    bit<VALUE_SIZE> value7;
+    bit<VALUE_SIZE> value8;
+    bit<VALUE_SIZE> value9;
+    bit<VALUE_SIZE> value10;
+    bit<VALUE_SIZE> value11;
+    bit<VALUE_SIZE> value12;
+    bit<VALUE_SIZE> value13;
+    bit<VALUE_SIZE> value14;
+    bit<VALUE_SIZE> value15;
+    bit<VALUE_SIZE> value16;
+    bit<VALUE_SIZE> value17;
+    bit<VALUE_SIZE> value18;
+    bit<VALUE_SIZE> value19;
+    bit<VALUE_SIZE> value20;
+    bit<VALUE_SIZE> value21;
+    bit<VALUE_SIZE> value22;
+    bit<VALUE_SIZE> value23;
+    bit<VALUE_SIZE> value24;
+    bit<VALUE_SIZE> value25;
+    bit<VALUE_SIZE> value26;
+    bit<VALUE_SIZE> value27;
+    bit<VALUE_SIZE> value28;
+    bit<VALUE_SIZE> value29;
+    bit<VALUE_SIZE> value30;
+    bit<VALUE_SIZE> value31;
 }
 
 struct metadata {
@@ -101,7 +131,7 @@ struct headers {
     udp_t udp;
     frame_type_t frame_type;
     preamble_t preamble;
-    entry_t[NUM_OF_ENTRIES] entry;
+    gradient_t gradient;
 }
 
 
@@ -160,46 +190,12 @@ parser MyParser(packet_in packet,
         meta.seg_number = hdr.preamble.seg_number;
         meta.end = hdr.preamble.end;
         meta.pool_index = hdr.preamble.pool_index;
-
-
-
-        transition parse_entry;  
+        transition parse_gradient;  
     }
 
 
-    state parse_entry {
-        packet.extract(hdr.entry[0]);
-        packet.extract(hdr.entry[1]);
-        packet.extract(hdr.entry[2]);
-        packet.extract(hdr.entry[3]);
-        packet.extract(hdr.entry[4]);
-        packet.extract(hdr.entry[5]);
-        packet.extract(hdr.entry[6]);
-        packet.extract(hdr.entry[7]);
-        packet.extract(hdr.entry[8]);
-        packet.extract(hdr.entry[9]);
-        packet.extract(hdr.entry[10]);
-        packet.extract(hdr.entry[11]);
-        packet.extract(hdr.entry[12]);
-        packet.extract(hdr.entry[13]);
-        packet.extract(hdr.entry[14]);
-        packet.extract(hdr.entry[15]);
-        packet.extract(hdr.entry[16]);
-        packet.extract(hdr.entry[17]);
-        packet.extract(hdr.entry[18]);
-        packet.extract(hdr.entry[19]);
-        packet.extract(hdr.entry[20]);
-        packet.extract(hdr.entry[21]);
-        packet.extract(hdr.entry[22]);
-        packet.extract(hdr.entry[23]);
-        packet.extract(hdr.entry[24]);
-        packet.extract(hdr.entry[25]);
-        packet.extract(hdr.entry[26]);
-        packet.extract(hdr.entry[27]);
-        packet.extract(hdr.entry[28]);
-        packet.extract(hdr.entry[29]);
-        packet.extract(hdr.entry[30]);
-        packet.extract(hdr.entry[31]);
+    state parse_gradient {
+        packet.extract(hdr.gradient);
         transition accept;
     }
 }
@@ -273,8 +269,8 @@ control MyIngress(inout headers hdr,
     register<bit<VALUE_SIZE>>(REGISTER_SIZE) parameter_pool2;
     register<bit<8>>(REGISTER_SIZE) counter_num_workers_pool1;
     register<bit<8>>(REGISTER_SIZE) counter_num_workers_pool2;
-    register<bit<1>>(PARAMETER_SIZE) sent_seg_num_pool1;
-    register<bit<1>>(PARAMETER_SIZE) sent_seg_num_pool2;
+    register<bit<1>>(REGISTER_SIZE) sent_seg_num_pool1;
+    register<bit<1>>(REGISTER_SIZE) sent_seg_num_pool2;
     
     register<bit<VALUE_SIZE>>(30000) global_grad_sign;
     register<bit<VALUE_SIZE>>(30000) global_grad_sign1;
@@ -378,16 +374,6 @@ control MyIngress(inout headers hdr,
     action forward_to_cpu(){
         standard_metadata.egress_spec = CPU_PORT;
         hdr.frame_type.frame_type = 3;
-        hdr.entry[0].setInvalid();
-        hdr.entry[1].setInvalid();
-        hdr.entry[2].setInvalid();
-        hdr.entry[3].setInvalid();
-        hdr.entry[4].setInvalid();
-        hdr.entry[5].setInvalid();
-        hdr.entry[6].setInvalid();
-        hdr.entry[7].setInvalid();
-        hdr.entry[8].setInvalid();
-        hdr.entry[9].setInvalid();
     }
 
     action xor_grad_sign(){ //TODO:
@@ -425,34 +411,34 @@ control MyIngress(inout headers hdr,
     /* Aggregation logic */
     /* Aggregation logic */ 
 
-    // Load current aggregated gradient values
-    // Add new gradient to current gradients
-    // Save aggregated gradient values
-    // Load aggregated gradient values to entry header
+    /* Load current aggregated gradient values */
+    /* Add new gradient to current gradients */
+    /* Save aggregated gradient values */
+    /* Load aggregated gradient values to gradient header */
     #define AGGREGATION_POOL1(i) \
     parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index + ##i); \
-    meta.gradient_value = meta.gradient_value + hdr.entry[##i].value; \
+    meta.gradient_value = meta.gradient_value + hdr.gradient.value##i; \
     parameter_pool1.write(hdr.preamble.pool_index + ##i,meta.gradient_value); \
-    hdr.entry[##i].value = meta.gradient_value; \
+    hdr.gradient.value##i = meta.gradient_value; \
 
     #define AGGREGATION_POOL2(i) \
     parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index + ##i); \
-    meta.gradient_value = meta.gradient_value + hdr.entry[##i].value; \
+    meta.gradient_value = meta.gradient_value + hdr.gradient.value##i; \
     parameter_pool2.write(hdr.preamble.pool_index + ##i,meta.gradient_value); \
-    hdr.entry[##i].value = meta.gradient_value; \
+    hdr.gradient.value##i = meta.gradient_value; \
 
     #define READ_FOR_BROADCAST_POOL1(i)  \
     parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index + ##i); \
-    hdr.entry[##i].value = meta.gradient_value; \
+    hdr.gradient.value##i = meta.gradient_value; \
     parameter_pool1.write(hdr.preamble.pool_index + ##i,0); \
 
     #define READ_FOR_BROADCAST_POOL2(i)  \
     parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index + ##i); \
-    hdr.entry[##i].value = meta.gradient_value; \
+    hdr.gradient.value##i = meta.gradient_value; \
     parameter_pool2.write(hdr.preamble.pool_index + ##i,0); \
 
     #define SAVE_GRADIENT_SIGN(i) \
-    meta.cur_global_grad_sign[##i:##i] = hdr.entry[##i].value[31:31]; \
+    meta.cur_global_grad_sign[##i:##i] = hdr.gradient.value##i[31:31]; \
 
     #define ACCUMULATE_SIGN() \
     meta.cur_global_grad_sign = meta.gradient_value; \
@@ -520,7 +506,7 @@ control MyIngress(inout headers hdr,
                 counter_num_workers_pool1.read(meta.counter_value, hdr.preamble.pool_index); // Load gradient counter of pool_index
 
                 bit<1> sent_seg_num;
-                sent_seg_num_pool1.read(sent_seg_num, meta.seg_number);
+                sent_seg_num_pool1.read(sent_seg_num, meta.pool_index);
 
                 if(sent_seg_num == 1){
                     // No Actions, because packet is late
@@ -602,7 +588,8 @@ control MyIngress(inout headers hdr,
                         READ_FOR_BROADCAST_POOL1(31)
 
                     
-                        sent_seg_num_pool1.write(meta.seg_number, 1);
+                        sent_seg_num_pool1.write(meta.pool_index, 1);
+                        sent_seg_num_pool2.write(meta.pool_index, 0);
                         broadcast();
 
                         parameter_pool1.write(hdr.preamble.pool_index + 0,0);
@@ -730,7 +717,7 @@ control MyIngress(inout headers hdr,
                 counter_num_workers_pool2.read(meta.counter_value, 1); // Load gradient counter of seg_number
 
                 bit<1> sent_seg_num;
-                sent_seg_num_pool2.read(sent_seg_num,0);
+                sent_seg_num_pool2.read(sent_seg_num,meta.pool_index);
 
                 if(sent_seg_num == 1){
                     // No Actions, because packet is late
@@ -811,7 +798,8 @@ control MyIngress(inout headers hdr,
                         READ_FOR_BROADCAST_POOL2(30)
                         READ_FOR_BROADCAST_POOL2(31)
 
-                        sent_seg_num_pool2.write(meta.seg_number, 1);
+                        sent_seg_num_pool2.write(meta.pool_index, 1);
+                        sent_seg_num_pool1.write(meta.pool_index, 0);
                         broadcast();
 
                         parameter_pool2.write(hdr.preamble.pool_index + 0,0);
@@ -938,17 +926,6 @@ control MyIngress(inout headers hdr,
         }
 
         // else if(meta.frame_type == 3){ // frame_type : 3
-
-        //     // hdr.entry[0].setValid();
-        //     // hdr.entry[1].setValid();
-        //     // hdr.entry[2].setValid();
-        //     // hdr.entry[3].setValid();
-        //     // hdr.entry[4].setValid();
-        //     // hdr.entry[5].setValid();
-        //     // hdr.entry[6].setValid();
-        //     // hdr.entry[7].setValid();
-        //     // hdr.entry[8].setValid();
-        //     // hdr.entry[9].setValid();
             
         //     broadcast();
 
@@ -1002,58 +979,58 @@ control MyEgress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
     
-    register<bit<48>>(1)    start_time_register_egress;
-    register<bit<48>>(1)    time1_egress;
-    register<bit<48>>(1)    time2_egress;
-    register<bit<48>>(1)    elapsed_time_register_egress;
+    // register<bit<48>>(1)    start_time_register_egress;
+    // register<bit<48>>(1)    time1_egress;
+    // register<bit<48>>(1)    time2_egress;
+    // register<bit<48>>(1)    elapsed_time_register_egress;
     
     
 
-    action start_recirculation(){
-        recirculate(meta);
-        meta.recirculation_flag = 1;
-    }
+    // action start_recirculation(){
+    //     recirculate(meta);
+    //     meta.recirculation_flag = 1;
+    // }
 
-    action save_start_time_egress(){
-        start_time_register_egress.write(0, standard_metadata.egress_global_timestamp);
-    }
+    // action save_start_time_egress(){
+    //     start_time_register_egress.write(0, standard_metadata.egress_global_timestamp);
+    // }
 
-    action elapsed_time_calculation(){
-        bit<48> start_time;
-        bit<48> receive_time;
-        start_time_register_egress.read(start_time,0);
-        receive_time = standard_metadata.egress_global_timestamp;
-        meta.elapsed_time = receive_time - start_time;
-        time1_egress.write(0,receive_time); //
-        time2_egress.write(0,start_time); //
-        elapsed_time_register_egress.write(0,meta.elapsed_time);
-    }
+    // action elapsed_time_calculation(){
+    //     bit<48> start_time;
+    //     bit<48> receive_time;
+    //     start_time_register_egress.read(start_time,0);
+    //     receive_time = standard_metadata.egress_global_timestamp;
+    //     meta.elapsed_time = receive_time - start_time;
+    //     time1_egress.write(0,receive_time); //
+    //     time2_egress.write(0,start_time); //
+    //     elapsed_time_register_egress.write(0,meta.elapsed_time);
+    // }
 
 
 
 
     apply {
-        if(meta.stop_recirculation_flag == 0){}
-            if(meta.counter_value == 1 && meta.recirculation_flag == 0){
-                save_start_time_egress();
-                // start_recirculation();
-            }
+        // if(meta.stop_recirculation_flag == 0){}
+        //     if(meta.counter_value == 1 && meta.recirculation_flag == 0){
+        //         save_start_time_egress();
+        //         // start_recirculation();
+        //     }
             
-            if(meta.recirculation_flag == 1 && meta.broadcast_flag == 0){ // When packet is timer packet
-                elapsed_time_calculation();
+        //     if(meta.recirculation_flag == 1 && meta.broadcast_flag == 0){ // When packet is timer packet
+        //         elapsed_time_calculation();
                 
-                if(meta.elapsed_time > 15000000){ // 1,500,000 ns = 1.5s
-                    // mark_to_drop(standard_metadata);
-                    meta.recirculation_flag = 0;
-                    meta.broadcast_flag = 1;
-                    recirculate(meta);
-                }
-                else{
-                    start_recirculation();
-                }
-            }
-        else{
-            meta.recirculation_flag = 0;
+        //         if(meta.elapsed_time > 15000000){ // 1,500,000 ns = 1.5s
+        //             // mark_to_drop(standard_metadata);
+        //             meta.recirculation_flag = 0;
+        //             meta.broadcast_flag = 1;
+        //             recirculate(meta);
+        //         }
+        //         else{
+        //             start_recirculation();
+        //         }
+        //     }
+        // else{
+        //     meta.recirculation_flag = 0;
         }
     }
 }
@@ -1069,16 +1046,7 @@ control MyDeparser(packet_out packet, in headers hdr) {
         packet.emit(hdr.udp);
         packet.emit(hdr.frame_type);
         packet.emit(hdr.preamble);
-        packet.emit(hdr.entry[0]);
-        packet.emit(hdr.entry[1]);
-        packet.emit(hdr.entry[2]);
-        packet.emit(hdr.entry[3]);
-        packet.emit(hdr.entry[4]);
-        packet.emit(hdr.entry[5]);
-        packet.emit(hdr.entry[6]);
-        packet.emit(hdr.entry[7]);
-        packet.emit(hdr.entry[8]);
-        packet.emit(hdr.entry[9]);
+        packet.emit(hdr.gradient);
     }
 }
 

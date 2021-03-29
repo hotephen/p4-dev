@@ -1,5 +1,5 @@
 table_clear select_k
-table_add select_k set_k => 10
+table_add select_k set_k => 1
 mc_mgrp_create 1  
 mc_node_create 1 1 
 mc_node_create 2 2

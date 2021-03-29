@@ -1,5 +1,5 @@
 ##########################
-BMV2_PATH=~/p4/behavioral-model
+BMV2_PATH=~/behavioral-model
 # P4C_BM_PATH=~/p4c-bm
 ##########################
 
