@@ -591,6 +591,8 @@ control MyIngress(inout headers hdr,
                         sent_seg_num_pool1.write(meta.pool_index, 1);
                         sent_seg_num_pool2.write(meta.pool_index, 0);
                         broadcast();
+                        hdr.preamble.k = meta.k;
+
 
                         parameter_pool1.write(hdr.preamble.pool_index + 0,0);
                         parameter_pool1.write(hdr.preamble.pool_index + 1,0);
@@ -803,6 +805,7 @@ control MyIngress(inout headers hdr,
                         sent_seg_num_pool2.write(meta.pool_index, 1);
                         sent_seg_num_pool1.write(meta.pool_index, 0);
                         broadcast();
+                        hdr.preamble.k = meta.k;
 
                         parameter_pool2.write(hdr.preamble.pool_index + 0,0);
                         parameter_pool2.write(hdr.preamble.pool_index + 1,0);
