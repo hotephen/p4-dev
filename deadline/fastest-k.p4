@@ -4,10 +4,8 @@
 #include <v1model.p4>
 
 #define VALUE_SIZE 32
-#define NUM_OF_ENTRIES 32 // switchML's size : 32
-#define NUM_OF_WORKERS 5 
-#define CPU_PORT 3
-
+#define NUM_OF_WORKERS 10 
+#define CPU_PORT 10
 // ----------------------------
 // ---------- header ----------
 // ----------------------------
@@ -62,38 +60,38 @@ header preamble_t {
 
 header gradient_t {
     // bit<KEY_SIZE> key;  //  FIXME: to be deleted
-    bit<VALUE_SIZE> value0;
-    bit<VALUE_SIZE> value1;
-    bit<VALUE_SIZE> value2;
-    bit<VALUE_SIZE> value3;
-    bit<VALUE_SIZE> value4;
-    bit<VALUE_SIZE> value5;
-    bit<VALUE_SIZE> value6;
-    bit<VALUE_SIZE> value7;
-    bit<VALUE_SIZE> value8;
-    bit<VALUE_SIZE> value9;
-    bit<VALUE_SIZE> value10;
-    bit<VALUE_SIZE> value11;
-    bit<VALUE_SIZE> value12;
-    bit<VALUE_SIZE> value13;
-    bit<VALUE_SIZE> value14;
-    bit<VALUE_SIZE> value15;
-    bit<VALUE_SIZE> value16;
-    bit<VALUE_SIZE> value17;
-    bit<VALUE_SIZE> value18;
-    bit<VALUE_SIZE> value19;
-    bit<VALUE_SIZE> value20;
-    bit<VALUE_SIZE> value21;
-    bit<VALUE_SIZE> value22;
-    bit<VALUE_SIZE> value23;
-    bit<VALUE_SIZE> value24;
-    bit<VALUE_SIZE> value25;
-    bit<VALUE_SIZE> value26;
-    bit<VALUE_SIZE> value27;
-    bit<VALUE_SIZE> value28;
-    bit<VALUE_SIZE> value29;
-    bit<VALUE_SIZE> value30;
-    bit<VALUE_SIZE> value31;
+    int<VALUE_SIZE> value0;
+    int<VALUE_SIZE> value1;
+    int<VALUE_SIZE> value2;
+    int<VALUE_SIZE> value3;
+    int<VALUE_SIZE> value4;
+    int<VALUE_SIZE> value5;
+    int<VALUE_SIZE> value6;
+    int<VALUE_SIZE> value7;
+    int<VALUE_SIZE> value8;
+    int<VALUE_SIZE> value9;
+    int<VALUE_SIZE> value10;
+    int<VALUE_SIZE> value11;
+    int<VALUE_SIZE> value12;
+    int<VALUE_SIZE> value13;
+    int<VALUE_SIZE> value14;
+    int<VALUE_SIZE> value15;
+    int<VALUE_SIZE> value16;
+    int<VALUE_SIZE> value17;
+    int<VALUE_SIZE> value18;
+    int<VALUE_SIZE> value19;
+    int<VALUE_SIZE> value20;
+    int<VALUE_SIZE> value21;
+    int<VALUE_SIZE> value22;
+    int<VALUE_SIZE> value23;
+    int<VALUE_SIZE> value24;
+    int<VALUE_SIZE> value25;
+    int<VALUE_SIZE> value26;
+    int<VALUE_SIZE> value27;
+    int<VALUE_SIZE> value28;
+    int<VALUE_SIZE> value29;
+    int<VALUE_SIZE> value30;
+    int<VALUE_SIZE> value31;
 }
 
 struct metadata {
@@ -103,7 +101,7 @@ struct metadata {
     bit<32> seg_number;
 
     bit<8>  counter_value;  // worker counter
-    bit<32> gradient_value;
+    int<32> gradient_value;
 
     bit<8>  broadcast_flag;
     bit<8>  recirculation_flag;
@@ -265,8 +263,8 @@ control MyIngress(inout headers hdr,
 
     #define PARAMETER_SIZE 900000
     #define REGISTER_SIZE 4097 // 128(pool size) x 32(the number of gradients in packet) = 4096 +1
-    register<bit<VALUE_SIZE>>(REGISTER_SIZE) parameter_pool1;
-    register<bit<VALUE_SIZE>>(REGISTER_SIZE) parameter_pool2;
+    register<int<VALUE_SIZE>>(REGISTER_SIZE) parameter_pool1;
+    register<int<VALUE_SIZE>>(REGISTER_SIZE) parameter_pool2;
     register<bit<8>>(REGISTER_SIZE) counter_num_workers_pool1;
     register<bit<8>>(REGISTER_SIZE) counter_num_workers_pool2;
     register<bit<1>>(REGISTER_SIZE) sent_seg_num_pool1;
@@ -441,7 +439,7 @@ control MyIngress(inout headers hdr,
     meta.cur_global_grad_sign[##i:##i] = hdr.gradient.value##i[31:31]; \
 
     #define ACCUMULATE_SIGN() \
-    meta.cur_global_grad_sign = meta.gradient_value; \
+    /* meta.cur_global_grad_sign = meta.gradient_value; */ \
     /* Load previous global_grad_sign */ \
     global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); \ 
     /* Save current global_grad_sign */ \
@@ -455,16 +453,18 @@ control MyIngress(inout headers hdr,
     /* If last gradient packet is received in current epoch,  */ \
     /* Check that the sum of the signs is greater than threshold */ \
     if(meta.end == 1){ \
-        if (meta.sum_grad_sign >= 400000){ \
+        if (meta.sum_grad_sign >= 40){ \
             /* Increase count */ \
             k_counter.read(meta.counter, 0); \
             meta.counter = meta.counter + 1; \
             k_counter.write(0, meta.counter); \
-            if (meta.counter >= 10){ \
+            if (meta.counter >= 1){ \
                 /* Increase k  */ \
-                k.read(meta.k, 0); \
-                meta.k = meta.k + 1; \
-                k.write(0,meta.k); \
+                /* k.read(meta.k, 0);*/ \
+                if(meta.k < 10){\
+                    meta.k = meta.k + 1; \
+                    k.write(0,meta.k); \
+                } \
             } \
         } \
         else{ \
@@ -629,6 +629,8 @@ control MyIngress(inout headers hdr,
 
 
                         // Save current sign of global gradients
+                        // meta.cur_global_grad_sign[0:0] = hdr.gradient.value0[31:31];
+                        // meta.cur_global_grad_sign[1:1] = hdr.gradient.value1[31:31];
                         SAVE_GRADIENT_SIGN(0)
                         SAVE_GRADIENT_SIGN(1)
                         SAVE_GRADIENT_SIGN(2)
@@ -714,7 +716,7 @@ control MyIngress(inout headers hdr,
             /* --------------------- pool2 --------------------- */
 
             else{ // When seg_number is odd (11,21,31)
-                counter_num_workers_pool2.read(meta.counter_value, 1); // Load gradient counter of seg_number
+                counter_num_workers_pool2.read(meta.counter_value, hdr.preamble.pool_index); // Load gradient counter of seg_number
 
                 bit<1> sent_seg_num;
                 sent_seg_num_pool2.read(sent_seg_num,meta.pool_index);
@@ -1031,7 +1033,7 @@ control MyEgress(inout headers hdr,
         //     }
         // else{
         //     meta.recirculation_flag = 0;
-        }
+        // }
     }
 }
 
@@ -1058,11 +1060,3 @@ V1Switch(
     MyComputeChecksum(),
     MyDeparser()
 ) main;
-
-    
-
-    
-    
-    
-    
-    

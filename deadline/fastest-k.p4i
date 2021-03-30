@@ -871,8 +871,6 @@ package V1Switch<H, M>(Parser<H, M> p,
 
 
 
-
-
 // ----------------------------
 // ---------- header ----------
 // ----------------------------
@@ -927,38 +925,38 @@ header preamble_t {
 
 header gradient_t {
     // bit<KEY_SIZE> key;  //  FIXME: to be deleted
-    bit<32> value0;
-    bit<32> value1;
-    bit<32> value2;
-    bit<32> value3;
-    bit<32> value4;
-    bit<32> value5;
-    bit<32> value6;
-    bit<32> value7;
-    bit<32> value8;
-    bit<32> value9;
-    bit<32> value10;
-    bit<32> value11;
-    bit<32> value12;
-    bit<32> value13;
-    bit<32> value14;
-    bit<32> value15;
-    bit<32> value16;
-    bit<32> value17;
-    bit<32> value18;
-    bit<32> value19;
-    bit<32> value20;
-    bit<32> value21;
-    bit<32> value22;
-    bit<32> value23;
-    bit<32> value24;
-    bit<32> value25;
-    bit<32> value26;
-    bit<32> value27;
-    bit<32> value28;
-    bit<32> value29;
-    bit<32> value30;
-    bit<32> value31;
+    int<32> value0;
+    int<32> value1;
+    int<32> value2;
+    int<32> value3;
+    int<32> value4;
+    int<32> value5;
+    int<32> value6;
+    int<32> value7;
+    int<32> value8;
+    int<32> value9;
+    int<32> value10;
+    int<32> value11;
+    int<32> value12;
+    int<32> value13;
+    int<32> value14;
+    int<32> value15;
+    int<32> value16;
+    int<32> value17;
+    int<32> value18;
+    int<32> value19;
+    int<32> value20;
+    int<32> value21;
+    int<32> value22;
+    int<32> value23;
+    int<32> value24;
+    int<32> value25;
+    int<32> value26;
+    int<32> value27;
+    int<32> value28;
+    int<32> value29;
+    int<32> value30;
+    int<32> value31;
 }
 
 struct metadata {
@@ -968,7 +966,7 @@ struct metadata {
     bit<32> seg_number;
 
     bit<8> counter_value; // worker counter
-    bit<32> gradient_value;
+    int<32> gradient_value;
 
     bit<8> broadcast_flag;
     bit<8> recirculation_flag;
@@ -1114,7 +1112,7 @@ control MyIngress(inout headers hdr,
 
     action save_start_time(){
         start_time_register.write(0, standard_metadata.ingress_global_timestamp);
-        standard_metadata.egress_spec = 3;
+        standard_metadata.egress_spec = 10;
 
     }
 
@@ -1130,8 +1128,8 @@ control MyIngress(inout headers hdr,
 
 
 
-    register<bit<32>>(4097) parameter_pool1;
-    register<bit<32>>(4097) parameter_pool2;
+    register<int<32>>(4097) parameter_pool1;
+    register<int<32>>(4097) parameter_pool2;
     register<bit<8>>(4097) counter_num_workers_pool1;
     register<bit<8>>(4097) counter_num_workers_pool2;
     register<bit<1>>(4097) sent_seg_num_pool1;
@@ -1237,7 +1235,7 @@ control MyIngress(inout headers hdr,
     }
 
     action forward_to_cpu(){
-        standard_metadata.egress_spec = 3;
+        standard_metadata.egress_spec = 10;
         hdr.frame_type.frame_type = 3;
     }
 
@@ -1395,6 +1393,7 @@ control MyIngress(inout headers hdr,
 
 
                         sent_seg_num_pool1.write(meta.pool_index, 1);
+                        sent_seg_num_pool2.write(meta.pool_index, 0);
                         broadcast();
 
                         parameter_pool1.write(hdr.preamble.pool_index + 0,0);
@@ -1434,6 +1433,8 @@ control MyIngress(inout headers hdr,
 
 
                         // Save current sign of global gradients
+                        // meta.cur_global_grad_sign[0:0] = hdr.gradient.value0[31:31];
+                        // meta.cur_global_grad_sign[1:1] = hdr.gradient.value1[31:31];
                         meta.cur_global_grad_sign[0:0] = hdr.gradient.value0[31:31];
                         meta.cur_global_grad_sign[1:1] = hdr.gradient.value1[31:31];
                         meta.cur_global_grad_sign[2:2] = hdr.gradient.value2[31:31];
@@ -1467,7 +1468,7 @@ control MyIngress(inout headers hdr,
                         meta.cur_global_grad_sign[30:30] = hdr.gradient.value30[31:31];
                         meta.cur_global_grad_sign[31:31] = hdr.gradient.value31[31:31];
 
-                        meta.cur_global_grad_sign = meta.gradient_value; global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 400000){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 10){ k.read(meta.k, 0); meta.k = meta.k + 1; k.write(0,meta.k); } } else{ } sum_grad_sign.write(0,0); }
+                        global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 40){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 1){ if(meta.k < 10){ meta.k = meta.k + 1; k.write(0,meta.k); } } } else{ } sum_grad_sign.write(0,0); }
 
                         // meta.cur_global_grad_sign = meta.gradient_value;
 
@@ -1519,7 +1520,7 @@ control MyIngress(inout headers hdr,
             /* --------------------- pool2 --------------------- */
 
             else{ // When seg_number is odd (11,21,31)
-                counter_num_workers_pool2.read(meta.counter_value, 1); // Load gradient counter of seg_number
+                counter_num_workers_pool2.read(meta.counter_value, hdr.preamble.pool_index); // Load gradient counter of seg_number
 
                 bit<1> sent_seg_num;
                 sent_seg_num_pool2.read(sent_seg_num,meta.pool_index);
@@ -1604,6 +1605,7 @@ control MyIngress(inout headers hdr,
                         parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +31); hdr.gradient.value31 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +31,0);
 
                         sent_seg_num_pool2.write(meta.pool_index, 1);
+                        sent_seg_num_pool1.write(meta.pool_index, 0);
                         broadcast();
 
                         parameter_pool2.write(hdr.preamble.pool_index + 0,0);
@@ -1676,7 +1678,7 @@ control MyIngress(inout headers hdr,
                         meta.cur_global_grad_sign[30:30] = hdr.gradient.value30[31:31];
                         meta.cur_global_grad_sign[31:31] = hdr.gradient.value31[31:31];
 
-                        meta.cur_global_grad_sign = meta.gradient_value; global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 400000){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 10){ k.read(meta.k, 0); meta.k = meta.k + 1; k.write(0,meta.k); } } else{ } sum_grad_sign.write(0,0); }
+                        global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 40){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 1){ if(meta.k < 10){ meta.k = meta.k + 1; k.write(0,meta.k); } } } else{ } sum_grad_sign.write(0,0); }
                         // meta.cur_global_grad_sign = meta.gradient_value;
 
                         // // Load previous global_grad_sign
@@ -1783,59 +1785,59 @@ control MyEgress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
-    register<bit<48>>(1) start_time_register_egress;
-    register<bit<48>>(1) time1_egress;
-    register<bit<48>>(1) time2_egress;
-    register<bit<48>>(1) elapsed_time_register_egress;
+    // register<bit<48>>(1)    start_time_register_egress;
+    // register<bit<48>>(1)    time1_egress;
+    // register<bit<48>>(1)    time2_egress;
+    // register<bit<48>>(1)    elapsed_time_register_egress;
 
 
 
-    action start_recirculation(){
-        recirculate(meta);
-        meta.recirculation_flag = 1;
-    }
+    // action start_recirculation(){
+    //     recirculate(meta);
+    //     meta.recirculation_flag = 1;
+    // }
 
-    action save_start_time_egress(){
-        start_time_register_egress.write(0, standard_metadata.egress_global_timestamp);
-    }
+    // action save_start_time_egress(){
+    //     start_time_register_egress.write(0, standard_metadata.egress_global_timestamp);
+    // }
 
-    action elapsed_time_calculation(){
-        bit<48> start_time;
-        bit<48> receive_time;
-        start_time_register_egress.read(start_time,0);
-        receive_time = standard_metadata.egress_global_timestamp;
-        meta.elapsed_time = receive_time - start_time;
-        time1_egress.write(0,receive_time); //
-        time2_egress.write(0,start_time); //
-        elapsed_time_register_egress.write(0,meta.elapsed_time);
-    }
+    // action elapsed_time_calculation(){
+    //     bit<48> start_time;
+    //     bit<48> receive_time;
+    //     start_time_register_egress.read(start_time,0);
+    //     receive_time = standard_metadata.egress_global_timestamp;
+    //     meta.elapsed_time = receive_time - start_time;
+    //     time1_egress.write(0,receive_time); //
+    //     time2_egress.write(0,start_time); //
+    //     elapsed_time_register_egress.write(0,meta.elapsed_time);
+    // }
 
 
 
 
     apply {
-        if(meta.stop_recirculation_flag == 0){}
-            if(meta.counter_value == 1 && meta.recirculation_flag == 0){
-                save_start_time_egress();
-                // start_recirculation();
-            }
+        // if(meta.stop_recirculation_flag == 0){}
+        //     if(meta.counter_value == 1 && meta.recirculation_flag == 0){
+        //         save_start_time_egress();
+        //         // start_recirculation();
+        //     }
 
-            if(meta.recirculation_flag == 1 && meta.broadcast_flag == 0){ // When packet is timer packet
-                elapsed_time_calculation();
+        //     if(meta.recirculation_flag == 1 && meta.broadcast_flag == 0){ // When packet is timer packet
+        //         elapsed_time_calculation();
 
-                if(meta.elapsed_time > 15000000){ // 1,500,000 ns = 1.5s
-                    // mark_to_drop(standard_metadata);
-                    meta.recirculation_flag = 0;
-                    meta.broadcast_flag = 1;
-                    recirculate(meta);
-                }
-                else{
-                    start_recirculation();
-                }
-            }
-        else{
-            meta.recirculation_flag = 0;
-        }
+        //         if(meta.elapsed_time > 15000000){ // 1,500,000 ns = 1.5s
+        //             // mark_to_drop(standard_metadata);
+        //             meta.recirculation_flag = 0;
+        //             meta.broadcast_flag = 1;
+        //             recirculate(meta);
+        //         }
+        //         else{
+        //             start_recirculation();
+        //         }
+        //     }
+        // else{
+        //     meta.recirculation_flag = 0;
+        // }
     }
 }
 

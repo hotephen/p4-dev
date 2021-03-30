@@ -12,8 +12,8 @@ from scapy.layers.inet import IP, UDP
 parser = argparse.ArgumentParser(description='parser')
 parser.add_argument('--seg', required=False, type=int, default=1, help='seg_number')
 parser.add_argument('--i', required=False, type=str, default='veth0', help='i')
-parser.add_argument('--num', required=False, type=int, default=0, help='number of workers')
-parser.add_argument('--step', required=False, type=int, default=10, help='number of steps')
+parser.add_argument('--num_workers', required=False, type=int, default=0, help='number of workers')
+parser.add_argument('--num_packets', required=False, type=int, default=10, help='number of steps')
 parser.add_argument('--epoch', required=False, type=int, default=2, help='number of epochs')
 args = parser.parse_args()
 
@@ -42,7 +42,7 @@ class preamble(Packet):
 class ENTRY(Packet):
     name = "ENTRY"
     fields_desc = [
-        IntField("value", 0)
+        SignedIntField("value", 0)
     ]
 
     def guess_payload_class(self, payload):
@@ -54,32 +54,38 @@ count = 0
 
 for k in (range(args.epoch)):
     seg_number = 0
-    pool_index = k+1
-    pool_version = k+1
-
-    for j in range(args.step):
+    pool_version = k%2 + 1
+    
+    for j in range(args.num_packets):   # The number of packets in one epoch
         pool_index = j*32
-
         end = 0
-        if j == (args.step-1) :
+
+        if j == (args.num_packets-1) :  # If last packet in the epoch
             end = 1
 
-        for i in range(args.num):
+        for i in range(args.num_workers): # The number of workers
             
             value = 0
             value_ = 0
             pkt = Ether() / IP(dst="10.10.0.1") / UDP(sport=1234, dport=5678) / frame_type(frame_type=1)/ \
                 preamble(end=end, seg_number=seg_number, pool_index=pool_index, pool_version=pool_version)
-            if k==0 :
+            if k % 2 == 0:
                 for z in range(32):
-                    value += 1
+                    value_ += 1 * 10000000
+                    value = value_
+                    value = value_ * -1
+                    # if count % 2 == 1 :
+                    #     value = value_ * -1
                     pkt = pkt / ENTRY(value=value)
-            if k==1 :
+            else:
                 for z in range(32):
-                    value_ += 1  # FIXME: No Support for negative integer
-                    value = value_ ^ 2147483648
+                    value_ += 1 * 10000000
+                    value = value_
+                    # if count % 2 == 1 :
+                    #     value = value_ * -1
                     pkt = pkt / ENTRY(value=value)
 
+            pkt.show()
             print(hexdump(pkt))
             print(len(pkt))
             count += 1
