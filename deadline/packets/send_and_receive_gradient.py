@@ -5,7 +5,7 @@ import argparse
 import sys
 import numpy as np
 import os
-# import multiprocessing.connection import Listener
+from multiprocessing import Process, Semaphore, shared_memory
 
 # from headers import *
 from scapy.all import *
@@ -13,6 +13,7 @@ from scapy.all import sniff, sendp, hexdump, get_if_list, get_if_hwaddr, bind_la
 from scapy.layers.l2 import Ether
 from scapy.layers.inet import IP, UDP
 from scapy.all import hexdump, ShortField, BitField, BitFieldLenField, ShortEnumField, X3BytesField, ByteField, XByteField, IntField
+from multiprocessing import shared_memory
 
 parser = argparse.ArgumentParser(description='parser')
 parser.add_argument('--i', required=False, type=str, default='veth0', help='interface')
@@ -75,32 +76,17 @@ for i in range(4096):
 
 ###
 
-def main():
 
-    # Create gradient list (To be deleted)
-    grad = []
-    for i in range (320000):
-        grad.append(i)
-
-    ifaces = filter(lambda i: args.i in i, os.listdir('/sys/class/net/'))
-    iface = args.i
-    
-    # Thread Creation
-    send_thread = threading.Thread(target=send_packet, args=(grad,))
-    receive_thread = threading.Thread(target=receiving, args=(args.i,))
-    send_thread.daemon = True       # To enable ctrl+c (exit)
-    receive_thread.daemon = True    # To enable ctrl+c (exit)
-    
-    send_thread.start()
-    receive_thread.start()
-    
-    print(threading.enumerate())
-
-    while True:         # Don't terminate main thread 
-        time.sleep(1)
+def collect_from_tf(serm,shm_name):
+    serm.acquire()
+    shm = shared_memory.SharedMemory(name=shm_name)
+    grad_ = np.ndarray()
+    grad_ = 
 
 
-def receiving(iface):
+
+
+def receive_packet(iface):
     print("Sniffing on %s" % iface)
     sys.stdout.flush()
     sniff(iface = iface, prn = lambda x: handle_pkt(x))
@@ -181,7 +167,33 @@ def send_packet(grad):
 if __name__ == '__main__':
     main()
 
+def main():
 
+    # Create gradient list (To be deleted)
+    grad = []
+    for i in range (320000):
+        grad.append(i)
+
+    ifaces = filter(lambda i: args.i in i, os.listdir('/sys/class/net/'))
+    iface = args.i
+
+    # Collect gradients from TensorFlow
+    serm = Semaphore(1)
+
+
+    # Thread Creation
+    send_thread = threading.Thread(target=send_packet, args=(grad,))
+    receive_thread = threading.Thread(target=receive_packet, args=(args.i,))
+    send_thread.daemon = True       # To enable ctrl+c (exit)
+    receive_thread.daemon = True    # To enable ctrl+c (exit)
+    
+    send_thread.start()
+    receive_thread.start()
+    
+    print(threading.enumerate())
+
+    while True:         # Don't terminate main thread 
+        time.sleep(1)
 
 
 # Update seg_num
