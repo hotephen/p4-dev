@@ -48,8 +48,8 @@ header frame_type_t {
 }
 
 header preamble_t {
-    bit<7>      k;
-    bit<1>      end;        //epoch end
+    bit<8>      k;
+    bit<8>      end;        //epoch end
     bit<8>      worker_id;
     bit<16>     epoch;
     bit<32>     seg_number;
@@ -118,7 +118,7 @@ struct metadata {
     bit<32> xor_result;
     bit<32> popcount_result;
     bit<32> sum_grad_sign;
-    bit<1>  end;
+    bit<8>  end;
     bit<32> pool_index;
 
 }

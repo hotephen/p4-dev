@@ -1,7 +1,7 @@
-# 1 "/home/hc/p4-dev/deadline/fastest-k.p4"
+# 1 "/home/p4/p4-dev/deadline/fastest-k.p4"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "/home/hc/p4-dev/deadline/fastest-k.p4"
+# 1 "/home/p4/p4-dev/deadline/fastest-k.p4"
 /* -*- P4_16 -*- */
 
 # 1 "/usr/local/share/p4c/p4include/core.p4" 1
@@ -87,7 +87,7 @@ match_kind {
     /// Longest-prefix match.
     lpm
 }
-# 4 "/home/hc/p4-dev/deadline/fastest-k.p4" 2
+# 4 "/home/p4/p4-dev/deadline/fastest-k.p4" 2
 # 1 "/usr/local/share/p4c/p4include/v1model.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -866,7 +866,7 @@ package V1Switch<H, M>(Parser<H, M> p,
                        ComputeChecksum<H, M> ck,
                        Deparser<H> dep
                        );
-# 5 "/home/hc/p4-dev/deadline/fastest-k.p4" 2
+# 5 "/home/p4/p4-dev/deadline/fastest-k.p4" 2
 
 
 
@@ -913,8 +913,8 @@ header frame_type_t {
 }
 
 header preamble_t {
-    bit<7> k;
-    bit<1> end; //epoch end
+    bit<8> k;
+    bit<8> end; //epoch end
     bit<8> worker_id;
     bit<16> epoch;
     bit<32> seg_number;
@@ -983,7 +983,7 @@ struct metadata {
     bit<32> xor_result;
     bit<32> popcount_result;
     bit<32> sum_grad_sign;
-    bit<1> end;
+    bit<8> end;
     bit<32> pool_index;
 
 }
@@ -1278,7 +1278,7 @@ control MyIngress(inout headers hdr,
     /* Add new gradient to current gradients */
     /* Save aggregated gradient values */
     /* Load aggregated gradient values to gradient header */
-# 478 "/home/hc/p4-dev/deadline/fastest-k.p4"
+# 478 "/home/p4/p4-dev/deadline/fastest-k.p4"
     /* Start ingress */
     /* Start ingress */
     /* Start ingress */
@@ -1395,6 +1395,8 @@ control MyIngress(inout headers hdr,
                         sent_seg_num_pool1.write(meta.pool_index, 1);
                         sent_seg_num_pool2.write(meta.pool_index, 0);
                         broadcast();
+                        hdr.preamble.k = meta.k;
+
 
                         parameter_pool1.write(hdr.preamble.pool_index + 0,0);
                         parameter_pool1.write(hdr.preamble.pool_index + 1,0);
@@ -1607,6 +1609,7 @@ control MyIngress(inout headers hdr,
                         sent_seg_num_pool2.write(meta.pool_index, 1);
                         sent_seg_num_pool1.write(meta.pool_index, 0);
                         broadcast();
+                        hdr.preamble.k = meta.k;
 
                         parameter_pool2.write(hdr.preamble.pool_index + 0,0);
                         parameter_pool2.write(hdr.preamble.pool_index + 1,0);
