@@ -829,10 +829,10 @@
       "source_info" : {
         "filename" : "/home/p4/p4-dev/deadline/fastest-k.p4",
         "line" : 266,
-        "column" : 28,
+        "column" : 30,
         "source_fragment" : "parameter_pool1"
       },
-      "size" : 4097,
+      "size" : 409600,
       "bitwidth" : 32
     },
     {
@@ -841,10 +841,10 @@
       "source_info" : {
         "filename" : "/home/p4/p4-dev/deadline/fastest-k.p4",
         "line" : 267,
-        "column" : 28,
+        "column" : 30,
         "source_fragment" : "parameter_pool2"
       },
-      "size" : 4097,
+      "size" : 409600,
       "bitwidth" : 32
     },
     {
@@ -853,10 +853,10 @@
       "source_info" : {
         "filename" : "/home/p4/p4-dev/deadline/fastest-k.p4",
         "line" : 268,
-        "column" : 27,
+        "column" : 29,
         "source_fragment" : "counter_num_workers_pool1"
       },
-      "size" : 4097,
+      "size" : 409600,
       "bitwidth" : 8
     },
     {
@@ -865,10 +865,10 @@
       "source_info" : {
         "filename" : "/home/p4/p4-dev/deadline/fastest-k.p4",
         "line" : 269,
-        "column" : 27,
+        "column" : 29,
         "source_fragment" : "counter_num_workers_pool2"
       },
-      "size" : 4097,
+      "size" : 409600,
       "bitwidth" : 8
     },
     {
@@ -877,10 +877,10 @@
       "source_info" : {
         "filename" : "/home/p4/p4-dev/deadline/fastest-k.p4",
         "line" : 270,
-        "column" : 27,
+        "column" : 29,
         "source_fragment" : "sent_seg_num_pool1"
       },
-      "size" : 4097,
+      "size" : 409600,
       "bitwidth" : 1
     },
     {
@@ -889,10 +889,10 @@
       "source_info" : {
         "filename" : "/home/p4/p4-dev/deadline/fastest-k.p4",
         "line" : 271,
-        "column" : 27,
+        "column" : 29,
         "source_fragment" : "sent_seg_num_pool2"
       },
-      "size" : 4097,
+      "size" : 409600,
       "bitwidth" : 1
     },
     {
@@ -40920,7 +40920,7 @@
             "filename" : "/home/p4/p4-dev/deadline/fastest-k.p4",
             "line" : 669,
             "column" : 413,
-            "source_fragment" : "meta.counter >= 1"
+            "source_fragment" : "meta.counter >= 5"
           },
           "expression" : {
             "type" : "expression",
@@ -40932,7 +40932,7 @@
               },
               "right" : {
                 "type" : "hexstr",
-                "value" : "0x00000001"
+                "value" : "0x00000005"
               }
             }
           },
@@ -41076,7 +41076,7 @@
             "filename" : "/home/p4/p4-dev/deadline/fastest-k.p4",
             "line" : 880,
             "column" : 413,
-            "source_fragment" : "meta.counter >= 1"
+            "source_fragment" : "meta.counter >= 5"
           },
           "expression" : {
             "type" : "expression",
@@ -41088,7 +41088,7 @@
               },
               "right" : {
                 "type" : "hexstr",
-                "value" : "0x00000001"
+                "value" : "0x00000005"
               }
             }
           },

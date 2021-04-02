@@ -262,7 +262,7 @@ control MyIngress(inout headers hdr,
     /* ------------ Register Definition ------------ */
 
     #define PARAMETER_SIZE 900000
-    #define REGISTER_SIZE 4097 // 128(pool size) x 32(the number of gradients in packet) = 4096 +1
+    #define REGISTER_SIZE 409600 // 128(pool size) x 32(the number of gradients in packet) = 4096 +1
     register<int<VALUE_SIZE>>(REGISTER_SIZE) parameter_pool1;
     register<int<VALUE_SIZE>>(REGISTER_SIZE) parameter_pool2;
     register<bit<8>>(REGISTER_SIZE) counter_num_workers_pool1;
@@ -458,7 +458,7 @@ control MyIngress(inout headers hdr,
             k_counter.read(meta.counter, 0); \
             meta.counter = meta.counter + 1; \
             k_counter.write(0, meta.counter); \
-            if (meta.counter >= 1){ \
+            if (meta.counter >= 5){ \
                 /* Increase k  */ \
                 /* k.read(meta.k, 0);*/ \
                 if(meta.k < 10){\
