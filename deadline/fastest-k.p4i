@@ -1392,8 +1392,8 @@ control MyIngress(inout headers hdr,
                         parameter_pool1.read(meta.gradient_value, hdr.preamble.pool_index +31); hdr.gradient.value31 = meta.gradient_value; parameter_pool1.write(hdr.preamble.pool_index +31,0);
 
 
-                        sent_seg_num_pool1.write(meta.pool_index, 1);
-                        sent_seg_num_pool2.write(meta.pool_index, 0);
+                        // sent_seg_num_pool1.write(meta.pool_index, 1);
+                        // sent_seg_num_pool2.write(meta.pool_index, 0);
                         broadcast();
                         hdr.preamble.k = meta.k;
 
@@ -1470,7 +1470,7 @@ control MyIngress(inout headers hdr,
                         meta.cur_global_grad_sign[30:30] = hdr.gradient.value30[31:31];
                         meta.cur_global_grad_sign[31:31] = hdr.gradient.value31[31:31];
 
-                        global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 40){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 5){ if(meta.k < 10){ meta.k = meta.k + 1; k.write(0,meta.k); } } } else{ } sum_grad_sign.write(0,0); }
+                        global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 40){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 10){ if(meta.k < 10){ meta.k = meta.k + 1; k.write(0,meta.k); } } } else{ } sum_grad_sign.write(0,0); }
 
                         // meta.cur_global_grad_sign = meta.gradient_value;
 
@@ -1606,8 +1606,8 @@ control MyIngress(inout headers hdr,
                         parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +30); hdr.gradient.value30 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +30,0);
                         parameter_pool2.read(meta.gradient_value, hdr.preamble.pool_index +31); hdr.gradient.value31 = meta.gradient_value; parameter_pool2.write(hdr.preamble.pool_index +31,0);
 
-                        sent_seg_num_pool2.write(meta.pool_index, 1);
-                        sent_seg_num_pool1.write(meta.pool_index, 0);
+                        // sent_seg_num_pool2.write(meta.pool_index, 1);
+                        // sent_seg_num_pool1.write(meta.pool_index, 0);
                         broadcast();
                         hdr.preamble.k = meta.k;
 
@@ -1681,7 +1681,7 @@ control MyIngress(inout headers hdr,
                         meta.cur_global_grad_sign[30:30] = hdr.gradient.value30[31:31];
                         meta.cur_global_grad_sign[31:31] = hdr.gradient.value31[31:31];
 
-                        global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 40){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 5){ if(meta.k < 10){ meta.k = meta.k + 1; k.write(0,meta.k); } } } else{ } sum_grad_sign.write(0,0); }
+                        global_grad_sign.read(meta.prev_global_grad_sign, hdr.preamble.seg_number); global_grad_sign.write(hdr.preamble.seg_number, meta.cur_global_grad_sign); xor_grad_sign(); popcount(meta.xor_result); accumulate_sign(meta.popcount_result); if(meta.end == 1){ if (meta.sum_grad_sign >= 40){ k_counter.read(meta.counter, 0); meta.counter = meta.counter + 1; k_counter.write(0, meta.counter); if (meta.counter >= 10){ if(meta.k < 10){ meta.k = meta.k + 1; k.write(0,meta.k); } } } else{ } sum_grad_sign.write(0,0); }
                         // meta.cur_global_grad_sign = meta.gradient_value;
 
                         // // Load previous global_grad_sign

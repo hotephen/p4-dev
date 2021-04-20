@@ -453,12 +453,12 @@ control MyIngress(inout headers hdr,
     /* If last gradient packet is received in current epoch,  */ \
     /* Check that the sum of the signs is greater than threshold */ \
     if(meta.end == 1){ \
-        if (meta.sum_grad_sign >= 40){ \
+        if (meta.sum_grad_sign >= 420000){ \
             /* Increase count */ \
             k_counter.read(meta.counter, 0); \
             meta.counter = meta.counter + 1; \
             k_counter.write(0, meta.counter); \
-            if (meta.counter >= 5){ \
+            if (meta.counter >= 10){ \
                 /* Increase k  */ \
                 /* k.read(meta.k, 0);*/ \
                 if(meta.k < 10){\
@@ -588,8 +588,8 @@ control MyIngress(inout headers hdr,
                         READ_FOR_BROADCAST_POOL1(31)
 
                     
-                        sent_seg_num_pool1.write(meta.pool_index, 1);
-                        sent_seg_num_pool2.write(meta.pool_index, 0);
+                        // sent_seg_num_pool1.write(meta.pool_index, 1);
+                        // sent_seg_num_pool2.write(meta.pool_index, 0);
                         broadcast();
                         hdr.preamble.k = meta.k;
 
@@ -802,8 +802,8 @@ control MyIngress(inout headers hdr,
                         READ_FOR_BROADCAST_POOL2(30)
                         READ_FOR_BROADCAST_POOL2(31)
 
-                        sent_seg_num_pool2.write(meta.pool_index, 1);
-                        sent_seg_num_pool1.write(meta.pool_index, 0);
+                        // sent_seg_num_pool2.write(meta.pool_index, 1);
+                        // sent_seg_num_pool1.write(meta.pool_index, 0);
                         broadcast();
                         hdr.preamble.k = meta.k;
 
