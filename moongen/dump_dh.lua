@@ -4,7 +4,7 @@ local device = require "device"
 local stats	 = require "stats"
 local log    = require "log"
 local dh	 = require "proto.dh"
-local nsh    = require "proto.nsh"
+-- local nsh    = require "proto.nsh"
 
 function configure(parser)
 	parser:argument("rxDev", "The device to receive from"):convert(tonumber)

@@ -864,7 +864,7 @@ ffi.metatype("struct rte_mbuf", pkt)
 pkt.getRawPacket = createStack()
 
 --- *** custom header *** ---
-pkt.getDhPacket = createStack("dh", "eth", "ip4","tcp")
+pkt.getDhPacket = createStack("dh", "eth", "ip4","tcp") --FIXME:
 pkt.getNshPacket = createStack("eth", "nsh", { "eth", name = "innerEth" }, "ip4", "udp")
 -----------------------------
 
