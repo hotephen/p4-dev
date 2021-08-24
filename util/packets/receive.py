@@ -71,12 +71,12 @@ def handle_pkt(pkt):
     global count
     count = count + 1
     # print(count)
-    # pkt.show()
+    pkt.show()
     
     ### Test ###
-    if (pkt[frame_type].frame_type == 2) and pkt[preamble].pool_index % 1024 == 0:
+    #if (pkt[frame_type].frame_type == 2) and pkt[preamble].pool_index % 1024 == 0:
         # pkt.show()
-        print(count, len((pkt[5])))
+     #   print(count, len((pkt[5])))
 
 
 def main():

@@ -35,7 +35,7 @@ def main():
     iface = sys.argv[3]
     
     pkt =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
-    pkt1 = pkt / IP(src=addr,dst=addr1) / TCP(dport=80, sport=20) / "hi"
+    pkt1 = pkt / IP(src=addr,dst=addr1)
     pkt1.show()
     hexdump(pkt1) # show hexadecimal expression of packet
     sendp(pkt1, iface=iface, verbose=False)
