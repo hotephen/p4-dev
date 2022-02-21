@@ -13,23 +13,15 @@ from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3Byt
 # src / dst / veth
 # SPI = 1 / SI = 255
 
-class NSH(Packet):
+
+class weightwriting(Packet):
     """Network Service Header.
        NSH MD-type 1 if there is no ContextHeaders"""
-    name = "NSH"
+    name = "weightwriting"
 
     fields_desc = [
-        BitField('Ver', 0, 2),
-        BitField('OAM', 0, 1),
-        BitField('Un1', 0, 1),
-        BitField('TTL', 0, 6),
-        BitField('Len', None, 6),
-	    BitField('Un4', 1, 4),
-        BitField('MDType', 1, 4),
-        ByteField("NextProto", 0x65),
-        ByteField("NextProto_2", 0x58),
-        X3BytesField('NSP', 1),
-        ByteField('NSI', 255)
+		BitField("index", 1, 32),
+		BitField("weight", 10, 120)
     ]
 
 def main():
@@ -47,15 +39,22 @@ def main():
     iface = sys.argv[3]
 
     
-    out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
-    in_ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
+#   out_ether = Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x894f)
+#   in_ether =  Ether(src=get_if_hwaddr(iface), dst='00:00:00:00:00:01', type=0x800)
 
-    pkt1 = out_ether / NSH() / in_ether / IP(src=addr,dst=addr1) / TCP(dport=80, sport=20) / "hi"
-    pkt1.show()
-    hexdump(pkt1)
-    sendp(pkt1, iface=iface, verbose=False)
+# pkt1 = Ether() / IP(src=addr,dst=addr1) / weightwriting() / TCP(dport=80, sport=20) / "hi"
+#   pkt1.show()
+# hexdump(pkt1)
+#sendp(pkt1, iface=iface, verbose=False)
     print "sending on interface %s (Bmv2 port 0) to dmac=00:00:00:00:00:01" % (iface)
 
+    for i in range(0,120):
+        pkt = Ether() / IP() / weightwriting(index=i, weight=1) / UDP() 
+        pkt.show()
+        pkt.hexdump()
+        sendp(pkt, iface=iface, verbose=False)
 
 if __name__ == '__main__':
     main()
+
+#sudo python sedn.py 
