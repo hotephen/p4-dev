@@ -35,9 +35,7 @@ const bit<8> TYPE_UDP = 17;
 
 
 #define FLOW_HASH_MAX 16w3
-#define MAX_BUCKET 36
-#define STEP_SIZE 6
-#define MAX_WINDOW 100
+#define MAX_WINDOW 10
 
 
 /*************************************************************************
@@ -199,6 +197,67 @@ control MyIngress(inout headers hdr,
     apply{
 
 
+
+
+
+
+    bit<32> active_flow;
+
+
+/* Window Register Operation*/
+    // Read pointer
+    bit<32> pointer; // 0-> .. -> MAX_WINDOW -> 0
+    bit<32> value0;
+    bit<32> value1;
+    bit<32> value2;
+    bit<32> decrease_flag0;
+    bit<32> decrease_flag1;
+    bit<32> decrease_flag2;
+
+    pointer_reg.read(pointer, 0);
+    
+    // Read value from current pointer (to decrease 1 from window)
+    window_reg_hash0.read(window_h0_idx, pointer);
+    window_reg_hash1.read(window_h1_idx, pointer);
+    window_reg_hash2.read(window_h2_idx, pointer);
+    couting_bloom_filter.read(value0, window_h0_idx);
+    couting_bloom_filter.read(value1, window_h1_idx);
+    couting_bloom_filter.read(value2, window_h2_idx);
+    if (value0 > 0){
+        value0 = value0 - 1;
+        if (value0 == 0 ){
+            decrease_flag0 = 1;
+        }
+    }
+    if (value1 > 0){
+        value1 = value1 - 1;
+        if (value1 == 0 ){
+            decrease_flag1 = 1;
+        }
+    }
+    if (value2 > 0){
+        value2 = value2 - 1;
+        if (value2 == 0 ){
+            decrease_flag2 = 1;
+        }
+    }
+
+    // Calculate Active Flow
+    num_active_flow.read(active_flow, 0);
+    // If entry is deleted from CBF -> decrease num_active_flow
+    if (decrease_flag0 == 1 || decrease_flag1 == 1 || decrease_flag2 == 1)
+        if (active_flow > 0){
+            active_flow = active_flow - 1;
+        }
+        num_active_flow.write(0, active_flow);
+
+    // Update CBF
+    couting_bloom_filter.write(window_h0_idx,value0);
+    couting_bloom_filter.write(window_h1_idx,value1);
+    couting_bloom_filter.write(window_h2_idx,value2);
+
+/* Update curent packet to CBF  */
+
     // Bloom Filter
     hash(bf0_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_0, 
         { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort },
@@ -215,10 +274,7 @@ control MyIngress(inout headers hdr,
         FLOW_HASH_MAX_2);
     couting_bloom_filter.read(bf2, (bit<32>)bf2_idx);
 
-
-
-    bit<32> active_flow;
-    num_active_flow.read(active_flow, 0);
+    
 
     if (bf0 == 1 && bf1 == 1 && bf2 == 1 ){ // If element exists
     }
@@ -232,56 +288,35 @@ control MyIngress(inout headers hdr,
         couting_bloom_filter.write(bf0_idx, bf0+1);
         couting_bloom_filter.write(bf1_idx, bf1+1);
         couting_bloom_filter.write(bf2_idx, bf2+1);
-
     }
 
-/* Window Register Operation*/
-    // Read pointer
-    bit<32> pointer; // 0-> .. -> MAX_WINDOW -> 0
-    bit<32> value0;
-    bit<32> value1;
-    bit<32> value2;
-    pointer_reg.read(pointer, 0);
-    
-    // Read value from current pointer (to be decrease 1 from window)
-    window_reg_hash0.read(window_h0_idx, pointer);
-    window_reg_hash1.read(window_h1_idx, pointer);
-    window_reg_hash2.read(window_h2_idx, pointer);
-    couting_bloom_filter.read(value0, window_h0_idx);
-    couting_bloom_filter.read(value1, window_h1_idx);
-    couting_bloom_filter.read(value2, window_h2_idx);
-    value0 = value0 - 1;
-    value1 = value1 - 1;
-    value2 = value2 - 1;
-    // Update CBF
-    couting_bloom_filter.write(window_h0_idx,value0);
-    couting_bloom_filter.write(window_h1_idx,value1);
-    couting_bloom_filter.write(window_h2_idx,value2);
-
-
     // Update Window : Write new hash index(value) to (current pointer-1)th index
-    window_reg_hash0.write(pointer-1, bf0_idx);
-    window_reg_hash1.write(pointer-1, bf1_idx);
-    window_reg_hash2.write(pointer-1, bf2_idx);
+    if (pointer > 0){
+        window_reg_hash0.write(pointer-1, bf0_idx);
+        window_reg_hash1.write(pointer-1, bf1_idx);
+        window_reg_hash2.write(pointer-1, bf2_idx);
+    }
+    else{
+        window_reg_hash0.write(MAX_WINDOW-1, bf0_idx);
+        window_reg_hash1.write(MAX_WINDOW-1, bf1_idx);
+        window_reg_hash2.write(MAX_WINDOW-1, bf2_idx);    
+    }
 
     // Update pointer + 1 
     pointer = pointer + 1;
     if (pointer == MAX_WINDOW){
         pointer = 0; // Initialize to 0
     }    
-    pointer_reg.write(0, pointer+1);
+    pointer_reg.write(0, pointer);
 
 
-/* Active Flow Operation */
-    // If entry is deleted from CBF -> decrase num_active_flow
-    if (value0 == 0 || value1 == 0 || value2 == 0)
-        active_flow = active_flow - 1;
-        num_active_flow.write(0, active_flow);
+
 
 
     // For fast test
-    standard_metadata.egress_spec = (bit<9>)active_flow;
-
+    standard_metadata.egress_spec = 1;
+    hdr.ipv4.dstAddr = active_flow;
+    // hdr.ipv4.identification = bit<16>active_flow;
 
     } // apply
 }

@@ -14,28 +14,28 @@ from scapy.all import hexdump
 def main():
 
     iface = 'veth0'
-    
     src_addr = '0.0.0.1'
     dst_addr = '0.0.0.2'
-    src_port = 1
-    dst_port = 2
 
     # pkt =  Ether(src='00:00:00:00:00:00', dst='00:00:00:00:00:01', type=0x800)
-    for i in range(6):
+    for i in range(10):
         pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
-        print(i)
 
-        
-        # pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i%6, sport=i%6)
-        # print(i%6)
+    # test case A
+        j = i%5
+        pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=j, sport=j)
+        # print(j)
 
+    # test case B
+        # if (0 <= i < 2):
+        #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
+        # if (2 <= i < 4):
+        #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=1, sport=1)
+        # if (4 <= i < 6):
+        #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=2, sport=2)
 
-        if (0 <= i < 2):
-            pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
-        if (2 <= i < 4):
-            pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=1, sport=1)
-        if (4 <= i < 6):
-            pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=2, sport=2)
+    # test case C
+        # pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
 
 
         # # elif (i<8):
@@ -44,6 +44,8 @@ def main():
         # #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
         # else:
         #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
+
+
 
         # pkt.show()
         # hexdump(pkt) # show hexadecimal expression of packet
