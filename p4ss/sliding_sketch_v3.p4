@@ -318,8 +318,8 @@ control MyIngress(inout headers hdr,
 
     // For fast test
     standard_metadata.egress_spec = 1;
-    hdr.ipv4.dstAddr = active_flow;
-    // hdr.ipv4.identification = bit<16>active_flow;
+    // hdr.ipv4.dstAddr = active_flow;
+    hdr.ipv4.identification = (bit<16>)active_flow;
 
     } // apply
 }

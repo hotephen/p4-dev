@@ -19,7 +19,7 @@ a = parser.parse_args()
 def handle_pkt(pkt):
 
     if(IP in pkt and (UDP in pkt or TCP in pkt)):
-        print(pkt[IP].dst)
+        print('The number of active flows: ' + str(pkt[IP].id))
 
 def main():
     

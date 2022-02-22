@@ -2071,18 +2071,31 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["ipv4", "dstAddr"]
+              "value" : ["ipv4", "identification"]
             },
             {
-              "type" : "field",
-              "value" : ["scalars", "active_flow"]
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "active_flow"]
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffff"
+                  }
+                }
+              }
             }
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v3.p4",
-            "line" : 321,
+            "line" : 322,
             "column" : 4,
-            "source_fragment" : "hdr.ipv4.dstAddr = active_flow"
+            "source_fragment" : "hdr.ipv4.identification = (bit<16>)active_flow"
           }
         }
       ]
