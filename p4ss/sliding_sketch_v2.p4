@@ -38,6 +38,7 @@ const bit<8> TYPE_UDP = 17;
 #define MAX_BUCKET 16
 #define STEP_SIZE 4
 
+
 /*************************************************************************
 *********************** H E A D E R S  ***********************************
 *************************************************************************/
@@ -174,14 +175,8 @@ control MyIngress(inout headers hdr,
 
 
 
-    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_seg0_new;
-    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_seg1_new;
-    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_seg2_new;
-    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_seg3_new;
-    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_seg0_old;
-    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_seg1_old;
-    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_seg2_old;
-    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_seg3_old;
+    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_new;
+    register<bit<1>>(FLOW_REGISTER_SIZE) bloom_filter_old;
     
     register<bit<32>>(10) num_active_flow;
     register<bit<32>>(1) scan_pointer_reg;
@@ -212,32 +207,32 @@ control MyIngress(inout headers hdr,
 
 
     // Bloom Filter
-    hash(bf0_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_0, 
+    hash(bf0_idx, HashAlgorithm.crc32, 16w0, 
         { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.udp.srcPort, hdr.udp.dstPort },
-        FLOW_HASH_MAX);
-    bloom_filter_seg0_new.read(bf0_new, (bit<32>)bf0_idx);
-    bloom_filter_seg0_old.read(bf0_old, (bit<32>)bf0_idx);
+        16w3);
+    bloom_filter_new.read(bf0_new, (bit<32>)bf0_idx);
+    bloom_filter_old.read(bf0_old, (bit<32>)bf0_idx);
 
-    hash(bf1_idx, HashAlgorithm.crc16, FLOW_HASH_BASE_0, 
+    hash(bf1_idx, HashAlgorithm.crc16, 16w4, 
         { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.udp.srcPort, hdr.udp.dstPort },
-        FLOW_HASH_MAX);
-    bloom_filter_seg1_new.read(bf1_new, (bit<32>)bf1_idx);
-    bloom_filter_seg1_old.read(bf1_old, (bit<32>)bf1_idx);
+        16w7);
+    bloom_filter_new.read(bf1_new, (bit<32>)bf1_idx);
+    bloom_filter_old.read(bf1_old, (bit<32>)bf1_idx);
 
-    hash(bf2_idx, HashAlgorithm.csum16, FLOW_HASH_BASE_0, 
+    hash(bf2_idx, HashAlgorithm.csum16, 16w8, 
         { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.udp.srcPort, hdr.udp.dstPort },
-        FLOW_HASH_MAX);
-    bloom_filter_seg2_new.read(bf2_new, (bit<32>)bf2_idx);
-    bloom_filter_seg2_old.read(bf2_old, (bit<32>)bf2_idx);
+        16w11);
+    bloom_filter_new.read(bf2_new, (bit<32>)bf2_idx);
+    bloom_filter_old.read(bf2_old, (bit<32>)bf2_idx);
 
-    hash(bf3_idx, HashAlgorithm.identity, FLOW_HASH_BASE_0, 
+    hash(bf3_idx, HashAlgorithm.identity, 16w12, 
         { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.udp.srcPort, hdr.udp.dstPort },
-        FLOW_HASH_MAX);
-    bloom_filter_seg3_new.read(bf3_new, (bit<32>)bf3_idx);
-    bloom_filter_seg3_old.read(bf3_old, (bit<32>)bf3_idx);
+        16w15);
+    bloom_filter_new.read(bf3_new, (bit<32>)bf3_idx);
+    bloom_filter_old.read(bf3_old, (bit<32>)bf3_idx);
 
 
-    bf0 = bf0_new | bf0_old;
+    bf0 = bf0_new | bf0_old; // OR operation
     bf1 = bf1_new | bf1_old;
     bf2 = bf2_new | bf2_old;
     bf3 = bf3_new | bf3_old;
@@ -253,35 +248,33 @@ control MyIngress(inout headers hdr,
         num_active_flow.write(0, active_flow);
 
         // Write 1 to corresponding buckets
-        bloom_filter_seg0_new.write(bf0_idx, 1);
-        bloom_filter_seg1_new.write(bf1_idx, 1);
-        bloom_filter_seg2_new.write(bf2_idx, 1);
-        bloom_filter_seg3_new.write(bf3_idx, 1);
+        bloom_filter_new.write(bf0_idx, 1);
+        bloom_filter_new.write(bf1_idx, 1);
+        bloom_filter_new.write(bf2_idx, 1);
+        bloom_filter_new.write(bf3_idx, 1);
     }
 
     // Read scan pointer to know the order of current time.
-    bit<32> scan_pointer; // 0->1->2->3->0->1 ...
+    bit<32> scan_pointer; // 0->4->8->12->
     scan_pointer_reg.read(scan_pointer, 0);
     
     // old = new
-    bloom_filter_seg0_old.write(scan_pointer, bf0_new);
-    bloom_filter_seg1_old.write(scan_pointer, bf1_new);
-    bloom_filter_seg2_old.write(scan_pointer, bf2_new);
-    bloom_filter_seg3_old.write(scan_pointer, bf3_new);
+    bloom_filter_old.write(scan_pointer, bf0_new);
+    bloom_filter_old.write(scan_pointer+1, bf1_new);
+    bloom_filter_old.write(scan_pointer+2, bf2_new);
+    bloom_filter_old.write(scan_pointer+3, bf3_new);
 
     // new = 0
-    bloom_filter_seg0_new.write(scan_pointer, 0);
-    bloom_filter_seg1_new.write(scan_pointer, 0);
-    bloom_filter_seg2_new.write(scan_pointer, 0);
-    bloom_filter_seg3_new.write(scan_pointer, 0);
+    bloom_filter_new.write(scan_pointer, 0);
+    bloom_filter_new.write(scan_pointer+1, 0);
+    bloom_filter_new.write(scan_pointer+2, 0);
+    bloom_filter_new.write(scan_pointer+3, 0);
 
+    scan_pointer = scan_pointer + STEP_SIZE;
     // Increase scan pointer
-    if (scan_pointer == MAX_BUCKET){ // If MAX_BUCKET -> initialize to 0
+    if (scan_pointer == MAX_BUCKET ){ // If MAX_BUCKET -> initialize to 0
         scan_pointer = 0;
         num_active_flow.write(0, 0); // initialize num_active_flow to 0
-    }
-    else{
-        scan_pointer = scan_pointer + 1; // Variation for implementation in p4
     }
     scan_pointer_reg.write(0, scan_pointer);
 

@@ -21,9 +21,14 @@ def main():
     dst_port = 2
 
     # pkt =  Ether(src='00:00:00:00:00:00', dst='00:00:00:00:00:01', type=0x800)
-    for i in range(8):
+    for i in range(16):
+        pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
         if (i<4):
             pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
+        # elif (i<8):
+        #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
+        # elif (i<12):
+        #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
         else:
             pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
 
