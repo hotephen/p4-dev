@@ -22,8 +22,8 @@ def main():
         pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
 
     # test case A
-        # j = i%10
-        # pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=j, sport=j)
+        j = i%10
+        pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=j, sport=j)
         # print(j)
 
     # test case B
@@ -35,7 +35,7 @@ def main():
         #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=2, sport=2)
 
     # test case C
-        pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
+        # pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
 
 
         # # elif (i<8):

@@ -166,21 +166,13 @@ control MyIngress(inout headers hdr,
 		          inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
     
-
-    action drop() {
-        mark_to_drop();
-    }
-
     register<bit<32>>(FLOW_REGISTER_SIZE) couting_bloom_filter;
-    
     register<bit<32>>(10) num_active_flow;
-
     register<bit<32>>(1) pointer_reg;
+
     register<bit<32>>(MAX_WINDOW) window_reg_hash0;
     register<bit<32>>(MAX_WINDOW) window_reg_hash1;
     register<bit<32>>(MAX_WINDOW) window_reg_hash2;
-
-
 
     bit<32> bf0; 
     bit<32> bf1; 
@@ -191,26 +183,20 @@ control MyIngress(inout headers hdr,
     bit<32> window_h0_idx;
     bit<32> window_h1_idx;
     bit<32> window_h2_idx;
+    bit<32> active_flow;
 
 
 
     apply{
 
 
-
-
-
-
-    bit<32> active_flow;
-
-
-/* Window Register Operation*/
+/* 1.  Window Register Operation*/
     // Read pointer
     bit<32> pointer; // 0-> .. -> MAX_WINDOW -> 0
     bit<32> value0;
     bit<32> value1;
     bit<32> value2;
-    bit<32> decrease_flag0;
+    bit<32> decrease_flag0; // Indicate whether the value of CBF is decreased
     bit<32> decrease_flag1;
     bit<32> decrease_flag2;
 
@@ -256,9 +242,9 @@ control MyIngress(inout headers hdr,
     couting_bloom_filter.write(window_h1_idx,value1);
     couting_bloom_filter.write(window_h2_idx,value2);
 
-/* Update curent packet to CBF  */
+/* 2. Update curent packet to CBF  */
 
-    // Bloom Filter
+    // Read from Bloom Filter
     hash(bf0_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_0, 
         { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort },
         FLOW_HASH_MAX_0);
@@ -277,7 +263,8 @@ control MyIngress(inout headers hdr,
 
 
     if (bf0 != 0 && bf1 != 0 && bf2 != 0 ){ // If element exists
-        couting_bloom_filter.write(bf0_idx, bf0+1);
+        // Increase 1 to corresponding buckets of CBF
+        couting_bloom_filter.write(bf0_idx, bf0+1); // Couting bloom filter operation
         couting_bloom_filter.write(bf1_idx, bf1+1);
         couting_bloom_filter.write(bf2_idx, bf2+1);
     }
@@ -288,24 +275,24 @@ control MyIngress(inout headers hdr,
         num_active_flow.write(0, active_flow);
 
         // Increase 1 to corresponding buckets of CBF
-        couting_bloom_filter.write(bf0_idx, bf0+1);
+        couting_bloom_filter.write(bf0_idx, bf0+1); // Couting bloom filter operation
         couting_bloom_filter.write(bf1_idx, bf1+1);
         couting_bloom_filter.write(bf2_idx, bf2+1);
     }
 
-    // Update Window : Write new hash index(value) to (current pointer-1)th index
+    // Update Window : Write new hash index to (current pointer-1)th index
     if (pointer > 0){
         window_reg_hash0.write(pointer-1, bf0_idx);
         window_reg_hash1.write(pointer-1, bf1_idx);
         window_reg_hash2.write(pointer-1, bf2_idx);
     }
-    else{
+    else{ // current pointer is 0
         window_reg_hash0.write(MAX_WINDOW-1, bf0_idx);
         window_reg_hash1.write(MAX_WINDOW-1, bf1_idx);
         window_reg_hash2.write(MAX_WINDOW-1, bf2_idx);    
     }
 
-    // Update pointer + 1 
+    // Update pointer + 1 for next processing
     pointer = pointer + 1;
     if (pointer == MAX_WINDOW){
         pointer = 0; // Initialize to 0
