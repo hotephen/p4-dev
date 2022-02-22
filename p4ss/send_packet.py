@@ -21,18 +21,26 @@ def main():
     dst_port = 2
 
     # pkt =  Ether(src='00:00:00:00:00:00', dst='00:00:00:00:00:01', type=0x800)
-    for i in range(16):
+    for i in range(6):
         pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
-        if (i<4):
-            pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
-        # elif (i<8):
-        #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
-        # elif (i<12):
-        #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
-        else:
+        
+        # pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i%6, sport=i%6)
+        # print(i%6)
+        print(i)
+        if (0 <= i < 2):
             pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
+        if (2 <= i < 4):
+            pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=1, sport=1)
+        if (4 <= i < 6):
+            pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=2, sport=2)
+        # # elif (i<8):
+        # #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
+        # # elif (i<12):
+        # #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
+        # else:
+        #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
 
-        pkt.show()
+        # pkt.show()
         # hexdump(pkt) # show hexadecimal expression of packet
         sendp(pkt, iface=iface, verbose=False)
 

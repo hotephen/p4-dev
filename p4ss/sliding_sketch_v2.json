@@ -10,20 +10,31 @@
         ["tmp_2", 32, false],
         ["tmp_3", 32, false],
         ["tmp_4", 32, false],
+        ["tmp_5", 32, false],
+        ["tmp_6", 32, false],
+        ["tmp_7", 32, false],
+        ["tmp_8", 32, false],
         ["bf0_new", 1, false],
         ["bf1_new", 1, false],
         ["bf2_new", 1, false],
         ["bf3_new", 1, false],
+        ["bf4_new", 1, false],
+        ["bf5_new", 1, false],
         ["bf0_old", 1, false],
         ["bf1_old", 1, false],
         ["bf2_old", 1, false],
         ["bf3_old", 1, false],
+        ["bf4_old", 1, false],
+        ["bf5_old", 1, false],
         ["bf0_idx", 32, false],
         ["bf1_idx", 32, false],
         ["bf2_idx", 32, false],
         ["bf3_idx", 32, false],
+        ["bf4_idx", 32, false],
+        ["bf5_idx", 32, false],
         ["active_flow", 32, false],
-        ["scan_pointer", 32, false]
+        ["scan_pointer", 32, false],
+        ["_padding_0", 4, false]
       ]
     },
     {
@@ -302,7 +313,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "sliding_sketch_v2.p4",
-        "line" : 317,
+        "line" : 357,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -381,11 +392,11 @@
         },
         {
           "type" : "field",
-          "value" : ["udp", "srcPort"]
+          "value" : ["tcp", "srcPort"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "dstPort"]
+          "value" : ["tcp", "dstPort"]
         }
       ]
     },
@@ -408,11 +419,11 @@
         },
         {
           "type" : "field",
-          "value" : ["udp", "srcPort"]
+          "value" : ["tcp", "srcPort"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "dstPort"]
+          "value" : ["tcp", "dstPort"]
         }
       ]
     },
@@ -435,11 +446,11 @@
         },
         {
           "type" : "field",
-          "value" : ["udp", "srcPort"]
+          "value" : ["tcp", "srcPort"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "dstPort"]
+          "value" : ["tcp", "dstPort"]
         }
       ]
     },
@@ -462,11 +473,65 @@
         },
         {
           "type" : "field",
-          "value" : ["udp", "srcPort"]
+          "value" : ["tcp", "srcPort"]
         },
         {
           "type" : "field",
-          "value" : ["udp", "dstPort"]
+          "value" : ["tcp", "dstPort"]
+        }
+      ]
+    },
+    {
+      "name" : "calc_3",
+      "id" : 4,
+      "algo" : "crc16_custom",
+      "input" : [
+        {
+          "type" : "field",
+          "value" : ["ipv4", "srcAddr"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "dstAddr"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "protocol"]
+        },
+        {
+          "type" : "field",
+          "value" : ["tcp", "srcPort"]
+        },
+        {
+          "type" : "field",
+          "value" : ["tcp", "dstPort"]
+        }
+      ]
+    },
+    {
+      "name" : "calc_4",
+      "id" : 5,
+      "algo" : "crc32_custom",
+      "input" : [
+        {
+          "type" : "field",
+          "value" : ["ipv4", "srcAddr"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "dstAddr"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "protocol"]
+        },
+        {
+          "type" : "field",
+          "value" : ["tcp", "srcPort"]
+        },
+        {
+          "type" : "field",
+          "value" : ["tcp", "dstPort"]
         }
       ]
     }
@@ -515,7 +580,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 247,
+            "line" : 274,
             "column" : 8,
             "source_fragment" : "active_flow = active_flow + 1"
           }
@@ -538,7 +603,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 248,
+            "line" : 275,
             "column" : 8,
             "source_fragment" : "num_active_flow.write(0, active_flow)"
           }
@@ -561,7 +626,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 251,
+            "line" : 278,
             "column" : 8,
             "source_fragment" : "bloom_filter_new.write(bf0_idx, 1)"
           }
@@ -584,7 +649,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 252,
+            "line" : 279,
             "column" : 8,
             "source_fragment" : "bloom_filter_new.write(bf1_idx, 1)"
           }
@@ -607,7 +672,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 253,
+            "line" : 280,
             "column" : 8,
             "source_fragment" : "bloom_filter_new.write(bf2_idx, 1)"
           }
@@ -630,9 +695,169 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 254,
+            "line" : 281,
             "column" : 8,
             "source_fragment" : "bloom_filter_new.write(bf3_idx, 1)"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf4_idx"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 282,
+            "column" : 8,
+            "source_fragment" : "bloom_filter_new.write(bf4_idx, 1)"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf5_idx"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 283,
+            "column" : 8,
+            "source_fragment" : "bloom_filter_new.write(bf5_idx, 1)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf0_new"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 285,
+            "column" : 8,
+            "source_fragment" : "bf0_new = 1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf1_new"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 286,
+            "column" : 8,
+            "source_fragment" : "bf1_new = 1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf2_new"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 287,
+            "column" : 8,
+            "source_fragment" : "bf2_new = 1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf3_new"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 288,
+            "column" : 8,
+            "source_fragment" : "bf3_new = 1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf4_new"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 289,
+            "column" : 8,
+            "source_fragment" : "bf4_new = 1"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf5_new"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 290,
+            "column" : 8,
+            "source_fragment" : "bf5_new = 1"
           }
         }
       ]
@@ -659,12 +884,12 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x0003"
+              "value" : "0x0006"
             }
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 210,
+            "line" : 220,
             "column" : 4,
             "source_fragment" : "hash(bf0_idx, HashAlgorithm.crc32, 16w0, ..."
           }
@@ -687,7 +912,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 213,
+            "line" : 223,
             "column" : 4,
             "source_fragment" : "bloom_filter_new.read(bf0_new, (bit<32>)bf0_idx)"
           }
@@ -710,7 +935,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 214,
+            "line" : 224,
             "column" : 4,
             "source_fragment" : "bloom_filter_old.read(bf0_old, (bit<32>)bf0_idx)"
           }
@@ -724,7 +949,7 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x0004"
+              "value" : "0x0006"
             },
             {
               "type" : "calculation",
@@ -732,14 +957,14 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x0007"
+              "value" : "0x0006"
             }
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 216,
+            "line" : 226,
             "column" : 4,
-            "source_fragment" : "hash(bf1_idx, HashAlgorithm.crc16, 16w4, ..."
+            "source_fragment" : "hash(bf1_idx, HashAlgorithm.crc16, 16w6, ..."
           }
         },
         {
@@ -760,7 +985,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 219,
+            "line" : 229,
             "column" : 4,
             "source_fragment" : "bloom_filter_new.read(bf1_new, (bit<32>)bf1_idx)"
           }
@@ -783,7 +1008,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 220,
+            "line" : 230,
             "column" : 4,
             "source_fragment" : "bloom_filter_old.read(bf1_old, (bit<32>)bf1_idx)"
           }
@@ -797,7 +1022,7 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x0008"
+              "value" : "0x000c"
             },
             {
               "type" : "calculation",
@@ -805,14 +1030,14 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x000b"
+              "value" : "0x0006"
             }
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 222,
+            "line" : 232,
             "column" : 4,
-            "source_fragment" : "hash(bf2_idx, HashAlgorithm.csum16, 16w8, ..."
+            "source_fragment" : "hash(bf2_idx, HashAlgorithm.csum16, 16w12, ..."
           }
         },
         {
@@ -833,7 +1058,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 225,
+            "line" : 235,
             "column" : 4,
             "source_fragment" : "bloom_filter_new.read(bf2_new, (bit<32>)bf2_idx)"
           }
@@ -856,7 +1081,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 226,
+            "line" : 236,
             "column" : 4,
             "source_fragment" : "bloom_filter_old.read(bf2_old, (bit<32>)bf2_idx)"
           }
@@ -870,7 +1095,7 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x000c"
+              "value" : "0x0012"
             },
             {
               "type" : "calculation",
@@ -878,14 +1103,14 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x000f"
+              "value" : "0x0006"
             }
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 228,
+            "line" : 238,
             "column" : 4,
-            "source_fragment" : "hash(bf3_idx, HashAlgorithm.identity, 16w12, ..."
+            "source_fragment" : "hash(bf3_idx, HashAlgorithm.identity, 16w18, ..."
           }
         },
         {
@@ -906,7 +1131,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 231,
+            "line" : 241,
             "column" : 4,
             "source_fragment" : "bloom_filter_new.read(bf3_new, (bit<32>)bf3_idx)"
           }
@@ -929,9 +1154,155 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 232,
+            "line" : 242,
             "column" : 4,
             "source_fragment" : "bloom_filter_old.read(bf3_old, (bit<32>)bf3_idx)"
+          }
+        },
+        {
+          "op" : "modify_field_with_hash_based_offset",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf4_idx"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0018"
+            },
+            {
+              "type" : "calculation",
+              "value" : "calc_3"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0006"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 244,
+            "column" : 4,
+            "source_fragment" : "hash(bf4_idx, HashAlgorithm.crc16_custom, 16w24, ..."
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf4_new"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf4_idx"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 247,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_new.read(bf4_new, (bit<32>)bf4_idx)"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf4_old"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_old"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf4_idx"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 248,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_old.read(bf4_old, (bit<32>)bf4_idx)"
+          }
+        },
+        {
+          "op" : "modify_field_with_hash_based_offset",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf5_idx"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x001e"
+            },
+            {
+              "type" : "calculation",
+              "value" : "calc_4"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0006"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 250,
+            "column" : 4,
+            "source_fragment" : "hash(bf5_idx, HashAlgorithm.crc32_custom, 16w30, ..."
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf5_new"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf5_idx"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 253,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_new.read(bf5_new, (bit<32>)bf5_idx)"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf5_old"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_old"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf5_idx"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 254,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_old.read(bf5_old, (bit<32>)bf5_idx)"
           }
         },
         {
@@ -952,7 +1323,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 241,
+            "line" : 268,
             "column" : 4,
             "source_fragment" : "num_active_flow.read(active_flow, 0)"
           }
@@ -978,7 +1349,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 276,
+            "line" : 316,
             "column" : 8,
             "source_fragment" : "scan_pointer = 0"
           }
@@ -1001,7 +1372,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 277,
+            "line" : 317,
             "column" : 8,
             "source_fragment" : "num_active_flow.write(0, 0)"
           }
@@ -1031,7 +1402,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 259,
+            "line" : 295,
             "column" : 4,
             "source_fragment" : "scan_pointer_reg.read(scan_pointer, 0)"
           }
@@ -1054,7 +1425,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 262,
+            "line" : 298,
             "column" : 4,
             "source_fragment" : "bloom_filter_old.write(scan_pointer, bf0_new)"
           }
@@ -1096,7 +1467,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 263,
+            "line" : 299,
             "column" : 27,
             "source_fragment" : "scan_pointer+1"
           }
@@ -1119,7 +1490,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 263,
+            "line" : 299,
             "column" : 4,
             "source_fragment" : "bloom_filter_old.write(scan_pointer+1, bf1_new)"
           }
@@ -1161,7 +1532,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 264,
+            "line" : 300,
             "column" : 27,
             "source_fragment" : "scan_pointer+2"
           }
@@ -1184,7 +1555,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 264,
+            "line" : 300,
             "column" : 4,
             "source_fragment" : "bloom_filter_old.write(scan_pointer+2, bf2_new)"
           }
@@ -1226,7 +1597,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 265,
+            "line" : 301,
             "column" : 27,
             "source_fragment" : "scan_pointer+3"
           }
@@ -1249,235 +1620,17 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 265,
+            "line" : 301,
             "column" : 4,
             "source_fragment" : "bloom_filter_old.write(scan_pointer+3, bf3_new)"
           }
         },
         {
-          "op" : "register_write",
-          "parameters" : [
-            {
-              "type" : "register_array",
-              "value" : "MyIngress.bloom_filter_new"
-            },
-            {
-              "type" : "field",
-              "value" : ["scalars", "scan_pointer"]
-            },
-            {
-              "type" : "hexstr",
-              "value" : "0x00"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sliding_sketch_v2.p4",
-            "line" : 268,
-            "column" : 4,
-            "source_fragment" : "bloom_filter_new.write(scan_pointer, 0)"
-          }
-        },
-        {
           "op" : "assign",
           "parameters" : [
             {
               "type" : "field",
               "value" : ["scalars", "tmp_2"]
-            },
-            {
-              "type" : "expression",
-              "value" : {
-                "type" : "expression",
-                "value" : {
-                  "op" : "&",
-                  "left" : {
-                    "type" : "expression",
-                    "value" : {
-                      "op" : "+",
-                      "left" : {
-                        "type" : "field",
-                        "value" : ["scalars", "scan_pointer"]
-                      },
-                      "right" : {
-                        "type" : "hexstr",
-                        "value" : "0x00000001"
-                      }
-                    }
-                  },
-                  "right" : {
-                    "type" : "hexstr",
-                    "value" : "0xffffffff"
-                  }
-                }
-              }
-            }
-          ],
-          "source_info" : {
-            "filename" : "sliding_sketch_v2.p4",
-            "line" : 269,
-            "column" : 27,
-            "source_fragment" : "scan_pointer+1"
-          }
-        },
-        {
-          "op" : "register_write",
-          "parameters" : [
-            {
-              "type" : "register_array",
-              "value" : "MyIngress.bloom_filter_new"
-            },
-            {
-              "type" : "field",
-              "value" : ["scalars", "tmp_2"]
-            },
-            {
-              "type" : "hexstr",
-              "value" : "0x00"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sliding_sketch_v2.p4",
-            "line" : 269,
-            "column" : 4,
-            "source_fragment" : "bloom_filter_new.write(scan_pointer+1, 0)"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["scalars", "tmp_3"]
-            },
-            {
-              "type" : "expression",
-              "value" : {
-                "type" : "expression",
-                "value" : {
-                  "op" : "&",
-                  "left" : {
-                    "type" : "expression",
-                    "value" : {
-                      "op" : "+",
-                      "left" : {
-                        "type" : "field",
-                        "value" : ["scalars", "scan_pointer"]
-                      },
-                      "right" : {
-                        "type" : "hexstr",
-                        "value" : "0x00000002"
-                      }
-                    }
-                  },
-                  "right" : {
-                    "type" : "hexstr",
-                    "value" : "0xffffffff"
-                  }
-                }
-              }
-            }
-          ],
-          "source_info" : {
-            "filename" : "sliding_sketch_v2.p4",
-            "line" : 270,
-            "column" : 27,
-            "source_fragment" : "scan_pointer+2"
-          }
-        },
-        {
-          "op" : "register_write",
-          "parameters" : [
-            {
-              "type" : "register_array",
-              "value" : "MyIngress.bloom_filter_new"
-            },
-            {
-              "type" : "field",
-              "value" : ["scalars", "tmp_3"]
-            },
-            {
-              "type" : "hexstr",
-              "value" : "0x00"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sliding_sketch_v2.p4",
-            "line" : 270,
-            "column" : 4,
-            "source_fragment" : "bloom_filter_new.write(scan_pointer+2, 0)"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["scalars", "tmp_4"]
-            },
-            {
-              "type" : "expression",
-              "value" : {
-                "type" : "expression",
-                "value" : {
-                  "op" : "&",
-                  "left" : {
-                    "type" : "expression",
-                    "value" : {
-                      "op" : "+",
-                      "left" : {
-                        "type" : "field",
-                        "value" : ["scalars", "scan_pointer"]
-                      },
-                      "right" : {
-                        "type" : "hexstr",
-                        "value" : "0x00000003"
-                      }
-                    }
-                  },
-                  "right" : {
-                    "type" : "hexstr",
-                    "value" : "0xffffffff"
-                  }
-                }
-              }
-            }
-          ],
-          "source_info" : {
-            "filename" : "sliding_sketch_v2.p4",
-            "line" : 271,
-            "column" : 27,
-            "source_fragment" : "scan_pointer+3"
-          }
-        },
-        {
-          "op" : "register_write",
-          "parameters" : [
-            {
-              "type" : "register_array",
-              "value" : "MyIngress.bloom_filter_new"
-            },
-            {
-              "type" : "field",
-              "value" : ["scalars", "tmp_4"]
-            },
-            {
-              "type" : "hexstr",
-              "value" : "0x00"
-            }
-          ],
-          "source_info" : {
-            "filename" : "sliding_sketch_v2.p4",
-            "line" : 271,
-            "column" : 4,
-            "source_fragment" : "bloom_filter_new.write(scan_pointer+3, 0)"
-          }
-        },
-        {
-          "op" : "assign",
-          "parameters" : [
-            {
-              "type" : "field",
-              "value" : ["scalars", "scan_pointer"]
             },
             {
               "type" : "expression",
@@ -1509,9 +1662,487 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 273,
+            "line" : 302,
+            "column" : 27,
+            "source_fragment" : "scan_pointer+4"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_old"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_2"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf4_new"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 302,
             "column" : 4,
-            "source_fragment" : "scan_pointer = scan_pointer + 4"
+            "source_fragment" : "bloom_filter_old.write(scan_pointer+4, bf4_new)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_3"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "scan_pointer"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 303,
+            "column" : 27,
+            "source_fragment" : "scan_pointer+5"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_old"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_3"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "bf5_new"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 303,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_old.write(scan_pointer+5, bf5_new)"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "scan_pointer"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 306,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_new.write(scan_pointer, 0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_4"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "scan_pointer"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 307,
+            "column" : 27,
+            "source_fragment" : "scan_pointer+1"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_4"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 307,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_new.write(scan_pointer+1, 0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_5"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "scan_pointer"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000002"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 308,
+            "column" : 27,
+            "source_fragment" : "scan_pointer+2"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_5"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 308,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_new.write(scan_pointer+2, 0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_6"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "scan_pointer"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000003"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 309,
+            "column" : 27,
+            "source_fragment" : "scan_pointer+3"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_6"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 309,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_new.write(scan_pointer+3, 0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_7"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "scan_pointer"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000004"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 310,
+            "column" : 27,
+            "source_fragment" : "scan_pointer+4"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_7"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 310,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_new.write(scan_pointer+4, 0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_8"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "scan_pointer"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 311,
+            "column" : 27,
+            "source_fragment" : "scan_pointer+5"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.bloom_filter_new"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_8"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 311,
+            "column" : 4,
+            "source_fragment" : "bloom_filter_new.write(scan_pointer+5, 0)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "scan_pointer"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "scan_pointer"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000006"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "sliding_sketch_v2.p4",
+            "line" : 313,
+            "column" : 4,
+            "source_fragment" : "scan_pointer = scan_pointer + 6"
           }
         }
       ]
@@ -1539,7 +2170,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 279,
+            "line" : 319,
             "column" : 4,
             "source_fragment" : "scan_pointer_reg.write(0, scan_pointer)"
           }
@@ -1571,7 +2202,7 @@
           ],
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 281,
+            "line" : 321,
             "column" : 4,
             "source_fragment" : "standard_metadata.egress_spec = (bit<9>)active_flow"
           }
@@ -1714,9 +2345,9 @@
           "id" : 0,
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 243,
+            "line" : 270,
             "column" : 8,
-            "source_fragment" : "bf0 == 1 && bf1 == 1 && bf2 == 1 && bf3 == 1"
+            "source_fragment" : "bf0 == 1 && bf1 == 1 && bf2 == 1 && bf3 == 1 && bf4 == 1 && bf5 == 1"
           },
           "expression" : {
             "type" : "expression",
@@ -1733,24 +2364,84 @@
                       "left" : {
                         "type" : "expression",
                         "value" : {
-                          "op" : "==",
+                          "op" : "and",
                           "left" : {
                             "type" : "expression",
                             "value" : {
-                              "op" : "|",
+                              "op" : "and",
                               "left" : {
-                                "type" : "field",
-                                "value" : ["scalars", "bf0_new"]
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "==",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "|",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "bf0_new"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "bf0_old"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0x01"
+                                  }
+                                }
                               },
                               "right" : {
-                                "type" : "field",
-                                "value" : ["scalars", "bf0_old"]
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "==",
+                                  "left" : {
+                                    "type" : "expression",
+                                    "value" : {
+                                      "op" : "|",
+                                      "left" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "bf1_new"]
+                                      },
+                                      "right" : {
+                                        "type" : "field",
+                                        "value" : ["scalars", "bf1_old"]
+                                      }
+                                    }
+                                  },
+                                  "right" : {
+                                    "type" : "hexstr",
+                                    "value" : "0x01"
+                                  }
+                                }
                               }
                             }
                           },
                           "right" : {
-                            "type" : "hexstr",
-                            "value" : "0x01"
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "==",
+                              "left" : {
+                                "type" : "expression",
+                                "value" : {
+                                  "op" : "|",
+                                  "left" : {
+                                    "type" : "field",
+                                    "value" : ["scalars", "bf2_new"]
+                                  },
+                                  "right" : {
+                                    "type" : "field",
+                                    "value" : ["scalars", "bf2_old"]
+                                  }
+                                }
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x01"
+                              }
+                            }
                           }
                         }
                       },
@@ -1764,11 +2455,11 @@
                               "op" : "|",
                               "left" : {
                                 "type" : "field",
-                                "value" : ["scalars", "bf1_new"]
+                                "value" : ["scalars", "bf3_new"]
                               },
                               "right" : {
                                 "type" : "field",
-                                "value" : ["scalars", "bf1_old"]
+                                "value" : ["scalars", "bf3_old"]
                               }
                             }
                           },
@@ -1790,11 +2481,11 @@
                           "op" : "|",
                           "left" : {
                             "type" : "field",
-                            "value" : ["scalars", "bf2_new"]
+                            "value" : ["scalars", "bf4_new"]
                           },
                           "right" : {
                             "type" : "field",
-                            "value" : ["scalars", "bf2_old"]
+                            "value" : ["scalars", "bf4_old"]
                           }
                         }
                       },
@@ -1816,11 +2507,11 @@
                       "op" : "|",
                       "left" : {
                         "type" : "field",
-                        "value" : ["scalars", "bf3_new"]
+                        "value" : ["scalars", "bf5_new"]
                       },
                       "right" : {
                         "type" : "field",
-                        "value" : ["scalars", "bf3_old"]
+                        "value" : ["scalars", "bf5_old"]
                       }
                     }
                   },
@@ -1840,9 +2531,9 @@
           "id" : 1,
           "source_info" : {
             "filename" : "sliding_sketch_v2.p4",
-            "line" : 275,
+            "line" : 315,
             "column" : 8,
-            "source_fragment" : "scan_pointer == 16"
+            "source_fragment" : "scan_pointer == 36"
           },
           "expression" : {
             "type" : "expression",
@@ -1854,7 +2545,7 @@
               },
               "right" : {
                 "type" : "hexstr",
-                "value" : "0x00000010"
+                "value" : "0x00000024"
               }
             }
           },
@@ -1868,7 +2559,7 @@
       "id" : 1,
       "source_info" : {
         "filename" : "sliding_sketch_v2.p4",
-        "line" : 291,
+        "line" : 331,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
