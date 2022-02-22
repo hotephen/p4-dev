@@ -514,9 +514,9 @@ control MyIngress(inout headers hdr,
     register<bit<32>>(10) num_active_flow;
 
     register<bit<32>>(1) pointer_reg;
-    register<bit<32>>(10) window_reg_hash0;
-    register<bit<32>>(10) window_reg_hash1;
-    register<bit<32>>(10) window_reg_hash2;
+    register<bit<32>>(20) window_reg_hash0;
+    register<bit<32>>(20) window_reg_hash1;
+    register<bit<32>>(20) window_reg_hash2;
 
 
 
@@ -614,7 +614,10 @@ control MyIngress(inout headers hdr,
 
 
 
-    if (bf0 == 1 && bf1 == 1 && bf2 == 1 ){ // If element exists
+    if (bf0 != 0 && bf1 != 0 && bf2 != 0 ){ // If element exists
+        couting_bloom_filter.write(bf0_idx, bf0+1);
+        couting_bloom_filter.write(bf1_idx, bf1+1);
+        couting_bloom_filter.write(bf2_idx, bf2+1);
     }
     else{ // If element is firstly joined
 
@@ -635,14 +638,14 @@ control MyIngress(inout headers hdr,
         window_reg_hash2.write(pointer-1, bf2_idx);
     }
     else{
-        window_reg_hash0.write(10 -1, bf0_idx);
-        window_reg_hash1.write(10 -1, bf1_idx);
-        window_reg_hash2.write(10 -1, bf2_idx);
+        window_reg_hash0.write(20 -1, bf0_idx);
+        window_reg_hash1.write(20 -1, bf1_idx);
+        window_reg_hash2.write(20 -1, bf2_idx);
     }
 
     // Update pointer + 1 
     pointer = pointer + 1;
-    if (pointer == 10){
+    if (pointer == 20){
         pointer = 0; // Initialize to 0
     }
     pointer_reg.write(0, pointer);

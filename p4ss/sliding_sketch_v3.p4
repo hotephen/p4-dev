@@ -35,7 +35,7 @@ const bit<8> TYPE_UDP = 17;
 
 
 #define FLOW_HASH_MAX 16w3
-#define MAX_WINDOW 10
+#define MAX_WINDOW 20
 
 
 /*************************************************************************
@@ -274,9 +274,12 @@ control MyIngress(inout headers hdr,
         FLOW_HASH_MAX_2);
     couting_bloom_filter.read(bf2, (bit<32>)bf2_idx);
 
-    
 
-    if (bf0 == 1 && bf1 == 1 && bf2 == 1 ){ // If element exists
+
+    if (bf0 != 0 && bf1 != 0 && bf2 != 0 ){ // If element exists
+        couting_bloom_filter.write(bf0_idx, bf0+1);
+        couting_bloom_filter.write(bf1_idx, bf1+1);
+        couting_bloom_filter.write(bf2_idx, bf2+1);
     }
     else{  // If element is firstly joined
 

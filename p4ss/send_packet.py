@@ -18,12 +18,12 @@ def main():
     dst_addr = '0.0.0.2'
 
     # pkt =  Ether(src='00:00:00:00:00:00', dst='00:00:00:00:00:01', type=0x800)
-    for i in range(10):
+    for i in range(20):
         pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
 
     # test case A
-        j = i%5
-        pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=j, sport=j)
+        # j = i%10
+        # pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=j, sport=j)
         # print(j)
 
     # test case B
@@ -35,7 +35,7 @@ def main():
         #     pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=2, sport=2)
 
     # test case C
-        # pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
+        pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=i, sport=i)
 
 
         # # elif (i<8):
