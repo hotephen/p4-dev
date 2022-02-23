@@ -13,4 +13,4 @@ Send packets
 `python plot_graph_bf.py`
 
 
-`5. See num_active_flow.png`
+See num_active_flow.png
