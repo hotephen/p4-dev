@@ -22,7 +22,7 @@ def main():
         pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=0, sport=0)
 
     # test case A
-        j = i%10
+        j = i%5
         pkt = Ether(type=0x800) / IP(src=src_addr,dst=dst_addr) / TCP(dport=j, sport=j)
         # print(j)
 

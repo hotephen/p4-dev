@@ -245,20 +245,38 @@ control MyIngress(inout headers hdr,
 /* 2. Update curent packet to CBF  */
 
     // Read from Bloom Filter
-    hash(bf0_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_0, 
-        { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort },
-        FLOW_HASH_MAX_0);
-    couting_bloom_filter.read(bf0, (bit<32>)bf0_idx);
+    if(hdr.tcp.isValid()){
+        hash(bf0_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_0, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort },
+            FLOW_HASH_MAX_0);
+        couting_bloom_filter.read(bf0, (bit<32>)bf0_idx);
 
-    hash(bf1_idx, HashAlgorithm.crc16, FLOW_HASH_BASE_1, 
-        { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort },
-        FLOW_HASH_MAX_1);
-    couting_bloom_filter.read(bf1, (bit<32>)bf1_idx);
+        hash(bf1_idx, HashAlgorithm.crc16, FLOW_HASH_BASE_1, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort },
+            FLOW_HASH_MAX_1);
+        couting_bloom_filter.read(bf1, (bit<32>)bf1_idx);
 
-    hash(bf2_idx, HashAlgorithm.csum16, FLOW_HASH_BASE_2, 
-        { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort },
-        FLOW_HASH_MAX_2);
-    couting_bloom_filter.read(bf2, (bit<32>)bf2_idx);
+        hash(bf2_idx, HashAlgorithm.csum16, FLOW_HASH_BASE_2, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.tcp.srcPort, hdr.tcp.dstPort },
+            FLOW_HASH_MAX_2);
+        couting_bloom_filter.read(bf2, (bit<32>)bf2_idx);
+    }
+    else{
+        hash(bf0_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_0, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.udp.srcPort, hdr.udp.dstPort },
+            FLOW_HASH_MAX_0);
+        couting_bloom_filter.read(bf0, (bit<32>)bf0_idx);
+
+        hash(bf1_idx, HashAlgorithm.crc16, FLOW_HASH_BASE_1, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.udp.srcPort, hdr.udp.dstPort },
+            FLOW_HASH_MAX_1);
+        couting_bloom_filter.read(bf1, (bit<32>)bf1_idx);
+
+        hash(bf2_idx, HashAlgorithm.csum16, FLOW_HASH_BASE_2, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, hdr.udp.srcPort, hdr.udp.dstPort },
+            FLOW_HASH_MAX_2);
+        couting_bloom_filter.read(bf2, (bit<32>)bf2_idx);
+    }
 
 
 
@@ -298,6 +316,8 @@ control MyIngress(inout headers hdr,
         pointer = 0; // Initialize to 0
     }    
     pointer_reg.write(0, pointer);
+
+    
 
 
 
