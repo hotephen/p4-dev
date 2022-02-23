@@ -36,6 +36,8 @@ const bit<8> TYPE_UDP = 17;
 
 #define FLOW_HASH_MAX 16w3
 #define MAX_WINDOW 64
+#define ACTIVE_THRESHOLD 10
+#define LONG_THRESHOLD 128
 
 
 /*************************************************************************
@@ -100,6 +102,9 @@ struct headers {
 }
 
 struct metadata {
+    bit<1>  isOn;
+    bit<1>  isLong;
+    // bit<16>  active_flow;
 }
 
 
@@ -185,12 +190,37 @@ control MyIngress(inout headers hdr,
     bit<32> window_h2_idx;
     bit<32> active_flow;
 
+
+    register<bit<10>>(FLOW_REGISTER_SIZE) hot_flow_counter;
+
     bit<16> l4_srcPort;
     bit<16> l4_dstPort;
 
+    action select_queue(bit<3> qid){
+        standard_metadata.priority = qid;
+    }
+
+    table select_priority_table {
+        key = {
+            meta.isOn : exact;
+            meta.isLong : exact;
+        }
+        actions = {
+            select_queue;
+            NoAction();
+        }
+        default_action = NoAction;
+        const entries = {
+            (0,0) : select_queue(1); // off, short  -> high
+            (0,1) : select_queue(1); // off, long -> high
+            (1,0) : select_queue(1); // on, short -> high
+            (1,1) : select_queue(2); // on, long -> low
+        }
+
+    }
+
 
 apply{
-
     
 
     // Read from Bloom Filter
@@ -262,9 +292,6 @@ apply{
         couting_bloom_filter.write(window_h2_idx,value2);
 
 
-
-
-
 /* 2. Update curent packet to CBF  */
         hash(bf0_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_0, 
             { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, l4_srcPort, l4_dstPort },
@@ -281,7 +308,6 @@ apply{
             FLOW_HASH_MAX_3);
         couting_bloom_filter.read(bf2, (bit<32>)bf2_idx);
 
-        standard_metadata.egress_spec = 1;
 
         if (bf0 != 0 && bf1 != 0 && bf2 != 0 ){ // If element exists
             // Increase 1 to corresponding buckets of CBF
@@ -320,8 +346,61 @@ apply{
         }    
         pointer_reg.write(0, pointer);
 
-        // hdr.ipv4.dstAddr = active_flow;
+        // Determine whether current time is on/off
+        if (active_flow > ACTIVE_THRESHOLD){
+            meta.isOn = 1;
+        }
+        else {
+            meta.isOn = 0;
+        }
+
+
+/* 3. Count Min Sketch */
+
+        bit<10> tmp = 0;
+        bit<10> min_count = 0;
+
+
+        hash(bf0_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_0, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, l4_srcPort, l4_dstPort }, 
+            FLOW_HASH_MAX_0);
+        hot_flow_counter.read(tmp, bf0_idx);
+        hot_flow_counter.write(bf0_idx, tmp + 1);
+        min_count = tmp + 1;
+
+        hash(bf1_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_1, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, l4_srcPort, l4_dstPort }, 
+            FLOW_HASH_MAX_1);
+        hot_flow_counter.read(tmp, bf1_idx);
+        hot_flow_counter.write(bf1_idx, tmp + 1);
+        if (min_count > tmp + 1) { min_count = tmp + 1; }
+
+        hash(bf2_idx, HashAlgorithm.crc32, FLOW_HASH_BASE_2, 
+            { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr, hdr.ipv4.protocol, l4_srcPort, l4_dstPort }, 
+            FLOW_HASH_MAX_2);
+        hot_flow_counter.read(tmp, bf2_idx);
+        hot_flow_counter.write(bf2_idx, tmp + 1);
+        if (min_count > tmp + 1) { min_count = tmp + 1; }
+
+        // Determine whether this packet is long/short
+        if (min_count >= LONG_THRESHOLD){
+            meta.isLong = 1;
+        }
+        else{
+            meta.isLong = 0;
+        }
+        select_priority_table.apply();
+
+
+/* For Test */
         hdr.ipv4.identification = (bit<16>)active_flow;
+        hdr.ipv4.version = (bit<4>)meta.isOn;
+        hdr.ipv4.ihl = (bit<4>)meta.isLong;
+        hdr.ipv4.diffserv = (bit<8>)standard_metadata.priority;        
+
+
+        standard_metadata.egress_spec = 1;
+
     }
 } // apply
 }

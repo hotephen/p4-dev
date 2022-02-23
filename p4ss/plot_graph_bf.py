@@ -178,7 +178,7 @@ f.close()
 print(len(y))
 # print(y)
 
-plt.rcParams['figure.figsize'] = (80, 10)
+plt.rcParams['figure.figsize'] = (60, 10)
 plt.plot(y, label='')
 # plt.figure(figsize=(50,10))
 plt.legend()

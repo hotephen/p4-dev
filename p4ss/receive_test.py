@@ -23,7 +23,26 @@ def handle_pkt(pkt,f):
     if(IP in pkt and (UDP in pkt or TCP in pkt)):
         f.write(str(pkt[IP].id) + '\n')
         if(args.show==1):
-            print('The number of active flows: ' + str(pkt[IP].id))
+            
+            if( str(pkt[IP].version) == '1'):
+                on_off = "on"
+            else:
+                on_off = "off"
+
+            if( str(pkt[IP].ihl) == '1'):
+                long_short = "long"
+            else:
+                long_short = "short"
+
+            # if( str(pkt[IP].tos) == 1):
+            #     high_low = "high"
+            # elif( str(pkt[IP].tos) == 2 ):
+            #     high_low = "low"
+
+            print('The number of active flows: ' + str(pkt[IP].id) 
+                + " / " + on_off + " / " + long_short + " / "
+                + "queue : " + str(pkt[IP].tos))
+
 
 
 def main():
