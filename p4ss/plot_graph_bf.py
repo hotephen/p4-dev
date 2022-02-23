@@ -176,11 +176,14 @@ y = map(int, y)
 f.close()
 
 print(len(y))
-print(y)
-plt.plot(y, label='', marker="." )
+# print(y)
 
+plt.rcParams['figure.figsize'] = (80, 10)
+plt.plot(y, label='')
+# plt.figure(figsize=(50,10))
 plt.legend()
-plt.rcParams['figure.figsize'] = [10, 10]
+
+
 plt.ylabel('The number of active flows')
 plt.xlabel('Packet seqeunce number')
 # plt.xticks(range(len(y)))
