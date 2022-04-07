@@ -1,0 +1,102 @@
+#ifndef _UDP_RECEIVER_
+#define _UDP_RECEIVER_
+
+#include "configuration.p4"
+#include "types.p4"
+#include "headers.p4"
+
+control UDPReceiver(
+    inout header_t hdr,
+    inout metadata_t meta){
+
+    // Packet was received with errors; set drop bit in deparser metadata
+    action drop() {
+        drop();
+    }
+
+    // This is a regular packet; just forward
+    action forward() {
+        meta.switchml_md.packet_type = packet_type_t.IGNORE;
+    }
+
+    action set_bitmap(
+        MulticastGroupId_t mgid,
+        worker_type_t worker_type,
+        worker_id_t worker_id,
+        packet_type_t packet_type,
+        num_workers_t num_workers,
+        worker_bitmap_t worker_bitmap,
+        pool_index_t pool_base,
+        worker_pool_index_t pool_size_minus_1) {
+
+        // Bitmap representation for this worker
+        meta.worker_bitmap           = worker_bitmap;
+        meta.switchml_md.num_workers = num_workers;
+
+        // Group ID for this job
+        meta.switchml_md.mgid = mgid; // 0
+
+        // Record packet size for use in recirculation
+        meta.switchml_md.packet_size = hdr.switchml.size;
+        
+        meta.switchml_md.round_end_flag = hdr.switchml.round_end_flag; //FIXME:
+
+        meta.switchml_md.worker_type = worker_type;
+        meta.switchml_md.worker_id = worker_id;
+        meta.switchml_md.dst_port = hdr.udp.src_port;
+        meta.switchml_md.src_port = hdr.udp.dst_port;
+        meta.switchml_md.tsi = hdr.switchml.tsi;
+        meta.switchml_md.job_number = hdr.switchml.job_number;
+        // ig_md.fastest.packet_id = hdr.switchml.packet_id; //FIXME:
+
+        // Get rid of headers we don't want to recirculate
+        hdr.ethernet.setInvalid();
+        hdr.ipv4.setInvalid();
+        hdr.udp.setInvalid();
+        hdr.switchml.setInvalid();
+        // hdr.sign_header.setInvalid(); //FIXME:
+        meta.fastest.setValid(); //FIXME:
+
+        // Move the SwitchML set bit in the MSB to the LSB. TODO move set bit to MSB
+        meta.switchml_md.pool_index = hdr.switchml.pool_index[13:0] ++ hdr.switchml.pool_index[15:15];
+
+        // Use the SwitchML set bit in the MSB to switch between sets
+        meta.pool_set = hdr.switchml.pool_index[15:15];
+    }
+
+    table receive_udp {
+        key = {
+            // use ternary matches to support matching on:
+            // * ingress port only like the original design
+            // * source IP and UDP destination port for the SwitchML Eth protocol
+            // * source IP and UDP destination port for the SwitchML UDP protocol
+            // * source IP and destination QP number for the RoCE protocols
+            // * also, parser error values so we can drop bad packets
+            standard_metadata.ingress_port   : ternary;
+            hdr.ethernet.src_addr     : ternary;
+            hdr.ethernet.dst_addr     : ternary;
+            hdr.ipv4.src_addr         : ternary;
+            hdr.ipv4.dst_addr         : ternary;
+            hdr.udp.dst_port          : ternary;
+            // hdr.ib_bth.partition_key  : ternary;
+            // hdr.ib_bth.dst_qp         : ternary;
+        }
+
+        actions = {
+            drop;
+            set_bitmap;
+            @defaultonly forward;
+        }
+        const default_action = forward;
+
+        // Create some extra table space to support parser error entries
+        // size = max_num_workers + 16;
+
+    }
+
+    apply {
+        receive_udp.apply();
+    }
+}
+
+#endif /* _UDP_RECEIVER_ */
