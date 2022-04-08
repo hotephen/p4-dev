@@ -44,8 +44,8 @@ control NextStepSelector(
         hdr.ethernet.src_addr = hdr.ethernet.dst_addr;
         // Destination address will be filled in egress pipe
 
-        // Send to multicast group; egress will fill in destination IP and MAC address
-        standard_metadata.mcast_grp = meta.switchml_md.mgid;
+        // standard_metadata.mcast_grp = meta.switchml_md.mgid;
+        standard_metadata.egress_spec = 16;
         meta.switchml_md.packet_type = 1;
 
     }

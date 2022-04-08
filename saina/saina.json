@@ -4325,18 +4325,18 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["standard_metadata", "mcast_grp"]
+              "value" : ["standard_metadata", "egress_spec"]
             },
             {
-              "type" : "field",
-              "value" : ["userMetadata.switchml_md", "mgid"]
+              "type" : "hexstr",
+              "value" : "0x0010"
             }
           ],
           "source_info" : {
             "filename" : "/home/p4net/p4-dev/saina/next_step_selector.p4",
             "line" : 48,
             "column" : 8,
-            "source_fragment" : "standard_metadata.mcast_grp = meta.switchml_md.mgid"
+            "source_fragment" : "standard_metadata.egress_spec = 16"
           }
         },
         {
