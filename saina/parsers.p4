@@ -4,9 +4,9 @@
 #include "types.p4"
 #include "headers.p4"
 
-parser MyParser(packet_in packet,
-                out headers hdr,
-		        inout metadata meta,
+parser MyParser(packet_in pkt,
+                out header_t hdr,
+		        inout metadata_t meta,
                 inout standard_metadata_t standard_metadata) {
 
     state start {
@@ -76,30 +76,24 @@ parser MyParser(packet_in packet,
         pkt.extract(hdr.d0);
         meta.switchml_md.setValid();
         meta.fastest.setValid();
-        meta.switchml_md.packet_type = packet_type_t.CONSUME0;
+        meta.switchml_md.packet_type = 4;
         transition accept;
     }
 
     state accept_regular {
         meta.switchml_md.setValid();
-        meta.switchml_md.packet_type = packet_type_t.IGNORE;
+        meta.switchml_md.packet_type = 3;
         transition accept;
     }
 }
 
 
-control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
+control MyComputeChecksum(inout header_t  hdr, inout metadata_t meta) {
      apply {
     }
 }
 
 
-control MyDeparser(packet_out packet, in headers hdr) {
 
-    apply {
-        pkt.emit(hdr);
-    }
-
-}
 
 #endif /* _PARSERS_ */

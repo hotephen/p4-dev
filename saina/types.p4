@@ -151,51 +151,51 @@ struct port_metadata_t {
 @flexible
 header switchml_md_h { //31B + 
 
-    MulticastGroupId_t mgid; // 16 bits
+    bit<16> mgid; // 16 bits
 
     // queue_pair_index_t recirc_port_selector; // 14bits
     bit<13> recirculation_type; //FIXME:
     bit<1> round_end_flag; //FIXME:
 
-    packet_size_t packet_size; // 3
+    bit<3> packet_size; // 3
 
-    worker_type_t worker_type;  // 2
-    worker_id_t worker_id;  // 16bits
+    bit<2>  worker_type;  // 2
+    bit<16> worker_id;  // 16bits
 
     // Dest port or QPN to be used for responses
     bit<16> src_port;
     bit<16> dst_port;
 
     // What should we do with this packet?
-    packet_type_t packet_type;  // 4bits
+    bit<4> packet_type;  // 4bits
 
     // This needs to be 0xFFFF
     bit<16> ether_type_msb;
 
     // Index of pool elements, including both sets
-    pool_index_t pool_index;    // 15bits
+    bit<15> pool_index;    // 15bits
 
     // 0 if first packet, 1 if last packet
-    num_workers_t first_last_flag;   // 8bits
+    bit<8> first_last_flag;   // 8bits
 
     // 0 if packet is first packet; non-zero if retransmission
-    worker_bitmap_t map_result; // 32bits
+    bit<32> map_result; // 32bits
 
     // Bitmap value before the current worker is ORed in
-    worker_bitmap_t worker_bitmap_before; // 32bits
+    bit<32> worker_bitmap_before; // 32bits
 
     // TSI used to fill in switchML header (or RoCE address later)
     // bit<32> packet_id; //FIXME:
     bit<32> tsi; //tsi; //FIXME:
     bit<8> job_number;
 
-    PortId_t ingress_port;  // 9 bits
+    bit<9> ingress_port;  // 9 bits
 
     // Egress drop flag
     bit<1> egress_drop_flag;  // 1bit 
 
     // Number of workers
-    num_workers_t num_workers;  // 8bits
+    bit<8> num_workers;  // 8bits
 
     // bit<8> k_counter;
     bit<8> k;
@@ -233,8 +233,12 @@ struct metadata_t {
     bool update_ipv4_checksum;
     mac_addr_t switch_mac;
     ipv4_addr_t switch_ip;
-    port_metadata_t port_metadata;
+    // port_metadata_t port_metadata;
     fastest_t fastest; //FIXME:
+    bit<1> drop_flag;
+    bit<1> action_flag;
+    bit<32> test1;
+    bit<32> test2;
 }
 
 

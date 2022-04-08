@@ -63,24 +63,9 @@ control UpdateAndCheckWorkerBitmap(
     register<bit<32>>(num_slots) worker_bitmap;
     register<bit<32>>(num_slots) worker_bitmap1;
     
-    RegisterAction<worker_bitmap_pair_t, pool_index_by2_t, worker_bitmap_t>(worker_bitmap) worker_bitmap_update_set0 = {
-        void apply(inout worker_bitmap_pair_t value, out worker_bitmap_t return_value) {
-            return_value = value.first; // return first set
-            value.first  = value.first  | ig_md.worker_bitmap;    // add bit to first set
-            value.second = value.second & (~ig_md.worker_bitmap); // remove bit from second set
-        }
-    };
-
-    RegisterAction<worker_bitmap_pair_t, pool_index_by2_t, worker_bitmap_t>(worker_bitmap) worker_bitmap_update_set1 = {
-        void apply(inout worker_bitmap_pair_t value, out worker_bitmap_t return_value) {
-            return_value = value.second; // return second set
-            value.first  = value.first & (~ig_md.worker_bitmap); // remove bit from first set
-            value.second = value.second | ig_md.worker_bitmap;    // add bit to second set
-        }
-    };
-
     action drop() {
-        mark_to_drop(standard_metadata);    
+        mark_to_drop();
+        meta.drop_flag = 1;
     }
 
 
@@ -91,28 +76,30 @@ control UpdateAndCheckWorkerBitmap(
 
     action update_worker_bitmap_set0_action() {
         bit<32> read_value;
-        worker_bitmap.read(read_value , meta.switchml_md.pool_index[14:1]);
+        worker_bitmap.read(read_value, (bit<32>)meta.switchml_md.pool_index[14:1]);
+        meta.switchml_md.worker_bitmap_before = read_value;
         read_value = read_value | meta.worker_bitmap;
-        worker_bitmap.write(meta.switchml_md.pool_index[14:1], read_value);
+        worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value);
 
         bit<32> read_value1;
-        worker_bitmap1.read(read_value1 , meta.switchml_md.pool_index[14:1]);
+        worker_bitmap1.read(read_value1 , (bit<32>)meta.switchml_md.pool_index[14:1]);
         read_value1 = read_value1 & (~meta.worker_bitmap) ;
-        worker_bitmap1.write(meta.switchml_md.pool_index[14:1], read_value1);
+        worker_bitmap1.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value1);
 
         check_worker_bitmap_action();
     }
 
     action update_worker_bitmap_set1_action() {
         bit<32> read_value1;
-        worker_bitmap1.read(read_value1 , meta.switchml_md.pool_index[14:1]);
+        worker_bitmap1.read(read_value1, (bit<32>)meta.switchml_md.pool_index[14:1]);
+        meta.switchml_md.worker_bitmap_before = read_value1;
         read_value1 = read_value1 | meta.worker_bitmap;
-        worker_bitmap1.write(meta.switchml_md.pool_index[14:1], read_value1);
+        worker_bitmap1.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value1);
 
         bit<32> read_value;
-        worker_bitmap.read(read_value , meta.switchml_md.pool_index[14:1]);
+        worker_bitmap.read(read_value, (bit<32>)meta.switchml_md.pool_index[14:1]);
         read_value = read_value & (~meta.worker_bitmap) ;
-        worker_bitmap.write(meta.switchml_md.pool_index[14:1], read_value);
+        worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value);
 
         check_worker_bitmap_action();
     }
@@ -131,18 +118,10 @@ control UpdateAndCheckWorkerBitmap(
         }
         const entries = {
             // Direct updates to the correct set
-            (15w0 &&& 15w1, packet_type_t.CONSUME0) : update_worker_bitmap_set0_action();
-            (15w1 &&& 15w1, packet_type_t.CONSUME0) : update_worker_bitmap_set1_action();
-
-            (15w0 &&& 15w1, packet_type_t.CONSUME1) : update_worker_bitmap_set0_action();
-            (15w1 &&& 15w1, packet_type_t.CONSUME1) : update_worker_bitmap_set1_action();
-
-            (15w0 &&& 15w1, packet_type_t.CONSUME2) : update_worker_bitmap_set0_action();
-            (15w1 &&& 15w1, packet_type_t.CONSUME2) : update_worker_bitmap_set1_action();
-
-            (15w0 &&& 15w1, packet_type_t.CONSUME3) : update_worker_bitmap_set0_action();
-            (15w1 &&& 15w1, packet_type_t.CONSUME3) : update_worker_bitmap_set1_action();
+            (15w0 &&& 15w1, 4) : update_worker_bitmap_set0_action();
+            (15w1 &&& 15w1, 4) : update_worker_bitmap_set1_action();
         }
+
         const default_action = NoAction;
     }
 

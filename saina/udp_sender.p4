@@ -1,12 +1,14 @@
 #ifndef _UDP_SENDER_
 #define _UDP_SENDER_
 
-#define UDP_LENGTH (hdr.udp.minSizeInBytes() + hdr.switchml.minSizeInBytes() + hdr.exponents.minSizeInBytes())
-#define IPV4_LENGTH (hdr.ipv4.minSizeInBytes() + UDP_LENGTH);
+#define UDP_LENGTH 100
+#define IPV4_LENGTH (20 + UDP_LENGTH);
 
 control UDPSender(
-    inout metadata_t meta,
-    inout header_t hdr) {
+    inout header_t hdr,
+    inout standard_metadata_t standard_metadata,
+    inout metadata_t meta
+    ) {
 
     action set_switch_mac_and_ip(mac_addr_t switch_mac, ipv4_addr_t switch_ip) {
         hdr.ethernet.src_addr = switch_mac;
@@ -38,10 +40,17 @@ control UDPSender(
         hdr.switchml.pool_index[13:0] = meta.switchml_md.pool_index[14:1];
         hdr.switchml.k = meta.switchml_md.k; //FIXME:
 
+        hdr.switchml.test1 = meta.test1;
+        hdr.switchml.test2 = meta.test2;
+
     }
 
     table switch_mac_and_ip {
+        key = {hdr.switchml.k : ternary; }
         actions = { @defaultonly set_switch_mac_and_ip; }
+        const entries = {
+            _ : set_switch_mac_and_ip(0x0cc47a63ffff, 0x140A00fe);
+        }
         size = 1;
     }
 
@@ -54,7 +63,7 @@ control UDPSender(
 
         hdr.udp.dst_port = meta.switchml_md.dst_port;
         hdr.udp.checksum = 0;
-        hdr.switchml.pool_index[15:15] = eg_md.switchml_md.pool_index[0:0];
+        hdr.switchml.pool_index[15:15] = meta.switchml_md.pool_index[0:0];
     }
 
     table dst_addr {
@@ -63,6 +72,13 @@ control UDPSender(
         }
         actions = {
             set_dst_addr;
+        }
+        const entries = {
+            0 : set_dst_addr( 0x000000000000, 0x140A0001);
+            1 : set_dst_addr( 0x000000000000, 0x140A0002);
+            2 : set_dst_addr( 0x000000000000, 0x140A0003);
+            3 : set_dst_addr( 0x000000000000, 0x140A0004);
+            4 : set_dst_addr( 0x000000000000, 0x140A0005);
         }
         size = max_num_workers;
     }
@@ -78,11 +94,11 @@ control UDPSender(
         dst_addr.apply();
 
         // Add payload size
-        if (meta.switchml_md.packet_size == packet_size_t.IBV_MTU_256) {
+        if (meta.switchml_md.packet_size == 1) {
             hdr.ipv4.total_len = hdr.ipv4.total_len + 256;
             hdr.udp.length = hdr.udp.length + 256;
         }
-        else if (meta.switchml_md.packet_size == packet_size_t.IBV_MTU_1024) {
+        else if (meta.switchml_md.packet_size == 3) {
             hdr.ipv4.total_len = hdr.ipv4.total_len + 1024;
             hdr.udp.length = hdr.udp.length + 1024;
         }

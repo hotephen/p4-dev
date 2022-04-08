@@ -7,6 +7,7 @@
 
 control Forwarder(
     in header_t hdr,
+    inout standard_metadata_t standard_metadata,
     inout metadata_t meta){
 
     action set_egress_port(bit<9> egress_port) {
@@ -15,12 +16,11 @@ control Forwarder(
         meta.switchml_md.setInvalid();
     }
 
-    action flood(MulticastGroupId_t flood_mgid) {
+    action flood(bit<16> flood_mgid) {
         standard_metadata.mcast_grp = flood_mgid;
         //We use 0x8000 + dev_port as the RID and XID for the flood group
 
         meta.switchml_md.setInvalid();
-        // ig_md.switchml_rdma_md.setInvalid();
     }
 
     table forward {

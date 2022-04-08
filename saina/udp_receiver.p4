@@ -7,27 +7,29 @@
 
 control UDPReceiver(
     inout header_t hdr,
+    inout standard_metadata_t standard_metadata,
     inout metadata_t meta){
 
     // Packet was received with errors; set drop bit in deparser metadata
     action drop() {
-        drop();
+        mark_to_drop();
+        meta.drop_flag = 1;
     }
 
     // This is a regular packet; just forward
     action forward() {
-        meta.switchml_md.packet_type = packet_type_t.IGNORE;
+        meta.switchml_md.packet_type = 3;
     }
 
     action set_bitmap(
-        MulticastGroupId_t mgid,
-        worker_type_t worker_type,
-        worker_id_t worker_id,
-        packet_type_t packet_type,
-        num_workers_t num_workers,
-        worker_bitmap_t worker_bitmap,
-        pool_index_t pool_base,
-        worker_pool_index_t pool_size_minus_1) {
+        bit<16> mgid,
+        bit<2> worker_type, // worker_type_t worker_type,
+        bit<16> worker_id, // worker_id_t worker_id,
+        bit<4> packet_type, 
+        bit<8> num_workers, // num_workers_t num_workers,
+        bit<32> worker_bitmap, // worker_bitmap_t worker_bitmap,
+        bit<15> pool_base,
+        bit<16> pool_size_minus_1) {
 
         // Bitmap representation for this worker
         meta.worker_bitmap           = worker_bitmap;
@@ -87,6 +89,17 @@ control UDPReceiver(
             set_bitmap;
             @defaultonly forward;
         }
+
+        const entries = {
+            (0, _, _, _, _, 48864) : set_bitmap(1, 0, 0, 1, 16, 1,    0, 0);
+            (1, _, _, _, _, 48864) : set_bitmap(1, 0, 1, 1, 16, 1<<1, 0, 0);
+            (2, _, _, _, _, 48864) : set_bitmap(1, 0, 2, 1, 16, 1<<2, 0, 0);
+            (3, _, _, _, _, 48864) : set_bitmap(1, 0, 3, 1, 16, 1<<3, 0, 0);
+            (4, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<4, 0, 0);
+            // 1 mgid, 2 worker_type, 3 worker_id, 4 packet_type, 5 num_workers, 6 worker_bitmap, pool_base, pool_size_minus_1
+        }
+
+
         const default_action = forward;
 
         // Create some extra table space to support parser error entries

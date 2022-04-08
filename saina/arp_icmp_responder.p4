@@ -7,6 +7,7 @@
 
 control ARPandICMPResponder(
     inout header_t hdr,
+    inout standard_metadata_t standard_metadata,
     inout metadata_t meta){
 
     // send packet back immediately
@@ -47,9 +48,9 @@ control ARPandICMPResponder(
         key = {
             hdr.arp_ipv4.isValid()      : exact;
             hdr.icmp.isValid()          : exact;
-            hdr.arp.opcode              : ternary;
-            hdr.arp_ipv4.dst_proto_addr : ternary;
-            hdr.icmp.msg_type           : ternary;
+            // hdr.arp.opcode              : ternary;
+            // hdr.arp_ipv4.dst_proto_addr : ternary;
+            // hdr.icmp.msg_type           : ternary;
             hdr.ipv4.dst_addr           : ternary;
         }
         actions = {

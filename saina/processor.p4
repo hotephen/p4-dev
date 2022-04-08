@@ -14,30 +14,21 @@ control Processor(
     register<bit<32>>(register_size) values;
     register<bit<32>>(register_size) values1;
 
-    // action write_read1_action() {
-    //     value1_out = write_read1_register_action.execute(switchml_md.pool_index);
-    // }
-
-    // action sum_read1_action() {
-    //     value1_out = sum_read1_register_action.execute(switchml_md.pool_index);
-    // }
-
     action read0_action() {
-        // value0_out = read0_register_action.execute(switchml_md.pool_index);
-        value0.read(value0_out, switchml_md.pool_index);
+        values.read(value0_out, (bit<32>)switchml_md.pool_index);
 
     }
 
     action write_read0_action() {
-        value0.write(switchml_md.pool_index, value0);
-        value_out = value0;
+        values.write((bit<32>)switchml_md.pool_index, value0);
+        value0_out = value0;
     }
 
     action sum_read0_action() {
         bit<32>read_value;
-        value0.read(read_value, switchml_md.pool_index);
+        values.read(read_value, (bit<32>)switchml_md.pool_index);
         value0_out = read_value + value0;
-        value0.write(switchml_md.pool_index, value0_out);
+        values.write((bit<32>)switchml_md.pool_index, value0_out);
     }
 
 
@@ -60,13 +51,13 @@ control Processor(
         }
         
         const entries = {
-            (32w0,    _, packet_type_t.CONSUME0) : write_read0_action(); // first packet
+            (32w0,    _, 4) : write_read0_action(); // first packet
 
-            (   _, 32w0, packet_type_t.CONSUME0) : sum_read0_action(); // sum
+            (   _, 32w0, 4) : sum_read0_action(); // sum
 
-            (   _,    _, packet_type_t.CONSUME0) : read0_action(); // retransmission
+            (   _,    _, 4) : read0_action(); // retransmission
 
-            (   _,    _, packet_type_t.HARVEST7) : read0_action(); // last pass; extract data0 slice in pipe 0
+            (   _,    _, 0xf) : read0_action(); // last pass; extract data0 slice in pipe 0
         }
         // if none of the above are true, do nothing.
         const default_action = NoAction;

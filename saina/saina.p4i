@@ -1,0 +1,2226 @@
+# 1 "/home/p4net/p4-dev/saina/saina.p4"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "/home/p4net/p4-dev/saina/saina.p4"
+# 1 "/usr/local/share/p4c/p4include/core.p4" 1
+/*
+Copyright 2013-present Barefoot Networks, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* This is the P4-16 core library, which declares some built-in P4 constructs using P4 */
+
+
+
+
+/// Standard error codes.  New error codes can be declared by users.
+error {
+    NoError, /// No error.
+    PacketTooShort, /// Not enough bits in packet for 'extract'.
+    NoMatch, /// 'select' expression has no matches.
+    StackOutOfBounds, /// Reference to invalid element of a header stack.
+    HeaderTooShort, /// Extracting too many bits into a varbit field.
+    ParserTimeout /// Parser execution time limit exceeded.
+}
+
+extern packet_in {
+    /// Read a header from the packet into a fixed-sized header @hdr and advance the cursor.
+    /// May trigger error PacketTooShort or StackOutOfBounds.
+    /// @T must be a fixed-size header type
+    void extract<T>(out T hdr);
+    /// Read bits from the packet into a variable-sized header @variableSizeHeader
+    /// and advance the cursor.
+    /// @T must be a header containing exactly 1 varbit field.
+    /// May trigger errors PacketTooShort, StackOutOfBounds, or HeaderTooShort.
+    void extract<T>(out T variableSizeHeader,
+                    in bit<32> variableFieldSizeInBits);
+    /// Read bits from the packet without advancing the cursor.
+    /// @returns: the bits read from the packet.
+    /// T may be an arbitrary fixed-size type.
+    T lookahead<T>();
+    /// Advance the packet cursor by the specified number of bits.
+    void advance(in bit<32> sizeInBits);
+    /// @return packet length in bytes.  This method may be unavailable on
+    /// some target architectures.
+    bit<32> length();
+}
+
+extern packet_out {
+    /// Write @hdr into the output packet, advancing cursor.
+    /// @T can be a header type, a header stack, a header_union, or a struct
+    /// containing fields with such types.
+    void emit<T>(in T hdr);
+}
+
+// TODO: remove from this file, convert to built-in
+/// Check a predicate @check in the parser; if the predicate is true do nothing,
+/// otherwise set the parser error to @toSignal, and transition to the `reject` state.
+extern void verify(in bool check, in error toSignal);
+
+/// Built-in action that does nothing.
+action NoAction() {}
+
+/// Standard match kinds for table key fields.
+/// Some architectures may not support all these match kinds.
+/// Architectures can declare additional match kinds.
+match_kind {
+    /// Match bits exactly.
+    exact,
+    /// Ternary match, using a mask.
+    ternary,
+    /// Longest-prefix match.
+    lpm
+}
+# 2 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/usr/local/share/p4c/p4include/v1model.p4" 1
+/*
+Copyright 2013-present Barefoot Networks, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* P4-16 declaration of the P4 v1.0 switch model */
+
+
+
+
+# 1 "/usr/local/share/p4c/p4include/core.p4" 1
+/*
+Copyright 2013-present Barefoot Networks, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* This is the P4-16 core library, which declares some built-in P4 constructs using P4 */
+# 23 "/usr/local/share/p4c/p4include/v1model.p4" 2
+
+match_kind {
+    range,
+    // Used for implementing dynamic_action_selection
+    selector
+}
+
+// Are these correct?
+@metadata @name("standard_metadata")
+struct standard_metadata_t {
+    bit<9> ingress_port;
+    bit<9> egress_spec;
+    bit<9> egress_port;
+    bit<32> clone_spec;
+    bit<32> instance_type;
+    // The drop and recirculate_port fields are not used at all by the
+    // behavioral-model simple_switch software switch as of September
+    // 2018, and perhaps never was.  They may be considered
+    // deprecated, at least for that P4 target device.  simple_switch
+    // uses the value of the egress_spec field to determine whether a
+    // packet is dropped or not, and it is recommended to use the
+    // P4_14 drop() primitive action, or the P4_16 + v1model
+    // mark_to_drop() primitive action, to cause that field to be
+    // changed so the packet will be dropped.
+    bit<1> drop;
+    bit<16> recirculate_port;
+    bit<32> packet_length;
+    //
+    // @alias is used to generate the field_alias section of the BMV2 JSON.
+    // Field alias creates a mapping from the metadata name in P4 program to
+    // the behavioral model's internal metadata name. Here we use it to
+    // expose all metadata supported by simple switch to the user through
+    // standard_metadata_t.
+    //
+    // flattening fields that exist in bmv2-ss
+    // queueing metadata
+    @alias("queueing_metadata.enq_timestamp")
+    bit<32> enq_timestamp;
+    @alias("queueing_metadata.enq_qdepth")
+    bit<19> enq_qdepth;
+    @alias("queueing_metadata.deq_timedelta")
+    bit<32> deq_timedelta;
+    /// queue depth at the packet dequeue time.
+    @alias("queueing_metadata.deq_qdepth")
+    bit<19> deq_qdepth;
+
+    // intrinsic metadata
+    @alias("intrinsic_metadata.ingress_global_timestamp")
+    bit<48> ingress_global_timestamp;
+    @alias("intrinsic_metadata.egress_global_timestamp")
+    bit<48> egress_global_timestamp;
+    /// Learn filter field list
+    @alias("intrinsic_metadata.lf_field_list")
+    bit<32> lf_field_list;
+    /// multicast group id (key for the mcast replication table)
+    @alias("intrinsic_metadata.mcast_grp")
+    bit<16> mcast_grp;
+    /// resubmit metadata field list id, or 0 if no resubmit operation has been performed
+    @alias("intrinsic_metadata.resubmit_flag")
+    bit<32> resubmit_flag;
+    /// Replication ID for multicast
+    @alias("intrinsic_metadata.egress_rid")
+    bit<16> egress_rid;
+    @alias("intrinsic_metadata.recirculate_flag")
+    bit<32> recirculate_flag;
+    /// Indicates that a verify_checksum() method has failed.
+    /// 1 if a checksum error was found, otherwise 0.
+    bit<1> checksum_error;
+    /// Error produced by parsing
+    error parser_error;
+    /// set packet priority
+    @alias("intrinsic_metadata.priority")
+    bit<3> priority;
+    @alias("queueing_metadata.qid")
+    bit<5> qid;
+}
+
+enum CounterType {
+    packets,
+    bytes,
+    packets_and_bytes
+}
+
+enum MeterType {
+    packets,
+    bytes
+}
+
+extern counter {
+    counter(bit<32> size, CounterType type);
+    /***
+     * count() causes the counter state with the specified index to be
+     * read, modified, and written back, atomically relative to the
+     * processing of other packets, updating the packet count, byte
+     * count, or both, depending upon the CounterType of the counter
+     * instance used when it was constructed.
+     *
+     * @param index The index of the counter state in the array to be
+     *              updated, normally a value in the range [0,
+     *              size-1].  If index >= size, no counter state will be
+     *              updated.
+     */
+    void count(in bit<32> index);
+}
+
+extern direct_counter {
+    /***
+     * A direct_counter object is created by calling its constructor.
+     * You must provide a choice of whether to maintain only a packet
+     * count (CounterType.packets), only a byte count
+     * (CounterType.bytes), or both (CounterType.packets_and_bytes).
+     * After constructing the object, you can associate it with at
+     * most one table, by adding the following table property to the
+     * definition of that table:
+     *
+     *     counters = <object_name>;
+     */
+    direct_counter(CounterType type);
+    /***
+     * The count() method is actually unnecessary in the v1model
+     * architecture.  This is because after a direct_counter object
+     * has been associated with a table as described in the
+     * documentation for the direct_counter constructor, every time
+     * the table is applied and a table entry is matched, the counter
+     * state associated with the matching entry is read, modified, and
+     * written back, atomically relative to the processing of other
+     * packets, regardless of whether the count() method is called in
+     * the body of that action.
+     */
+    void count();
+}
+
+
+
+
+
+extern meter {
+    meter(bit<32> size, MeterType type);
+    /***
+     * execute_meter() causes the meter state with the specified index
+     * to be read, modified, and written back, atomically relative to
+     * the processing of other packets, and an integer encoding of one
+     * of the colors green, yellow, or red to be written to the result
+     * out parameter.
+     *
+     * @param index The index of the meter state in the array to be
+     *              updated, normally a value in the range [0,
+     *              size-1].  If index >= size, no meter state will be
+     *              updated.
+     * @param result Type T must be bit<W> with W >= 2.  When index is
+     *              in range, the value of result will be assigned 0
+     *              for color GREEN, 1 for color YELLOW, and 2 for
+     *              color RED (see RFC 2697 and RFC 2698 for the
+     *              meaning of these colors).  When index is out of
+     *              range, the final value of result is not specified,
+     *              and should be ignored by the caller.
+     */
+    void execute_meter<T>(in bit<32> index, out T result);
+}
+
+extern direct_meter<T> {
+    /***
+     * A direct_meter object is created by calling its constructor.
+     * You must provide a choice of whether to meter based on the
+     * number of packets, regardless of their size
+     * (MeterType.packets), or based upon the number of bytes the
+     * packets contain (MeterType.bytes).  After constructing the
+     * object, you can associate it with at most one table, by adding
+     * the following table property to the definition of that table:
+     *
+     *     meters = <object_name>;
+     */
+    direct_meter(MeterType type);
+    /***
+     * After a direct_meter object has been associated with a table as
+     * described in the documentation for the direct_meter
+     * constructor, every time the table is applied and a table entry
+     * is matched, the meter state associated with the matching entry
+     * is read, modified, and written back, atomically relative to the
+     * processing of other packets, regardless of whether the read()
+     * method is called in the body of that action.
+     *
+     * read() may only be called within an action executed as a result
+     * of matching a table entry, of a table that has a direct_meter
+     * associated with it.  Calling read() causes an integer encoding
+     * of one of the colors green, yellow, or red to be written to the
+     * result out parameter.
+     *
+     * @param result Type T must be bit<W> with W >= 2.  The value of
+     *              result will be assigned 0 for color GREEN, 1 for
+     *              color YELLOW, and 2 for color RED (see RFC 2697
+     *              and RFC 2698 for the meaning of these colors).
+     */
+    void read(out T result);
+}
+
+extern register<T> {
+    register(bit<32> size);
+    /***
+     * read() reads the state of the register array stored at the
+     * specified index, and returns it as the value written to the
+     * result parameter.
+     *
+     * @param index The index of the register array element to be
+     *              read, normally a value in the range [0, size-1].
+     * @param result Only types T that are bit<W> are currently
+     *              supported.  When index is in range, the value of
+     *              result becomes the value read from the register
+     *              array element.  When index >= size, the final
+     *              value of result is not specified, and should be
+     *              ignored by the caller.
+     */
+    void read(out T result, in bit<32> index);
+    /***
+     * write() writes the state of the register array at the specified
+     * index, with the value provided by the value parameter.
+     *
+     * If you wish to perform a read() followed later by a write() to
+     * the same register array element, and you wish the
+     * read-modify-write sequence to be atomic relative to other
+     * processed packets, then there may be parallel implementations
+     * of the v1model architecture for which you must execute them in
+     * a P4_16 block annotated with an @atomic annotation.  See the
+     * P4_16 language specification description of the @atomic
+     * annotation for more details.
+     *
+     * @param index The index of the register array element to be
+     *              written, normally a value in the range [0,
+     *              size-1].  If index >= size, no register state will
+     *              be updated.
+     * @param value Only types T that are bit<W> are currently
+     *              supported.  When index is in range, this
+     *              parameter's value is written into the register
+     *              array element specified by index.
+     */
+    void write(in bit<32> index, in T value);
+}
+
+// used as table implementation attribute
+extern action_profile {
+    action_profile(bit<32> size);
+}
+
+/***
+ * Generate a random number in the range lo..hi, inclusive, and write
+ * it to the result parameter.  The value written to result is not
+ * specified if lo > hi.
+ *
+ * @param T          Must be a type bit<W>
+ */
+extern void random<T>(out T result, in T lo, in T hi);
+
+// If the type T is a named struct, the name is used
+// to generate the control-plane API.
+extern void digest<T>(in bit<32> receiver, in T data);
+
+enum HashAlgorithm {
+    crc32,
+    crc32_custom,
+    crc16,
+    crc16_custom,
+    random,
+    identity,
+    csum16,
+    xor16
+}
+
+@deprecated("Please use mark_to_drop(standard_metadata) instead.")
+extern void mark_to_drop();
+
+/***
+ * mark_to_drop(standard_metadata) is a primitive action that modifies
+ * standard_metadata.egress_spec to an implementation-specific special
+ * value that in some cases causes the packet to be dropped at the end
+ * of ingress or egress processing.  It also assigns 0 to
+ * standard_metadata.mcast_grp.  Either of those metadata fields may
+ * be changed by executing later P4 code, after calling
+ * mark_to_drop(), and this can change the resulting behavior of the
+ * packet to do something other than drop.
+ *
+ * See
+ * https://github.com/p4lang/behavioral-model/blob/master/docs/simple_switch.md
+ * -- in particular the section "Pseudocode for what happens at the
+ * end of ingress and egress processing" -- for the relative priority
+ * of the different possible things that can happen to a packet when
+ * ingress and egress processing are complete.
+ */
+extern void mark_to_drop(inout standard_metadata_t standard_metadata);
+
+/***
+ * Calculate a hash function of the value specified by the data
+ * parameter.  The value written to the out parameter named result
+ * will always be in the range [base, base+max-1] inclusive, if max >=
+ * 1.  If max=0, the value written to result will always be base.
+ *
+ * @param O          Must be a type bit<W>
+ * @param D          Must be a tuple type where all the fields are bit-fields (type bit<W> or int<W>) or varbits.
+ * @param T          Must be a type bit<W>
+ * @param M          Must be a type bit<W>
+ */
+extern void hash<O, T, D, M>(out O result, in HashAlgorithm algo, in T base, in D data, in M max);
+
+extern action_selector {
+    action_selector(HashAlgorithm algorithm, bit<32> size, bit<32> outputWidth);
+}
+
+enum CloneType {
+    I2E,
+    E2E
+}
+
+@deprecated("Please use verify_checksum/update_checksum instead.")
+extern Checksum16 {
+    Checksum16();
+    bit<16> get<D>(in D data);
+}
+
+/**
+Verifies the checksum of the supplied data.
+If this method detects that a checksum of the data is not correct it
+sets the standard_metadata checksum_error bit.
+@param T          Must be a tuple type where all the tuple elements are of type bit<W>, int<W>, or varbit<W>.
+                  The total dynamic length of the fields is a multiple of the output size.
+@param O          Checksum type; must be bit<X> type.
+@param condition  If 'false' the verification always succeeds.
+@param data       Data whose checksum is verified.
+@param checksum   Expected checksum of the data; note that is must be a left-value.
+@param algo       Algorithm to use for checksum (not all algorithms may be supported).
+                  Must be a compile-time constant.
+*/
+extern void verify_checksum<T, O>(in bool condition, in T data, inout O checksum, HashAlgorithm algo);
+/**
+Computes the checksum of the supplied data.
+@param T          Must be a tuple type where all the tuple elements are of type bit<W>, int<W>, or varbit<W>.
+                  The total dynamic length of the fields is a multiple of the output size.
+@param O          Output type; must be bit<X> type.
+@param condition  If 'false' the checksum is not changed
+@param data       Data whose checksum is computed.
+@param checksum   Checksum of the data.
+@param algo       Algorithm to use for checksum (not all algorithms may be supported).
+                  Must be a compile-time constant.
+*/
+extern void update_checksum<T, O>(in bool condition, in T data, inout O checksum, HashAlgorithm algo);
+
+/**
+Verifies the checksum of the supplied data including the payload.
+The payload is defined as "all bytes of the packet which were not parsed by the parser".
+If this method detects that a checksum of the data is not correct it
+sets the standard_metadata checksum_error bit.
+@param T          Must be a tuple type where all the tuple elements are of type bit<W>, int<W>, or varbit<W>.
+                  The total dynamic length of the fields is a multiple of the output size.
+@param O          Checksum type; must be bit<X> type.
+@param condition  If 'false' the verification always succeeds.
+@param data       Data whose checksum is verified.
+@param checksum   Expected checksum of the data; note that is must be a left-value.
+@param algo       Algorithm to use for checksum (not all algorithms may be supported).
+                  Must be a compile-time constant.
+*/
+extern void verify_checksum_with_payload<T, O>(in bool condition, in T data, inout O checksum, HashAlgorithm algo);
+/**
+Computes the checksum of the supplied data including the payload.
+The payload is defined as "all bytes of the packet which were not parsed by the parser".
+@param T          Must be a tuple type where all the tuple elements are of type bit<W>, int<W>, or varbit<W>.
+                  The total dynamic length of the fields is a multiple of the output size.
+@param O          Output type; must be bit<X> type.
+@param condition  If 'false' the checksum is not changed
+@param data       Data whose checksum is computed.
+@param checksum   Checksum of the data.
+@param algo       Algorithm to use for checksum (not all algorithms may be supported).
+                  Must be a compile-time constant.
+*/
+extern void update_checksum_with_payload<T, O>(in bool condition, in T data, inout O checksum, HashAlgorithm algo);
+
+extern void resubmit<T>(in T data);
+extern void recirculate<T>(in T data);
+extern void clone(in CloneType type, in bit<32> session);
+extern void clone3<T>(in CloneType type, in bit<32> session, in T data);
+
+extern void truncate(in bit<32> length);
+
+// The name 'standard_metadata' is reserved
+
+// Architecture.
+// M should be a struct of structs
+// H should be a struct of headers, stacks or header_unions
+
+parser Parser<H, M>(packet_in b,
+                    out H parsedHdr,
+                    inout M meta,
+                    inout standard_metadata_t standard_metadata);
+
+/* The only legal statements in the implementation of the
+VerifyChecksum control are: block statements, calls to the
+verify_checksum and verify_checksum_with_payload methods,
+and return statements. */
+control VerifyChecksum<H, M>(inout H hdr,
+                             inout M meta);
+@pipeline
+control Ingress<H, M>(inout H hdr,
+                      inout M meta,
+                      inout standard_metadata_t standard_metadata);
+@pipeline
+control Egress<H, M>(inout H hdr,
+                     inout M meta,
+                     inout standard_metadata_t standard_metadata);
+
+/* The only legal statements in the implementation of the
+ComputeChecksum control are: block statements, calls to the
+update_checksum and update_checksum_with_payload methods,
+and return statements. */
+control ComputeChecksum<H, M>(inout H hdr,
+                              inout M meta);
+
+/* The only legal statements in a Deparser control are: calls to the
+packet_out.emit() method. */
+@deparser
+control Deparser<H>(packet_out b, in H hdr);
+
+package V1Switch<H, M>(Parser<H, M> p,
+                       VerifyChecksum<H, M> vr,
+                       Ingress<H, M> ig,
+                       Egress<H, M> eg,
+                       ComputeChecksum<H, M> ck,
+                       Deparser<H> dep
+                       );
+# 3 "/home/p4net/p4-dev/saina/saina.p4" 2
+
+# 1 "/home/p4net/p4-dev/saina/configuration.p4" 1
+
+
+
+// Register size
+// 16384 is the largest power-of-two stateful 64b register size per stage in Tofino 1
+// This is enough for a single 2MB message in flight when using 2 slots
+
+// const int register_size = 16384;
+
+// Each slot has two registers because of the shadow copy
+
+
+// Max number of SwitchML workers we support
+
+
+
+// Size of the forwarding table
+
+
+// Number of destination queue pairs per-worker
+
+
+
+// Total number of destination queue pairs
+# 5 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/home/p4net/p4-dev/saina/types.p4" 1
+
+
+
+
+
+// Mirror types
+typedef bit<3> mirror_type_t;
+
+const mirror_type_t MIRROR_TYPE_I2E = 1;
+const mirror_type_t MIRROR_TYPE_E2E = 2;
+
+// Ethernet-specific types
+typedef bit<48> mac_addr_t;
+typedef bit<16> ether_type_t;
+
+const ether_type_t ETHERTYPE_IPV4 = 16w0x0800;
+const ether_type_t ETHERTYPE_ARP = 16w0x0806;
+const ether_type_t ETHERTYPE_ROCEv1 = 16w0x8915;
+
+// IPv4-specific types;
+typedef bit<32> ipv4_addr_t;
+enum bit<8> ip_protocol_t {
+    ICMP = 1,
+    UDP = 17
+}
+
+// ARP-specific types
+enum bit<16> arp_opcode_t {
+    REQUEST = 1,
+    REPLY = 2
+}
+
+// ICMP-specific types
+enum bit<8> icmp_type_t {
+    ECHO_REPLY = 0,
+    ECHO_REQUEST = 8
+}
+
+// UDP-specific types;
+typedef bit<16> udp_port_t;
+
+const udp_port_t UDP_PORT_ROCEV2 = 4791;
+const udp_port_t UDP_PORT_SWITCHML_BASE = 0xbee0;
+const udp_port_t UDP_PORT_SWITCHML_MASK = 0xfff0;
+
+// IB/RoCE-specific types:
+typedef bit<128> ib_gid_t;
+typedef bit<24> sequence_number_t;
+typedef bit<24> queue_pair_t;
+typedef bit<32> rkey_t;
+typedef bit<64> addr_t;
+
+// UC opcodes
+enum bit<8> ib_opcode_t {
+    UC_SEND_FIRST = 8w0b00100000,
+    UC_SEND_MIDDLE = 8w0b00100001,
+    UC_SEND_LAST = 8w0b00100010,
+    UC_SEND_LAST_IMMEDIATE = 8w0b00100011,
+    UC_SEND_ONLY = 8w0b00100100,
+    UC_SEND_ONLY_IMMEDIATE = 8w0b00100101,
+    UC_RDMA_WRITE_FIRST = 8w0b00100110,
+    UC_RDMA_WRITE_MIDDLE = 8w0b00100111,
+    UC_RDMA_WRITE_LAST = 8w0b00101000,
+    UC_RDMA_WRITE_LAST_IMMEDIATE = 8w0b00101001,
+    UC_RDMA_WRITE_ONLY = 8w0b00101010,
+    UC_RDMA_WRITE_ONLY_IMMEDIATE = 8w0b00101011
+}
+
+typedef bit<(9 + 5)> queue_pair_index_t; // 14bits
+
+// Worker types
+enum bit<2> worker_type_t {
+    FORWARD_ONLY = 0,
+    SWITCHML_UDP = 1,
+    ROCEv2 = 2
+}
+
+typedef bit<16> worker_id_t; // Same as rid for worker; used when retransmitting RDMA packets
+typedef bit<32> worker_bitmap_t;
+struct worker_bitmap_pair_t {
+    worker_bitmap_t first;
+    worker_bitmap_t second;
+}
+
+// Type to hold number of workers for a job
+typedef bit<8> num_workers_t;
+struct num_workers_pair_t {
+    num_workers_t first;
+    num_workers_t second;
+}
+
+// Type used to index into register array
+typedef bit<15> pool_index_t;
+typedef bit<14> pool_index_by2_t;
+typedef bit<16> worker_pool_index_t;
+
+typedef bit<32> value_t;
+struct value_pair_t {
+    value_t first;
+    value_t second;
+}
+
+typedef bit<16> exponent_t;
+struct exponent_pair_t {
+    exponent_t first;
+    exponent_t second;
+}
+
+// RDMA MTU (packet size). Matches ibv_mtu enum in verbs.h
+enum bit<3> packet_size_t {
+    IBV_MTU_128 = 0, // not actually defined in IB, but useful for no recirculation tests
+    IBV_MTU_256 = 1,
+    IBV_MTU_512 = 2,
+    IBV_MTU_1024 = 3
+}
+
+// Drop probability between 0 and 32767
+typedef bit<16> drop_probability_t;
+
+// Type for counters
+typedef bit<32> counter_t;
+
+typedef bit<4> packet_type_underlying_t;
+enum bit<4> packet_type_t {
+    MIRROR = 0x0,
+    BROADCAST = 0x1,
+    RETRANSMIT = 0x2,
+    IGNORE = 0x3,
+    CONSUME0 = 0x4,
+    CONSUME1 = 0x5,
+    CONSUME2 = 0x6,
+    CONSUME3 = 0x7,
+    HARVEST0 = 0x8,
+    HARVEST1 = 0x9,
+    HARVEST2 = 0xa,
+    HARVEST3 = 0xb,
+    HARVEST4 = 0xc,
+    HARVEST5 = 0xd,
+    HARVEST6 = 0xe,
+    HARVEST7 = 0xf
+}
+
+// Port metadata, used for drop simulation
+struct port_metadata_t {
+    drop_probability_t ingress_drop_probability;
+    drop_probability_t egress_drop_probability;
+}
+
+// SwitchML metadata header, bridged for recirculation and not exposed outside the switch
+// @pa_no_overlay("ingress", "ig_md.switchml_md.simulate_egress_drop") // 오른쪽 필드와 중첩될 수 없음을 나타낸다 (?)
+@flexible
+header switchml_md_h { //31B + 
+
+    bit<16> mgid; // 16 bits
+
+    // queue_pair_index_t recirc_port_selector; // 14bits
+    bit<13> recirculation_type; //FIXME:
+    bit<1> round_end_flag; //FIXME:
+
+    bit<3> packet_size; // 3
+
+    bit<2> worker_type; // 2
+    bit<16> worker_id; // 16bits
+
+    // Dest port or QPN to be used for responses
+    bit<16> src_port;
+    bit<16> dst_port;
+
+    // What should we do with this packet?
+    bit<4> packet_type; // 4bits
+
+    // This needs to be 0xFFFF
+    bit<16> ether_type_msb;
+
+    // Index of pool elements, including both sets
+    bit<15> pool_index; // 15bits
+
+    // 0 if first packet, 1 if last packet
+    bit<8> first_last_flag; // 8bits
+
+    // 0 if packet is first packet; non-zero if retransmission
+    bit<32> map_result; // 32bits
+
+    // Bitmap value before the current worker is ORed in
+    bit<32> worker_bitmap_before; // 32bits
+
+    // TSI used to fill in switchML header (or RoCE address later)
+    // bit<32> packet_id; //FIXME:
+    bit<32> tsi; //tsi; //FIXME:
+    bit<8> job_number;
+
+    bit<9> ingress_port; // 9 bits
+
+    // Egress drop flag
+    bit<1> egress_drop_flag; // 1bit 
+
+    // Number of workers
+    bit<8> num_workers; // 8bits
+
+    // bit<8> k_counter;
+    bit<8> k;
+    // bit<8> round_end_flag;
+    // bit<32> packet_id; 
+}
+
+
+
+//FIXME:
+@flexible
+header fastest_t { // 30B
+    //FIXME:
+    bit<8> k_counter;
+    bit<8> sum_grad_sign_reset_flag;
+    bit<16> packet_id; // packet id
+    bit<32> xor_result;
+    bit<32> immediate_result;
+    bit<32> popcount_result;
+    bit<32> temp1; // sign_vector
+    bit<32> temp2;
+    bit<32> sign_reg_idx;
+    bit<32> sum_grad_sign;
+    //FIXME:
+}
+
+
+
+// Metadata for ingress stage
+struct metadata_t {
+    switchml_md_h switchml_md;
+    worker_bitmap_t worker_bitmap;
+    bit<1> pool_set;
+    bool checksum_err_ipv4;
+    bool update_ipv4_checksum;
+    mac_addr_t switch_mac;
+    ipv4_addr_t switch_ip;
+    // port_metadata_t port_metadata;
+    fastest_t fastest; //FIXME:
+    bit<1> drop_flag;
+    bit<1> action_flag;
+    bit<32> test1;
+    bit<32> test2;
+}
+# 6 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/home/p4net/p4-dev/saina/headers.p4" 1
+
+
+
+
+
+header ethernet_h {
+    mac_addr_t dst_addr;
+    mac_addr_t src_addr;
+    bit<16> ether_type;
+}
+
+header ipv4_h {
+    bit<4> version;
+    bit<4> ihl;
+    bit<8> diffserv;
+    bit<16> total_len;
+    bit<16> identification;
+    bit<3> flags;
+    bit<13> frag_offset;
+    bit<8> ttl;
+    ip_protocol_t protocol;
+    bit<16> hdr_checksum;
+    ipv4_addr_t src_addr;
+    ipv4_addr_t dst_addr;
+}
+
+header icmp_h {
+    icmp_type_t msg_type;
+    bit<8> msg_code;
+    bit<16> checksum;
+}
+
+header arp_h {
+    bit<16> hw_type;
+    ether_type_t proto_type;
+    bit<8> hw_addr_len;
+    bit<8> proto_addr_len;
+    arp_opcode_t opcode;
+}
+
+header arp_ipv4_h {
+    mac_addr_t src_hw_addr;
+    ipv4_addr_t src_proto_addr;
+    mac_addr_t dst_hw_addr;
+    ipv4_addr_t dst_proto_addr;
+}
+
+header udp_h {
+    bit<16> src_port;
+    bit<16> dst_port;
+    bit<16> length;
+    bit<16> checksum;
+}
+
+// header switchml_h {
+//     bit<4> msg_type;
+//     bit<1> unused;
+//     packet_size_t size;
+//     bit<8> job_number;
+//     bit<32> tsi;
+//     bit<16> pool_index;
+// }
+
+// SwitchML header
+header switchml_h {
+    bit<4> msg_type;
+    bit<1> round_end_flag; //FIXME: // bit<1> unused;
+    bit<3> size; // packet_size
+    bit<8> job_number;
+    bit<32> tsi; //FIXME: Also used for k_counter value
+    bit<16> pool_index;
+    bit<8> packet_type;
+    bit<8> k; //FIXME:
+
+    // bit<16> round; //FIXME:
+    bit<8> round; //FIXME:
+    bit<32> test1;
+    bit<32> test2;
+    bit<8> last_packet_flag;
+
+    // bit<32> sign_reg_idx; 
+    // bit<32> sign_vector;
+    // bit<16> packet_id; //FIXME:
+
+    // bit<8> round_end_flag;   //FIXME: // bit<1> unused;
+
+}
+
+
+
+// 2-byte exponent header (assuming exponent_t is bit<16>)
+
+// 128-byte data header
+header data_h {
+    value_t d00;
+    value_t d01;
+    value_t d02;
+    value_t d03;
+    value_t d04;
+    value_t d05;
+    value_t d06;
+    value_t d07;
+    value_t d08;
+    value_t d09;
+    value_t d10;
+    value_t d11;
+    value_t d12;
+    value_t d13;
+    value_t d14;
+    value_t d15;
+    value_t d16;
+    value_t d17;
+    value_t d18;
+    value_t d19;
+    value_t d20;
+    value_t d21;
+    value_t d22;
+    value_t d23;
+    value_t d24;
+    value_t d25;
+    value_t d26;
+    value_t d27;
+    value_t d28;
+    value_t d29;
+    value_t d30;
+    value_t d31;
+}
+
+
+
+
+// }
+/*FIXME:*/
+
+// Full header stack
+struct header_t {
+    ethernet_h ethernet;
+    arp_h arp;
+    arp_ipv4_h arp_ipv4;
+    ipv4_h ipv4;
+    icmp_h icmp;
+    udp_h udp;
+    switchml_h switchml;
+    data_h d0;
+}
+# 7 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/home/p4net/p4-dev/saina/parsers.p4" 1
+
+
+
+
+
+
+parser MyParser(packet_in pkt,
+                out header_t hdr,
+          inout metadata_t meta,
+                inout standard_metadata_t standard_metadata) {
+
+    state start {
+        transition parse_ethernet;
+    }
+
+    state parse_consume {
+        pkt.extract(hdr.d0);
+        transition accept;
+    }
+
+    state parse_harvest {
+        pkt.extract(hdr.d0);
+        transition accept;
+    }
+
+    state parse_ethernet {
+        pkt.extract(hdr.ethernet);
+        transition select(hdr.ethernet.ether_type) {
+            ETHERTYPE_ARP : parse_arp;
+            ETHERTYPE_IPV4 : parse_ipv4;
+            default : accept_regular;
+        }
+    }
+
+    state parse_arp {
+        pkt.extract(hdr.arp);
+        transition select(hdr.arp.hw_type, hdr.arp.proto_type) {
+            (0x0001, ETHERTYPE_IPV4) : parse_arp_ipv4;
+            default: accept_regular;
+        }
+    }
+
+    state parse_arp_ipv4 {
+        pkt.extract(hdr.arp_ipv4);
+        transition accept_regular;
+    }
+
+    state parse_ipv4 {
+        pkt.extract(hdr.ipv4);
+        transition select(hdr.ipv4.ihl, hdr.ipv4.frag_offset, hdr.ipv4.protocol) {
+            (5, 0, ip_protocol_t.ICMP) : parse_icmp;
+            (5, 0, ip_protocol_t.UDP) : parse_udp;
+            default : accept_regular;
+        }
+    }
+
+    state parse_icmp {
+        pkt.extract(hdr.icmp);
+        transition accept_regular;
+    }
+
+    state parse_udp {
+        pkt.extract(hdr.udp);
+        transition select(hdr.udp.dst_port) {
+            UDP_PORT_SWITCHML_BASE &&& UDP_PORT_SWITCHML_MASK : parse_switchml;
+            default : accept_regular;
+        }
+    }
+
+    state parse_switchml {
+        pkt.extract(hdr.switchml);
+        transition parse_values;
+    }
+
+    state parse_values {
+        pkt.extract(hdr.d0);
+        meta.switchml_md.setValid();
+        meta.fastest.setValid();
+        meta.switchml_md.packet_type = 4;
+        transition accept;
+    }
+
+    state accept_regular {
+        meta.switchml_md.setValid();
+        meta.switchml_md.packet_type = 3;
+        transition accept;
+    }
+}
+
+
+control MyComputeChecksum(inout header_t hdr, inout metadata_t meta) {
+     apply {
+    }
+}
+# 8 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/home/p4net/p4-dev/saina/arp_icmp_responder.p4" 1
+
+
+
+
+
+
+
+control ARPandICMPResponder(
+    inout header_t hdr,
+    inout standard_metadata_t standard_metadata,
+    inout metadata_t meta){
+
+    // send packet back immediately
+    action send_back() {
+        // we assume this runs in parallel with or after
+        // UDPReceiver which will set packet type IGNORE, so
+        // packet will be forwarded
+        standard_metadata.egress_spec = standard_metadata.ingress_port;
+    }
+
+    action send_arp_reply(mac_addr_t switch_mac, ipv4_addr_t switch_ip) {
+        hdr.ethernet.dst_addr = hdr.arp_ipv4.src_hw_addr;
+        hdr.ethernet.src_addr = switch_mac;
+
+        hdr.arp.opcode = arp_opcode_t.REPLY;
+        hdr.arp_ipv4.dst_hw_addr = hdr.arp_ipv4.src_hw_addr;
+        hdr.arp_ipv4.dst_proto_addr = hdr.arp_ipv4.src_proto_addr;
+        hdr.arp_ipv4.src_hw_addr = switch_mac;
+        hdr.arp_ipv4.src_proto_addr = switch_ip;
+
+        send_back();
+    }
+
+    action send_icmp_echo_reply(mac_addr_t switch_mac, ipv4_addr_t switch_ip) {
+        hdr.ethernet.dst_addr = hdr.ethernet.src_addr;
+        hdr.ethernet.src_addr = switch_mac;
+
+        hdr.ipv4.dst_addr = hdr.ipv4.src_addr;
+        hdr.ipv4.src_addr = switch_ip;
+
+        hdr.icmp.msg_type = icmp_type_t.ECHO_REPLY;
+        hdr.icmp.checksum = 0;
+
+        send_back();
+    }
+
+    table arp_icmp {
+        key = {
+            hdr.arp_ipv4.isValid() : exact;
+            hdr.icmp.isValid() : exact;
+            // hdr.arp.opcode              : ternary;
+            // hdr.arp_ipv4.dst_proto_addr : ternary;
+            // hdr.icmp.msg_type           : ternary;
+            hdr.ipv4.dst_addr : ternary;
+        }
+        actions = {
+            send_arp_reply;
+            send_icmp_echo_reply;
+        }
+        size = 2;
+    }
+
+    apply {
+        arp_icmp.apply();
+    }
+}
+# 9 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/home/p4net/p4-dev/saina/forwarder.p4" 1
+
+
+
+
+
+
+
+control Forwarder(
+    in header_t hdr,
+    inout standard_metadata_t standard_metadata,
+    inout metadata_t meta){
+
+    action set_egress_port(bit<9> egress_port) {
+        standard_metadata.egress_spec = egress_port;
+
+        meta.switchml_md.setInvalid();
+    }
+
+    action flood(bit<16> flood_mgid) {
+        standard_metadata.mcast_grp = flood_mgid;
+        //We use 0x8000 + dev_port as the RID and XID for the flood group
+
+        meta.switchml_md.setInvalid();
+    }
+
+    table forward {
+        key = {
+            hdr.ethernet.dst_addr : exact;
+        }
+        actions = {
+            set_egress_port;
+            flood;
+        }
+        size = 1024;
+    }
+
+    apply {
+        forward.apply();
+    }
+}
+# 10 "/home/p4net/p4-dev/saina/saina.p4" 2
+// #include "drop_simulator.p4"
+# 1 "/home/p4net/p4-dev/saina/udp_receiver.p4" 1
+
+
+
+
+
+
+
+control UDPReceiver(
+    inout header_t hdr,
+    inout standard_metadata_t standard_metadata,
+    inout metadata_t meta){
+
+    // Packet was received with errors; set drop bit in deparser metadata
+    action drop() {
+        mark_to_drop();
+        meta.drop_flag = 1;
+    }
+
+    // This is a regular packet; just forward
+    action forward() {
+        meta.switchml_md.packet_type = 3;
+    }
+
+    action set_bitmap(
+        bit<16> mgid,
+        bit<2> worker_type, // worker_type_t worker_type,
+        bit<16> worker_id, // worker_id_t worker_id,
+        bit<4> packet_type,
+        bit<8> num_workers, // num_workers_t num_workers,
+        bit<32> worker_bitmap, // worker_bitmap_t worker_bitmap,
+        bit<15> pool_base,
+        bit<16> pool_size_minus_1) {
+
+        // Bitmap representation for this worker
+        meta.worker_bitmap = worker_bitmap;
+        meta.switchml_md.num_workers = num_workers;
+
+        // Group ID for this job
+        meta.switchml_md.mgid = mgid; // 0
+
+        // Record packet size for use in recirculation
+        meta.switchml_md.packet_size = hdr.switchml.size;
+
+        meta.switchml_md.round_end_flag = hdr.switchml.round_end_flag; //FIXME:
+
+        meta.switchml_md.worker_type = worker_type;
+        meta.switchml_md.worker_id = worker_id;
+        meta.switchml_md.dst_port = hdr.udp.src_port;
+        meta.switchml_md.src_port = hdr.udp.dst_port;
+        meta.switchml_md.tsi = hdr.switchml.tsi;
+        meta.switchml_md.job_number = hdr.switchml.job_number;
+        // ig_md.fastest.packet_id = hdr.switchml.packet_id; //FIXME:
+
+        // Get rid of headers we don't want to recirculate
+        hdr.ethernet.setInvalid();
+        hdr.ipv4.setInvalid();
+        hdr.udp.setInvalid();
+        hdr.switchml.setInvalid();
+        // hdr.sign_header.setInvalid(); //FIXME:
+        meta.fastest.setValid(); //FIXME:
+
+        // Move the SwitchML set bit in the MSB to the LSB. TODO move set bit to MSB
+        meta.switchml_md.pool_index = hdr.switchml.pool_index[13:0] ++ hdr.switchml.pool_index[15:15];
+
+        // Use the SwitchML set bit in the MSB to switch between sets
+        meta.pool_set = hdr.switchml.pool_index[15:15];
+    }
+
+    table receive_udp {
+        key = {
+            // use ternary matches to support matching on:
+            // * ingress port only like the original design
+            // * source IP and UDP destination port for the SwitchML Eth protocol
+            // * source IP and UDP destination port for the SwitchML UDP protocol
+            // * source IP and destination QP number for the RoCE protocols
+            // * also, parser error values so we can drop bad packets
+            standard_metadata.ingress_port : ternary;
+            hdr.ethernet.src_addr : ternary;
+            hdr.ethernet.dst_addr : ternary;
+            hdr.ipv4.src_addr : ternary;
+            hdr.ipv4.dst_addr : ternary;
+            hdr.udp.dst_port : ternary;
+            // hdr.ib_bth.partition_key  : ternary;
+            // hdr.ib_bth.dst_qp         : ternary;
+        }
+
+        actions = {
+            drop;
+            set_bitmap;
+            @defaultonly forward;
+        }
+
+        const entries = {
+            (0, _, _, _, _, 48864) : set_bitmap(1, 0, 0, 1, 16, 1, 0, 0);
+            (1, _, _, _, _, 48864) : set_bitmap(1, 0, 1, 1, 16, 1<<1, 0, 0);
+            (2, _, _, _, _, 48864) : set_bitmap(1, 0, 2, 1, 16, 1<<2, 0, 0);
+            (3, _, _, _, _, 48864) : set_bitmap(1, 0, 3, 1, 16, 1<<3, 0, 0);
+            (4, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<4, 0, 0);
+            // 1 mgid, 2 worker_type, 3 worker_id, 4 packet_type, 5 num_workers, 6 worker_bitmap, pool_base, pool_size_minus_1
+        }
+
+
+        const default_action = forward;
+
+        // Create some extra table space to support parser error entries
+        // size = max_num_workers + 16;
+
+    }
+
+    apply {
+        receive_udp.apply();
+    }
+}
+# 12 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/home/p4net/p4-dev/saina/udp_sender.p4" 1
+
+
+
+
+
+
+control UDPSender(
+    inout header_t hdr,
+    inout standard_metadata_t standard_metadata,
+    inout metadata_t meta
+    ) {
+
+    action set_switch_mac_and_ip(mac_addr_t switch_mac, ipv4_addr_t switch_ip) {
+        hdr.ethernet.src_addr = switch_mac;
+        hdr.ipv4.src_addr = switch_ip;
+        hdr.udp.src_port = meta.switchml_md.src_port;
+
+        hdr.ethernet.ether_type = ETHERTYPE_IPV4;
+
+        hdr.ipv4.version = 4;
+        hdr.ipv4.ihl = 5;
+        hdr.ipv4.diffserv = 0x00;
+        hdr.ipv4.total_len = (20 + 100);;
+        hdr.ipv4.identification = 0x0000;
+        hdr.ipv4.flags = 0b000;
+        hdr.ipv4.frag_offset = 0;
+        hdr.ipv4.ttl = 64;
+        hdr.ipv4.protocol = ip_protocol_t.UDP;
+        hdr.ipv4.src_addr = switch_ip;
+
+        hdr.udp.length = 100;
+
+        hdr.switchml.setValid();
+        hdr.switchml.msg_type = 1;
+        hdr.switchml.round_end_flag = 0; //FIXME:
+        hdr.switchml.size = meta.switchml_md.packet_size;
+        hdr.switchml.job_number = meta.switchml_md.job_number;
+        hdr.switchml.tsi = meta.switchml_md.tsi;
+
+        hdr.switchml.pool_index[13:0] = meta.switchml_md.pool_index[14:1];
+        hdr.switchml.k = meta.switchml_md.k; //FIXME:
+
+        hdr.switchml.test1 = meta.test1;
+        hdr.switchml.test2 = meta.test2;
+
+    }
+
+    table switch_mac_and_ip {
+        key = {hdr.switchml.k : ternary; }
+        actions = { @defaultonly set_switch_mac_and_ip; }
+        const entries = {
+            _ : set_switch_mac_and_ip(0x0cc47a63ffff, 0x140A00fe);
+        }
+        size = 1;
+    }
+
+    action set_dst_addr(
+        mac_addr_t eth_dst_addr,
+        ipv4_addr_t ip_dst_addr) {
+
+        hdr.ethernet.dst_addr = eth_dst_addr;
+        hdr.ipv4.dst_addr = ip_dst_addr;
+
+        hdr.udp.dst_port = meta.switchml_md.dst_port;
+        hdr.udp.checksum = 0;
+        hdr.switchml.pool_index[15:15] = meta.switchml_md.pool_index[0:0];
+    }
+
+    table dst_addr {
+        key = {
+            meta.switchml_md.worker_id : exact;
+        }
+        actions = {
+            set_dst_addr;
+        }
+        const entries = {
+            0 : set_dst_addr( 0x000000000000, 0x140A0001);
+            1 : set_dst_addr( 0x000000000000, 0x140A0002);
+            2 : set_dst_addr( 0x000000000000, 0x140A0003);
+            3 : set_dst_addr( 0x000000000000, 0x140A0004);
+            4 : set_dst_addr( 0x000000000000, 0x140A0005);
+        }
+        size = 32;
+    }
+
+    apply {
+        hdr.ethernet.setValid();
+        hdr.ipv4.setValid();
+        hdr.udp.setValid();
+        hdr.switchml.setValid();
+        hdr.switchml.pool_index = 16w0;
+
+        switch_mac_and_ip.apply();
+        dst_addr.apply();
+
+        // Add payload size
+        if (meta.switchml_md.packet_size == 1) {
+            hdr.ipv4.total_len = hdr.ipv4.total_len + 256;
+            hdr.udp.length = hdr.udp.length + 256;
+        }
+        else if (meta.switchml_md.packet_size == 3) {
+            hdr.ipv4.total_len = hdr.ipv4.total_len + 1024;
+            hdr.udp.length = hdr.udp.length + 1024;
+        }
+    }
+}
+# 13 "/home/p4net/p4-dev/saina/saina.p4" 2
+// #include "rdma_receiver.p4"
+// #include "rdma_sender.p4"
+# 1 "/home/p4net/p4-dev/saina/bitmap_checker.p4" 1
+
+
+
+control ReconstructWorkerBitmap(
+    inout metadata_t meta) {
+
+    action reconstruct_worker_bitmap_from_worker_id(worker_bitmap_t bitmap) {
+        meta.worker_bitmap = bitmap;
+    }
+
+    table reconstruct_worker_bitmap {
+        key = {
+            meta.switchml_md.worker_id : ternary;
+        }
+        actions = {
+            reconstruct_worker_bitmap_from_worker_id;
+        }
+        const entries = {
+            0 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 0);
+            1 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 1);
+            2 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 2);
+            3 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 3);
+            4 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 4);
+            5 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 5);
+            6 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 6);
+            7 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 7);
+            8 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 8);
+            9 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 9);
+            10 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 10);
+            11 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 11);
+            12 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 12);
+            13 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 13);
+            14 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 14);
+            15 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 15);
+            16 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 16);
+            17 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 17);
+            18 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 18);
+            19 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 19);
+            20 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 20);
+            21 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 21);
+            22 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 22);
+            23 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 23);
+            24 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 24);
+            25 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 25);
+            26 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 26);
+            27 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 27);
+            28 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 28);
+            29 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 29);
+            30 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 30);
+            31 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 31);
+        }
+    }
+
+    apply {
+        reconstruct_worker_bitmap.apply();
+    }
+}
+
+control UpdateAndCheckWorkerBitmap(
+    inout header_t hdr,
+    inout metadata_t meta) {
+
+    register<bit<32>>(8192) worker_bitmap;
+    register<bit<32>>(8192) worker_bitmap1;
+
+    action drop() {
+        mark_to_drop();
+        meta.drop_flag = 1;
+    }
+
+
+    action check_worker_bitmap_action() {
+        // Set map result to nonzero if this packet is a retransmission
+        meta.switchml_md.map_result = meta.switchml_md.worker_bitmap_before & meta.worker_bitmap;
+    }
+
+    action update_worker_bitmap_set0_action() {
+        bit<32> read_value;
+        worker_bitmap.read(read_value, (bit<32>)meta.switchml_md.pool_index[14:1]);
+        meta.switchml_md.worker_bitmap_before = read_value;
+        read_value = read_value | meta.worker_bitmap;
+        worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value);
+
+        bit<32> read_value1;
+        worker_bitmap1.read(read_value1 , (bit<32>)meta.switchml_md.pool_index[14:1]);
+        read_value1 = read_value1 & (~meta.worker_bitmap) ;
+        worker_bitmap1.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value1);
+
+        check_worker_bitmap_action();
+    }
+
+    action update_worker_bitmap_set1_action() {
+        bit<32> read_value1;
+        worker_bitmap1.read(read_value1, (bit<32>)meta.switchml_md.pool_index[14:1]);
+        meta.switchml_md.worker_bitmap_before = read_value1;
+        read_value1 = read_value1 | meta.worker_bitmap;
+        worker_bitmap1.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value1);
+
+        bit<32> read_value;
+        worker_bitmap.read(read_value, (bit<32>)meta.switchml_md.pool_index[14:1]);
+        read_value = read_value & (~meta.worker_bitmap) ;
+        worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value);
+
+        check_worker_bitmap_action();
+    }
+
+    table update_and_check_worker_bitmap {
+        key = {
+            meta.switchml_md.pool_index : ternary;
+            meta.switchml_md.packet_type : ternary; // only act on packets of type CONSUME0
+            // meta.port_metadata.ingress_drop_probability : ternary; // if nonzero, drop packet
+        }
+        actions = {
+            update_worker_bitmap_set0_action;
+            update_worker_bitmap_set1_action;
+            drop;
+            NoAction;
+        }
+        const entries = {
+            // Direct updates to the correct set
+            (15w0 &&& 15w1, 4) : update_worker_bitmap_set0_action();
+            (15w1 &&& 15w1, 4) : update_worker_bitmap_set1_action();
+        }
+
+        const default_action = NoAction;
+    }
+
+    apply {
+        update_and_check_worker_bitmap.apply();
+    }
+}
+# 16 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/home/p4net/p4-dev/saina/workers_counter.p4" 1
+
+
+
+control WorkersCounter(
+    in header_t hdr,
+    inout standard_metadata_t standard_metadata,
+    inout metadata_t meta){
+
+    register<bit<8>>(16384) workers_count;
+
+
+
+
+    // action single_worker_count_action() {
+    //     workers_count.read(meta.switchml_md.first_last_flag, (bit<32>)meta.switchml_md.pool_index);
+    //     meta.switchml_md.first_last_flag = 1; //because it is last in k=1
+
+    // }
+
+    // action single_worker_read_action() {
+    //     meta.switchml_md.first_last_flag = 0;
+    // }
+
+    action count_workers_action() {
+        // flag 0 -> first / flag 1 -> last / flag 2~k -> nothing /
+        workers_count.read(meta.switchml_md.first_last_flag, (bit<32>)meta.switchml_md.pool_index);
+        meta.action_flag = 1;
+    }
+
+    action read_count_workers_action() {
+        workers_count.read(meta.switchml_md.first_last_flag, (bit<32>)meta.switchml_md.pool_index);
+    }
+
+    // If no bits are set in the map result, this was the first time we
+    // saw this packet, so decrement worker count. Otherwise, it's a
+    // retransmission, so just read the worker count.
+    // Only act if packet type is CONSUME0
+    table count_workers {
+        key = {
+            meta.switchml_md.num_workers: ternary;
+            meta.switchml_md.map_result : ternary;
+            meta.switchml_md.packet_type: ternary;
+        }
+        actions = {
+            // single_worker_count_action;
+            // single_worker_read_action;
+            count_workers_action;
+            read_count_workers_action;
+            @defaultonly NoAction;
+        }
+        const entries = {
+            // Special case for single-worker jobs
+            // if map_result is all 0's and type is CONSUME0, this is the first time we've seen this packet
+            // (1, 0, 4) : single_worker_count_action();
+            // if we've seen this packet before, don't count, just read
+            // (1, _, 4) : single_worker_read_action();
+
+            // Multi-worker jobs
+            // if map_result is all 0's and type is CONSUME0, this is the first time we've seen this packet
+            (_, 0, 4) : count_workers_action();
+            // if map_result is not all 0's and type is CONSUME0, don't count, just read
+            (_, _, 4) : read_count_workers_action();
+        }
+        const default_action = NoAction;
+    }
+
+    apply {
+        count_workers.apply();
+        if(meta.action_flag==1){
+            if(meta.switchml_md.first_last_flag == 0 ){ // first packet
+                workers_count.write((bit<32>)meta.switchml_md.pool_index, meta.switchml_md.k - 1);
+            }
+            else{ // not first packet
+                workers_count.write((bit<32>)meta.switchml_md.pool_index, meta.switchml_md.first_last_flag - 1);
+            }
+        }
+    }
+}
+# 17 "/home/p4net/p4-dev/saina/saina.p4" 2
+// #include "exponents.p4"
+# 1 "/home/p4net/p4-dev/saina/processor.p4" 1
+
+
+
+
+
+
+// Sum calculator
+// Each control handles two values
+control Processor(
+    in value_t value0,
+    out value_t value0_out,
+    inout switchml_md_h switchml_md) {
+
+    register<bit<32>>(16384) values;
+    register<bit<32>>(16384) values1;
+
+    action read0_action() {
+        values.read(value0_out, (bit<32>)switchml_md.pool_index);
+
+    }
+
+    action write_read0_action() {
+        values.write((bit<32>)switchml_md.pool_index, value0);
+        value0_out = value0;
+    }
+
+    action sum_read0_action() {
+        bit<32>read_value;
+        values.read(read_value, (bit<32>)switchml_md.pool_index);
+        value0_out = read_value + value0;
+        values.write((bit<32>)switchml_md.pool_index, value0_out);
+    }
+
+
+
+    // If bitmap_before is 0 and type is CONSUME0, write values and read second value
+    // If bitmap_before is not zero and type is CONSUME0, add values and read second value
+    // If map_result is not zero and type is CONSUME0, just read first value
+    // If type is HARVEST, read second value
+    table sum {
+        key = {
+            switchml_md.worker_bitmap_before : ternary;
+            switchml_md.map_result : ternary;
+            switchml_md.packet_type: ternary;
+        }
+        actions = {
+            write_read0_action;
+            sum_read0_action;
+            read0_action;
+            NoAction;
+        }
+
+        const entries = {
+            (32w0, _, 4) : write_read0_action(); // first packet
+
+            ( _, 32w0, 4) : sum_read0_action(); // sum
+
+            ( _, _, 4) : read0_action(); // retransmission
+
+            ( _, _, 0xf) : read0_action(); // last pass; extract data0 slice in pipe 0
+        }
+        // if none of the above are true, do nothing.
+        const default_action = NoAction;
+    }
+
+    apply {
+        sum.apply();
+    }
+}
+# 19 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 1 "/home/p4net/p4-dev/saina/next_step_selector.p4" 1
+
+
+
+
+
+
+
+control NextStepSelector(
+    inout header_t hdr,
+    inout standard_metadata_t standard_metadata,
+    inout metadata_t meta){
+
+    action recirculate_for_consume(bit<4> packet_type, bit<9> recirc_port) {
+        // Drop both data headers now that they've been consumed
+        hdr.d0.setInvalid();
+        // Send to recirculation port
+        standard_metadata.egress_spec = recirc_port;
+        meta.switchml_md.packet_type = packet_type;
+
+    }
+
+    action recirculate_for_harvest(bit<4> packet_type, bit<9> recirc_port) {
+        // Recirculate for harvest
+        // ig_tm_md.ucast_egress_port = recirc_port;
+        standard_metadata.mcast_grp = 0x0001;
+
+        meta.switchml_md.packet_type = packet_type;
+
+        meta.switchml_md.recirculation_type = 1;
+    }
+
+    action recirculate_for_HARVEST7(bit<9> recirc_port) {
+        // hdr.d0.setInvalid();
+        recirculate_for_harvest(0xf, recirc_port);
+    }
+
+    action finish_consume() {
+        mark_to_drop();
+        meta.drop_flag = 1;
+    }
+
+    action broadcast() {
+        // Set the switch as the source MAC address
+        hdr.ethernet.src_addr = hdr.ethernet.dst_addr;
+        // Destination address will be filled in egress pipe
+
+        // Send to multicast group; egress will fill in destination IP and MAC address
+        standard_metadata.mcast_grp = meta.switchml_md.mgid;
+        meta.switchml_md.packet_type = 1;
+
+    }
+
+    action trigger_ABWD(){
+        meta.switchml_md.recirculation_type = 1;
+    }
+
+    action retransmit() {
+        // hdr.d1.setInvalid();
+
+        // Send back out ingress port
+        standard_metadata.egress_spec = meta.switchml_md.ingress_port;
+        meta.switchml_md.packet_type = 2;
+    }
+
+    action drop() {
+        // Mark for drop
+        mark_to_drop();
+        meta.drop_flag = 1;
+        meta.switchml_md.packet_type = 3;
+    }
+
+    table next_step {
+        key = {
+            meta.switchml_md.packet_size : ternary;
+            meta.switchml_md.worker_id : ternary;
+            meta.switchml_md.packet_type : ternary;
+            meta.switchml_md.first_last_flag : ternary; // 1: last 0: first
+            meta.switchml_md.map_result : ternary;
+            meta.switchml_md.round_end_flag : ternary; // FIXME:
+            meta.switchml_md.k : ternary;
+
+        }
+        actions = {
+            recirculate_for_HARVEST7;
+            trigger_ABWD;
+            finish_consume;
+            broadcast;
+            retransmit;
+            drop;
+        }
+
+        const entries = {
+            // 2. Normal last worker's gradient : last=1, map=None end_flag=0;
+            (_, _, 4, 1, _, _, _) : broadcast();
+
+            // 1. Normal gradient : last=None, map=0, end_flag=None
+            (_, _, 4, _, 0, _, 1) : broadcast();
+            (_, _, 4, _, 0, _, _) : finish_consume();
+
+            // 3. round end packet : last=1, map=0, end_flag=1;
+            // (0, _, 4, 1, 0, 1) : recirculate_for_HARVEST7(68); 
+            // (0, _, 4, 1, 0, 1) : trigger_ABWD(); 
+
+        }
+
+        const default_action = drop();
+    }
+
+    apply {
+        next_step.apply();
+    }
+}
+# 20 "/home/p4net/p4-dev/saina/saina.p4" 2
+// #include "process_sign.p4"
+// #include "extraction.p4"
+// #include "Popcount.p4"
+// #include "k_counter.p4"
+// #include "k_update.p4"
+
+
+
+// #define HALF_NUM_PARAMETERS 400000
+
+
+
+
+// control Ingress(
+//     inout header_t hdr,
+//     inout ingress_metadata_t ig_md,
+//     in ingress_intrinsic_metadata_t ig_intr_md,
+//     in ingress_intrinsic_metadata_from_parser_t ig_prsr_md,
+//     inout ingress_intrinsic_metadata_for_deparser_t ig_dprsr_md,
+//     inout ingress_intrinsic_metadata_for_tm_t ig_tm_md) {
+
+control MyIngress(
+    inout header_t hdr,
+    inout metadata_t meta,
+    inout standard_metadata_t standard_metadata) {
+
+
+    register<bit<32>>(163840) sign1;
+    register<bit<32>>(163840) sign2;
+    register<bit<32>>(1) idx_counter_register;
+    register<bit<32>>(1) sum_grad_sign;
+    register<bit<32>>(1) k_counter;
+    register<bit<8>>(1) k_register;
+
+    // Instantiate controls
+
+    register<bit<32>>(8192) worker_bitmap;
+    register<bit<32>>(8192) worker_bitmap1;
+
+    action reconstruct_worker_bitmap_from_worker_id(worker_bitmap_t bitmap) {
+        meta.worker_bitmap = bitmap;
+    }
+
+    table reconstruct_worker_bitmap {
+        key = {
+            meta.switchml_md.worker_id : ternary;
+        }
+        actions = {
+            reconstruct_worker_bitmap_from_worker_id;
+        }
+        const entries = {
+            0 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 0);
+            1 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 1);
+            2 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 2);
+            3 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 3);
+            4 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 4);
+            5 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 5);
+            6 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 6);
+            7 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 7);
+            8 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 8);
+            9 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 9);
+            10 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 10);
+            11 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 11);
+            12 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 12);
+            13 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 13);
+            14 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 14);
+            15 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 15);
+            16 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 16);
+            17 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 17);
+            18 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 18);
+            19 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 19);
+            20 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 20);
+            21 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 21);
+            22 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 22);
+            23 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 23);
+            24 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 24);
+            25 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 25);
+            26 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 26);
+            27 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 27);
+            28 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 28);
+            29 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 29);
+            30 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 30);
+            31 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 31);
+        }
+    }
+
+    action drop() {
+        mark_to_drop();
+        meta.drop_flag = 1;
+    }
+
+
+    action check_worker_bitmap_action() {
+        // Set map result to nonzero if this packet is a retransmission
+        meta.switchml_md.map_result = meta.switchml_md.worker_bitmap_before & meta.worker_bitmap;
+    }
+
+    action update_worker_bitmap_set0_action() {
+        bit<32> read_value;
+        worker_bitmap.read(read_value, (bit<32>)meta.switchml_md.pool_index[14:1]);
+        meta.switchml_md.worker_bitmap_before = read_value;
+        read_value = read_value | meta.worker_bitmap;
+        worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value);
+
+        bit<32> read_value1;
+        worker_bitmap1.read(read_value1 , (bit<32>)meta.switchml_md.pool_index[14:1]);
+        read_value1 = read_value1 & (~meta.worker_bitmap) ;
+        worker_bitmap1.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value1);
+
+        check_worker_bitmap_action();
+    }
+
+    action update_worker_bitmap_set1_action() {
+        bit<32> read_value1;
+        worker_bitmap1.read(read_value1, (bit<32>)meta.switchml_md.pool_index[14:1]);
+        meta.switchml_md.worker_bitmap_before = read_value1;
+        read_value1 = read_value1 | meta.worker_bitmap;
+        worker_bitmap1.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value1);
+
+        bit<32> read_value;
+        worker_bitmap.read(read_value, (bit<32>)meta.switchml_md.pool_index[14:1]);
+        read_value = read_value & (~meta.worker_bitmap) ;
+        worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value);
+
+        check_worker_bitmap_action();
+    }
+
+    table update_and_check_worker_bitmap {
+        key = {
+            meta.switchml_md.pool_index : ternary;
+            meta.switchml_md.packet_type : ternary; // only act on packets of type CONSUME0
+            // meta.port_metadata.ingress_drop_probability : ternary; // if nonzero, drop packet
+        }
+        actions = {
+            update_worker_bitmap_set0_action;
+            update_worker_bitmap_set1_action;
+            drop;
+            NoAction;
+        }
+        const entries = {
+            // Direct updates to the correct set
+            (15w0 &&& 15w1, 4) : update_worker_bitmap_set0_action();
+            (15w1 &&& 15w1, 4) : update_worker_bitmap_set1_action();
+        }
+
+        const default_action = NoAction;
+    }
+
+
+
+
+
+
+
+    ARPandICMPResponder() arp_icmp_responder;
+    Forwarder() forwarder;
+
+    UDPReceiver() udp_receiver;
+    WorkersCounter() workers_counter;
+    // ReconstructWorkerBitmap() reconstruct_worker_bitmap;
+    // UpdateAndCheckWorkerBitmap() update_and_check_worker_bitmap;
+
+    NextStepSelector() next_step_selector;
+
+    Processor() value00;
+    Processor() value01;
+    Processor() value02;
+    Processor() value03;
+    Processor() value04;
+    Processor() value05;
+    Processor() value06;
+    Processor() value07;
+    Processor() value08;
+    Processor() value09;
+    Processor() value10;
+    Processor() value11;
+    Processor() value12;
+    Processor() value13;
+    Processor() value14;
+    Processor() value15;
+    Processor() value16;
+    Processor() value17;
+    Processor() value18;
+    Processor() value19;
+    Processor() value20;
+    Processor() value21;
+    Processor() value22;
+    Processor() value23;
+    Processor() value24;
+    Processor() value25;
+    Processor() value26;
+    Processor() value27;
+    Processor() value28;
+    Processor() value29;
+    Processor() value30;
+    Processor() value31;
+
+    apply { //FIXME:
+
+
+        if (meta.switchml_md.packet_type == 4) {
+            udp_receiver.apply(hdr, standard_metadata, meta);
+            meta.switchml_md.ingress_port = standard_metadata.ingress_port;
+
+        } else if (meta.switchml_md.packet_type == 5 ||
+            meta.switchml_md.packet_type == 6 ||
+            meta.switchml_md.packet_type == 7) {
+            reconstruct_worker_bitmap.apply();
+            // reconstruct_worker_bitmap.apply(meta);
+        }
+
+        // If the packet is valid, should be either forwarded or processed
+        if (meta.drop_flag == 1w0) { //FIXME:
+            if (meta.switchml_md.packet_type == 4 ||
+                meta.switchml_md.packet_type == 5 ||
+                meta.switchml_md.packet_type == 6 ||
+                meta.switchml_md.packet_type == 7) {
+                // For CONSUME packets, record packet reception and check if this packet is a retransmission
+                update_and_check_worker_bitmap.apply();
+                k_register.read(meta.switchml_md.k, 0);
+                if(meta.switchml_md.k == 0 ){
+                    meta.switchml_md.k = 1;
+                    k_register.write(0, 1);
+                }
+                workers_counter.apply(hdr, standard_metadata, meta);
+            }
+            // If it's a SwitchML packet, process it
+            if ((packet_type_underlying_t) meta.switchml_md.packet_type >=
+                (packet_type_underlying_t) 4) { // all consume or harvest types
+
+                // Aggregate values
+                value00.apply(hdr.d0.d00, hdr.d0.d00, meta.switchml_md);
+                value01.apply(hdr.d0.d01, hdr.d0.d01, meta.switchml_md);
+                value02.apply(hdr.d0.d02, hdr.d0.d02, meta.switchml_md);
+                value03.apply(hdr.d0.d03, hdr.d0.d03, meta.switchml_md);
+                value04.apply(hdr.d0.d04, hdr.d0.d04, meta.switchml_md);
+                value05.apply(hdr.d0.d05, hdr.d0.d05, meta.switchml_md);
+                value06.apply(hdr.d0.d06, hdr.d0.d06, meta.switchml_md);
+                value07.apply(hdr.d0.d07, hdr.d0.d07, meta.switchml_md);
+                value08.apply(hdr.d0.d08, hdr.d0.d08, meta.switchml_md);
+                value09.apply(hdr.d0.d09, hdr.d0.d09, meta.switchml_md);
+                value10.apply(hdr.d0.d10, hdr.d0.d10, meta.switchml_md);
+                value11.apply(hdr.d0.d11, hdr.d0.d11, meta.switchml_md);
+                value12.apply(hdr.d0.d12, hdr.d0.d12, meta.switchml_md);
+                value13.apply(hdr.d0.d13, hdr.d0.d13, meta.switchml_md);
+                value14.apply(hdr.d0.d14, hdr.d0.d14, meta.switchml_md);
+                value15.apply(hdr.d0.d15, hdr.d0.d15, meta.switchml_md);
+                value16.apply(hdr.d0.d16, hdr.d0.d16, meta.switchml_md);
+                value17.apply(hdr.d0.d17, hdr.d0.d17, meta.switchml_md);
+                value18.apply(hdr.d0.d18, hdr.d0.d18, meta.switchml_md);
+                value19.apply(hdr.d0.d19, hdr.d0.d19, meta.switchml_md);
+                value20.apply(hdr.d0.d20, hdr.d0.d20, meta.switchml_md);
+                value21.apply(hdr.d0.d21, hdr.d0.d21, meta.switchml_md);
+                value22.apply(hdr.d0.d22, hdr.d0.d22, meta.switchml_md);
+                value23.apply(hdr.d0.d23, hdr.d0.d23, meta.switchml_md);
+                value24.apply(hdr.d0.d24, hdr.d0.d24, meta.switchml_md);
+                value25.apply(hdr.d0.d25, hdr.d0.d25, meta.switchml_md);
+                value26.apply(hdr.d0.d26, hdr.d0.d26, meta.switchml_md);
+                value27.apply(hdr.d0.d27, hdr.d0.d27, meta.switchml_md);
+                value28.apply(hdr.d0.d28, hdr.d0.d28, meta.switchml_md);
+                value29.apply(hdr.d0.d29, hdr.d0.d29, meta.switchml_md);
+                value30.apply(hdr.d0.d30, hdr.d0.d30, meta.switchml_md);
+                value31.apply(hdr.d0.d31, hdr.d0.d31, meta.switchml_md);
+
+                next_step_selector.apply(hdr, standard_metadata, meta);
+            }
+            else {
+
+                arp_icmp_responder.apply(hdr, standard_metadata, meta);
+                forwarder.apply(hdr, standard_metadata, meta);
+
+            }
+        }
+
+        if (hdr.switchml.round_end_flag == 1 && meta.switchml_md.packet_type == 1){
+
+            // Clear worker_bitmap
+            worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], 0);
+
+            bit<32> sign_reg_idx;
+            bit<32> sign_vector1;
+            bit<32> sign_vector2;
+            bit<32> xor_result;
+            bit<32> idx_counter;
+            bit<32> sum;
+            bit<32> k_count;
+
+            sign_reg_idx = (bit<32>)hdr.switchml.tsi[31:5];
+
+            if (hdr.switchml.round % 2 == 0){
+                sign2.read(sign_vector2, sign_reg_idx);
+                sign_vector2 = sign_vector2 << 1;
+                sign_vector2 = sign_vector2 + (bit<32>)hdr.d0.d00[31:31];
+                sign2.write(sign_reg_idx, sign_vector2);
+                idx_counter_register.read(idx_counter, 0);
+
+                meta.test1 = sign_vector2; // fixme
+
+                if(idx_counter == 31){
+                    sign1.read(sign_vector1, sign_reg_idx);
+                    xor_result = sign_vector2 ^ sign_vector1;
+                    sign1.write(sign_reg_idx, 0);
+                    idx_counter_register.write(0, 0);
+
+                }
+                else{
+                    idx_counter_register.write(0, idx_counter+1);
+                }
+            }
+            else{ // if(hdr.switchml.round % 2 == 0) {
+                sign1.read(sign_vector1 , sign_reg_idx);
+                sign_vector1 = sign_vector1 << 1;
+                sign_vector1 = sign_vector1 + (bit<32>)hdr.d0.d00[31:31];
+                sign1.write(sign_reg_idx, sign_vector1);
+                idx_counter_register.read(idx_counter, 0);
+
+                meta.test1 = sign_vector1; // fixme
+
+                if(idx_counter == 31){
+                    sign2.read(sign_vector2, sign_reg_idx);
+                    xor_result = sign_vector1 ^ sign_vector2;
+                    sign2.write(sign_reg_idx, 0);
+                    idx_counter_register.write(0, 0);
+
+                }
+                else{
+                    idx_counter_register.write(0, idx_counter+1);
+                }
+            }
+
+
+            sum_grad_sign.read(sum, 0);
+
+            if(idx_counter == 31){
+                bit<32> temp1;
+                bit<32> temp2;
+                bit<32> popcount_result;
+
+                temp1 = xor_result & 0x55555555;
+                temp2 = (xor_result >> 1) & 0x55555555;
+                popcount_result = temp1 + temp2;
+                temp1 = popcount_result & 0x33333333;
+                temp2 = (popcount_result >> 2) & 0x33333333;
+                popcount_result = temp1 + temp2;
+                temp1 = popcount_result & 0x0f0f0f0f;
+                temp2 = (popcount_result >> 4) & 0x0f0f0f0f;
+                popcount_result = temp1 + temp2;
+                temp1 = popcount_result & 0x00ff00ff;
+                temp2 = (popcount_result >> 8) & 0x00ff00ff;
+                popcount_result = temp1 + temp2;
+                temp1 = popcount_result & 0x0000ffff;
+                temp2 = (popcount_result >> 16) & 0x0000ffff;
+                popcount_result = temp1 + temp2;
+
+                sum = sum + popcount_result;
+                sum_grad_sign.write(0, sum);
+            }
+
+            // if(hdr.switchml.last_packet_flag==1){
+            // if(meta.switchml_md.first_last_flag == 0 && hdr.switchml.last_packet_flag==1){
+            if(hdr.switchml.last_packet_flag==1){
+                if(hdr.switchml.round % 2 == 1){
+                    sign2.write(sign_reg_idx, 0);
+                }
+                else{
+                    sign1.write(sign_reg_idx, 0);
+                }
+                sum_grad_sign.write(0, 0);
+                idx_counter_register.write(0,0);
+
+                k_counter.read(k_count, 0);
+                if(sum >= 40){
+                    k_count = k_count + 1;
+                    k_counter.write(0, k_count);
+                }
+
+                if(k_count >= 1){
+                    k_register.read(meta.switchml_md.k, 0);
+                    meta.switchml_md.k = meta.switchml_md.k + 1;
+                    k_register.write(0,meta.switchml_md.k);
+                    k_counter.write(0,0);
+                }
+            }
+
+            sum_grad_sign.read(meta.test2, 0); //FIXME:
+            k_register.read(meta.switchml_md.k, 0); //FIXME:
+        }
+
+    }
+}
+
+control MyEgress(
+    inout header_t hdr,
+    inout metadata_t meta,
+    inout standard_metadata_t standard_metadata
+    ){
+
+    UDPSender() udp_sender;
+
+    apply {
+        udp_sender.apply(hdr, standard_metadata, meta);
+    }
+}
+
+control MyDeparser(packet_out pkt, in header_t hdr) {
+
+    apply {
+        pkt.emit(hdr);
+    }
+}
+
+control MyVerifyChecksum(inout header_t hdr, inout metadata_t meta
+) {
+    apply { }
+}
+
+
+V1Switch(
+MyParser(),
+MyVerifyChecksum(),
+MyIngress(),
+MyEgress(),
+MyComputeChecksum(),
+MyDeparser()
+) main;

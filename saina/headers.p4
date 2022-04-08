@@ -65,20 +65,21 @@ header udp_h {
 header switchml_h {
     bit<4> msg_type;
     bit<1> round_end_flag;   //FIXME: // bit<1> unused;
-    packet_size_t size;
+    bit<3> size; // packet_size
     bit<8> job_number; 
-
     bit<32> tsi;        //FIXME: Also used for k_counter value
-
     bit<16> pool_index;
     bit<8> packet_type;
     bit<8> k; //FIXME:
 
     // bit<16> round; //FIXME:
-
     bit<8> round; //FIXME:
-    bit<32> sign_reg_idx; 
-    bit<32> sign_vector;
+    bit<32> test1;      
+    bit<32> test2;      
+    bit<8> last_packet_flag;
+
+    // bit<32> sign_reg_idx; 
+    // bit<32> sign_vector;
     // bit<16> packet_id; //FIXME:
 
     // bit<8> round_end_flag;   //FIXME: // bit<1> unused;
@@ -88,9 +89,6 @@ header switchml_h {
 
 
 // 2-byte exponent header (assuming exponent_t is bit<16>)
-header exponents_h {
-    exponent_t e0;
-}
 
 // 128-byte data header
 header data_h {
@@ -144,7 +142,6 @@ struct header_t {
     udp_h          udp;
     switchml_h     switchml;
     data_h         d0;
-    exponents_h    exponents;
 }
 
 #endif /* _HEADERS_ */
