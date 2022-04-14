@@ -1,8 +1,8 @@
 #ifndef _UDP_SENDER_
 #define _UDP_SENDER_
 
-#define UDP_LENGTH 100
-#define IPV4_LENGTH (20 + UDP_LENGTH);
+#define UDP_LENGTH 156 // 8udp + 20SW + 128
+#define IPV4_LENGTH 20 + UDP_LENGTH;
 
 control UDPSender(
     inout header_t hdr,

@@ -1,7 +1,7 @@
-# 1 "/home/p4net/p4-dev/saina/saina.p4"
+# 1 "saina.p4"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "/home/p4net/p4-dev/saina/saina.p4"
+# 1 "saina.p4"
 # 1 "/usr/local/share/p4c/p4include/core.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -82,7 +82,7 @@ match_kind {
     /// Longest-prefix match.
     lpm
 }
-# 2 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 2 "saina.p4" 2
 # 1 "/usr/local/share/p4c/p4include/v1model.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -549,9 +549,9 @@ package V1Switch<H, M>(Parser<H, M> p,
                        ComputeChecksum<H, M> ck,
                        Deparser<H> dep
                        );
-# 3 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 3 "saina.p4" 2
 
-# 1 "/home/p4net/p4-dev/saina/configuration.p4" 1
+# 1 "configuration.p4" 1
 
 
 
@@ -576,8 +576,8 @@ package V1Switch<H, M>(Parser<H, M> p,
 
 
 // Total number of destination queue pairs
-# 5 "/home/p4net/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4net/p4-dev/saina/types.p4" 1
+# 5 "saina.p4" 2
+# 1 "types.p4" 1
 
 
 
@@ -820,8 +820,8 @@ struct metadata_t {
     bit<32> test1;
     bit<32> test2;
 }
-# 6 "/home/p4net/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4net/p4-dev/saina/headers.p4" 1
+# 6 "saina.p4" 2
+# 1 "headers.p4" 1
 
 
 
@@ -967,8 +967,8 @@ struct header_t {
     switchml_h switchml;
     data_h d0;
 }
-# 7 "/home/p4net/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4net/p4-dev/saina/parsers.p4" 1
+# 7 "saina.p4" 2
+# 1 "parsers.p4" 1
 
 
 
@@ -1063,8 +1063,8 @@ control MyComputeChecksum(inout header_t hdr, inout metadata_t meta) {
      apply {
     }
 }
-# 8 "/home/p4net/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4net/p4-dev/saina/arp_icmp_responder.p4" 1
+# 8 "saina.p4" 2
+# 1 "arp_icmp_responder.p4" 1
 
 
 
@@ -1131,8 +1131,8 @@ control ARPandICMPResponder(
         arp_icmp.apply();
     }
 }
-# 9 "/home/p4net/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4net/p4-dev/saina/forwarder.p4" 1
+# 9 "saina.p4" 2
+# 1 "forwarder.p4" 1
 
 
 
@@ -1173,9 +1173,9 @@ control Forwarder(
         forward.apply();
     }
 }
-# 10 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 10 "saina.p4" 2
 // #include "drop_simulator.p4"
-# 1 "/home/p4net/p4-dev/saina/udp_receiver.p4" 1
+# 1 "udp_receiver.p4" 1
 
 
 
@@ -1289,8 +1289,8 @@ control UDPReceiver(
         receive_udp.apply();
     }
 }
-# 12 "/home/p4net/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4net/p4-dev/saina/udp_sender.p4" 1
+# 12 "saina.p4" 2
+# 1 "udp_sender.p4" 1
 
 
 
@@ -1313,7 +1313,7 @@ control UDPSender(
         hdr.ipv4.version = 4;
         hdr.ipv4.ihl = 5;
         hdr.ipv4.diffserv = 0x00;
-        hdr.ipv4.total_len = (20 + 100);;
+        hdr.ipv4.total_len = 20 + 156;;
         hdr.ipv4.identification = 0x0000;
         hdr.ipv4.flags = 0b000;
         hdr.ipv4.frag_offset = 0;
@@ -1321,7 +1321,7 @@ control UDPSender(
         hdr.ipv4.protocol = ip_protocol_t.UDP;
         hdr.ipv4.src_addr = switch_ip;
 
-        hdr.udp.length = 100;
+        hdr.udp.length = 156;
 
         hdr.switchml.setValid();
         hdr.switchml.msg_type = 1;
@@ -1397,10 +1397,10 @@ control UDPSender(
         }
     }
 }
-# 13 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 13 "saina.p4" 2
 // #include "rdma_receiver.p4"
 // #include "rdma_sender.p4"
-# 1 "/home/p4net/p4-dev/saina/bitmap_checker.p4" 1
+# 1 "bitmap_checker.p4" 1
 
 
 
@@ -1532,8 +1532,8 @@ control UpdateAndCheckWorkerBitmap(
         update_and_check_worker_bitmap.apply();
     }
 }
-# 16 "/home/p4net/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4net/p4-dev/saina/workers_counter.p4" 1
+# 16 "saina.p4" 2
+# 1 "workers_counter.p4" 1
 
 
 
@@ -1612,9 +1612,9 @@ control WorkersCounter(
         }
     }
 }
-# 17 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 17 "saina.p4" 2
 // #include "exponents.p4"
-# 1 "/home/p4net/p4-dev/saina/processor.p4" 1
+# 1 "processor.p4" 1
 
 
 
@@ -1684,8 +1684,8 @@ control Processor(
         sum.apply();
     }
 }
-# 19 "/home/p4net/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4net/p4-dev/saina/next_step_selector.p4" 1
+# 19 "saina.p4" 2
+# 1 "next_step_selector.p4" 1
 
 
 
@@ -1798,7 +1798,7 @@ control NextStepSelector(
         next_step.apply();
     }
 }
-# 20 "/home/p4net/p4-dev/saina/saina.p4" 2
+# 20 "saina.p4" 2
 // #include "process_sign.p4"
 // #include "extraction.p4"
 // #include "Popcount.p4"
