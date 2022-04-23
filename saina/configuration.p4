@@ -25,5 +25,7 @@
 #define max_num_queue_pairs 512*32
 #define max_num_queue_pairs_log2  max_num_queue_pairs_per_worker_log2 + max_num_workers_log2
 
+#define TEST_OUTPUT_PORT 16
+
 
 #endif /* _CONFIGURATION_ */

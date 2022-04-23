@@ -26,8 +26,8 @@
 
 
 // #define HALF_NUM_PARAMETERS 400000
-#define PARAMETERS 163840
-#define S_THRESHOLD 40 // 37148106*0.48/32= (VGG-16)
+#define PARAMETERS 163840 // 37148106 / 32 / 32
+#define S_THRESHOLD 40 // 37148106*0.48/32= 557,221 (VGG-16)
 #define K_THRESHOLD 1
 
 // control Ingress(
@@ -238,6 +238,7 @@ control MyIngress(
                 update_and_check_worker_bitmap.apply();
                 k_register.read(meta.switchml_md.k, 0);
                 if(meta.switchml_md.k == 0 ){
+                    // meta.switchml_md.k = 1; //FIXME:
                     meta.switchml_md.k = 1;
                     k_register.write(0, 1);
                 }

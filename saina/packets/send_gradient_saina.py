@@ -20,9 +20,12 @@ parser.add_argument('--dst_mac', required=False, type=str, default="0c:c4:7a:63:
 parser.add_argument('--src_ip', required=False, type=str, default="20.10.0.1", help='')
 parser.add_argument('--dst_ip', required=False, type=str, default="20.10.0.254", help='')
 parser.add_argument('--pkt_id', required=False, type=int, default=0, help='')
+parser.add_argument('--wid', required=False, type=int, default=0, help='')
 parser.add_argument('--ls_flag', required=False, type=int, default=0, help='')
 parser.add_argument('--num_pkt', required=False, type=int, default=1, help='')
 parser.add_argument('--round', required=False, type=int, default=1, help='')
+
+worker_veth_map = {0:'veth0', 1:'veth2', 2:'veth4', 3:'vet6', 16:'veth8'}
 
 args = parser.parse_args()
 
@@ -92,16 +95,32 @@ class data(Packet):
 bind_layers(UDP, switchml)
 bind_layers(switchml, data)
 
+def pkt_id_to_pool_index(pkt_id):
+
+    i = pkt_id % (2*pool_size)
+
+    if (i < pool_size):
+        return i
+    else:
+        return (i-pool_size | 0x8000)
 
 def main():
     dst_ip = args.dst_ip
     src_ip = args.src_ip
     iface = args.i
-    
+    if args.wid != 0:
+        iface = worker_veth_map[args.wid]
+
+    pkt_id = args.pkt_id
+
+    global pool_size
+    pool_size = 256
+    pool_index = pkt_id_to_pool_index(pkt_id)
+
     if(args.c==0):
         # pkt = Ether / IP(src=src_ip, dst=dst_ip) / UDP(dport=48864, sport=20) / switchml / data / data / exponents / sign
         pkt = Ether(src='00:00:00:00:00:00', dst=args.dst_mac) / IP(src=src_ip, dst=dst_ip) / UDP(dport=48864, sport=20) \
-                    / switchml() / data()
+                    / switchml(pool_index=pool_index) / data()
         pkt.show()
         # hexdump(pkt)
 
@@ -109,12 +128,17 @@ def main():
     
     else:
         for i in range(args.num_pkt):
-            pkt = Ether(src='00:00:00:00:00:00', dst=args.dst_mac) / IP(src=src_ip, dst=dst_ip) / UDP(dport=48864, sport=20) / switchml(tsi=i, pool_index=i*32) / data()
+            pkt = Ether(src='00:00:00:00:00:00', dst=args.dst_mac) / IP(src=src_ip, dst=dst_ip) / UDP(dport=48864, sport=20) / switchml(tsi=i, pool_index=pool_index) / data()
             if i == args.num_pkt-1:
-                pkt = Ether(src='00:00:00:00:00:00', dst=args.dst_mac) / IP(src=src_ip, dst=dst_ip) / UDP(dport=48864, sport=20) / switchml(tsi=i, pool_index=i*32, last_packet_flag=1) / data()
+                pkt = Ether(src='00:00:00:00:00:00', dst=args.dst_mac) / IP(src=src_ip, dst=dst_ip) / UDP(dport=48864, sport=20) / switchml(tsi=i, pool_index=pool_index, last_packet_flag=1) / data()
             sendp(pkt, iface=iface, verbose=False)
-            print ("sending %s th packets to interface %s " % (i, iface))
 
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
+# print ("sending %s th packets to interface %s " % (i, iface))

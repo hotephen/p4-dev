@@ -45,7 +45,7 @@ control NextStepSelector(
         // Destination address will be filled in egress pipe
 
         // standard_metadata.mcast_grp = meta.switchml_md.mgid;
-        standard_metadata.egress_spec = 16;
+        standard_metadata.egress_spec = TEST_OUTPUT_PORT;
         meta.switchml_md.packet_type = 1;
 
     }
@@ -58,7 +58,8 @@ control NextStepSelector(
         // hdr.d1.setInvalid();
 
         // Send back out ingress port
-        standard_metadata.egress_spec = meta.switchml_md.ingress_port;
+        // standard_metadata.egress_spec = meta.switchml_md.ingress_port; // FIXME
+        standard_metadata.egress_spec = TEST_OUTPUT_PORT; // :FIXME
         meta.switchml_md.packet_type = 2;
     }
 
@@ -96,6 +97,8 @@ control NextStepSelector(
             // 1. Normal gradient : last=None, map=0, end_flag=None
             (_, _, 4, _, 0, _, 1) : broadcast();
             (_, _, 4, _, 0, _, _) : finish_consume();
+
+            (_, _, 4, _, _, _, _): retransmit();
             
             // 3. round end packet : last=1, map=0, end_flag=1;
             // (0, _, 4, 1, 0, 1) : recirculate_for_HARVEST7(68); 

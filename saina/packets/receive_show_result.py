@@ -15,6 +15,7 @@ from scapy.all import hexdump, BitField, BitFieldLenField, ShortEnumField, X3Byt
 parser = argparse.ArgumentParser(description='parser')
 parser.add_argument('--i', required=False, type=str, default='veth0', help='interface')
 parser.add_argument('--c', required=False, type=int, default=0, help='continuous packet transmission')
+parser.add_argument('--s', required=False, type=int, default=0, help='show packet')
 parser.add_argument('--job_id', required=False, type=int, default=0, help='job id')
 parser.add_argument('--src_ip', required=False, type=str, default="10.10.0.1", help='')
 parser.add_argument('--dst_ip', required=False, type=str, default="10.10.0.12", help='')
@@ -95,7 +96,8 @@ def handle_pkt(pkt):
     # pkt.show()
     # hexdump(pkt)
     if (pkt[Ether].dst =='00:00:00:00:00:00'):
-        # pkt.show()
+        if args.s == 1:
+            pkt.show()
         print("tsi: ", pkt[switchml].tsi , "sign_vector: ", bin(pkt[switchml].test1).zfill(32), "sum: ", pkt[switchml].test2, "k: ", pkt[switchml].k, "round: ", pkt[switchml].round)
         print("=========================================================")
 
