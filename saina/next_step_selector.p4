@@ -35,7 +35,7 @@ control NextStepSelector(
     }
 
     action finish_consume() {
-        mark_to_drop();
+        mark_to_drop(standard_metadata);
         meta.drop_flag = 1;
     }
 
@@ -61,11 +61,12 @@ control NextStepSelector(
         // standard_metadata.egress_spec = meta.switchml_md.ingress_port; // FIXME
         standard_metadata.egress_spec = TEST_OUTPUT_PORT; // :FIXME
         meta.switchml_md.packet_type = 2;
+        hdr.switchml.packet_type = (bit<8>)meta.switchml_md.packet_type;
     }
 
     action drop() {
         // Mark for drop
-        mark_to_drop();
+        mark_to_drop(standard_metadata);
         meta.drop_flag = 1;
         meta.switchml_md.packet_type = 3;
     }

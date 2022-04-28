@@ -25,7 +25,7 @@ parser.add_argument('--ls_flag', required=False, type=int, default=0, help='')
 parser.add_argument('--num_pkt', required=False, type=int, default=1, help='')
 parser.add_argument('--round', required=False, type=int, default=1, help='')
 
-worker_veth_map = {0:'veth0', 1:'veth2', 2:'veth4', 3:'vet6', 16:'veth8'}
+worker_veth_map = {0:'veth0', 1:'veth2', 2:'veth4', 3:'veth6', 16:'veth8'}
 
 args = parser.parse_args()
 
@@ -40,7 +40,7 @@ class switchml(Packet):
         BitField('packet_size', 0, 3),
         ByteField('job_id', 0),
         BitField('tsi', args.pkt_id, 32),
-	    BitField('pool_index', (args.pkt_id)*32, 16),
+	    BitField('pool_index', (args.pkt_id), 16),
         BitField('packet_type', 0, 8),        
         ByteField('k', 0), ##
         ByteField('round', args.round), ##
@@ -114,7 +114,7 @@ def main():
     pkt_id = args.pkt_id
 
     global pool_size
-    pool_size = 256
+    pool_size = 384
     pool_index = pkt_id_to_pool_index(pkt_id)
 
     if(args.c==0):
@@ -132,6 +132,7 @@ def main():
             if i == args.num_pkt-1:
                 pkt = Ether(src='00:00:00:00:00:00', dst=args.dst_mac) / IP(src=src_ip, dst=dst_ip) / UDP(dport=48864, sport=20) / switchml(tsi=i, pool_index=pool_index, last_packet_flag=1) / data()
             sendp(pkt, iface=iface, verbose=False)
+            pkt.show()
 
 
 if __name__ == '__main__':

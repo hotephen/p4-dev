@@ -32,13 +32,16 @@ control UDPSender(
 
         hdr.switchml.setValid();
         hdr.switchml.msg_type = 1;
-        hdr.switchml.round_end_flag = 0; //FIXME:
         hdr.switchml.size = meta.switchml_md.packet_size;
         hdr.switchml.job_number = meta.switchml_md.job_number;
         hdr.switchml.tsi = meta.switchml_md.tsi;
 
-        hdr.switchml.pool_index[13:0] = meta.switchml_md.pool_index[14:1];
+        hdr.switchml.round_end_flag = meta.switchml_md.round_end_flag; //FIXME:
+        hdr.switchml.packet_type = (bit<8>)meta.switchml_md.packet_type; //FIXME:
         hdr.switchml.k = meta.switchml_md.k; //FIXME:
+        
+
+        hdr.switchml.pool_index[13:0] = meta.switchml_md.pool_index[14:1];
 
         hdr.switchml.test1 = meta.test1;
         hdr.switchml.test2 = meta.test2;
@@ -46,12 +49,16 @@ control UDPSender(
     }
 
     table switch_mac_and_ip {
-        key = {hdr.switchml.k : ternary; }
-        actions = { @defaultonly set_switch_mac_and_ip; }
+        key = {
+            hdr.switchml.k : ternary;
+            }
+        actions = { 
+            set_switch_mac_and_ip; 
+        }
         const entries = {
             _ : set_switch_mac_and_ip(0x0cc47a63ffff, 0x140A00fe);
         }
-        size = 1;
+        // size = 1;
     }
 
     action set_dst_addr(

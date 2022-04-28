@@ -104,7 +104,7 @@ control MyIngress(
     }
 
     action drop() {
-        mark_to_drop();
+        mark_to_drop(standard_metadata);
         meta.drop_flag = 1;
     }
 
@@ -295,7 +295,7 @@ control MyIngress(
         if (hdr.switchml.round_end_flag == 1 && meta.switchml_md.packet_type == 1){
 
             // Clear worker_bitmap
-            worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], 0);
+            // worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], 0);
             
             bit<32> sign_reg_idx;
             bit<32> sign_vector1;
@@ -327,7 +327,7 @@ control MyIngress(
                     idx_counter_register.write(0, idx_counter+1);
                 }
             }
-            else{ // if(hdr.switchml.round % 2 == 0) {
+            else{ // if(hdr.switchml.round % 2 == 1) {
                 sign1.read(sign_vector1 , sign_reg_idx);
                 sign_vector1 = sign_vector1 << 1;
                 sign_vector1 = sign_vector1 + (bit<32>)hdr.d0.d00[31:31];
@@ -392,6 +392,15 @@ control MyIngress(
                 if(sum >= S_THRESHOLD){
                     k_count = k_count + 1;
                     k_counter.write(0, k_count);
+                }
+                else{
+                    if (k_count == 0){
+                        // nothing
+                    } 
+                    else{
+                        k_count = k_count - 1;
+                    }
+                    k_counter.write(0, k_count);
                 }       
 
                 if(k_count >= K_THRESHOLD){
@@ -400,8 +409,9 @@ control MyIngress(
                     k_register.write(0,meta.switchml_md.k);    
                     k_counter.write(0,0);
                 }
+                
             }
-
+            hdr.switchml.test2 = sum;
             sum_grad_sign.read(meta.test2, 0); //FIXME:
             k_register.read(meta.switchml_md.k, 0); //FIXME:
         }

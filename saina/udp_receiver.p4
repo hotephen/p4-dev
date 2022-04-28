@@ -12,7 +12,7 @@ control UDPReceiver(
 
     // Packet was received with errors; set drop bit in deparser metadata
     action drop() {
-        mark_to_drop();
+        mark_to_drop(standard_metadata);
         meta.drop_flag = 1;
     }
 
@@ -55,7 +55,7 @@ control UDPReceiver(
         hdr.ethernet.setInvalid();
         hdr.ipv4.setInvalid();
         hdr.udp.setInvalid();
-        hdr.switchml.setInvalid();
+        // hdr.switchml.setInvalid();
         // hdr.sign_header.setInvalid(); //FIXME:
         meta.fastest.setValid(); //FIXME:
 

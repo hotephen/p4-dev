@@ -64,7 +64,7 @@ control UpdateAndCheckWorkerBitmap(
     register<bit<32>>(num_slots) worker_bitmap1;
     
     action drop() {
-        mark_to_drop();
+        // mark_to_drop(standard_metadata);
         meta.drop_flag = 1;
     }
 
