@@ -1,7 +1,7 @@
-# 1 "/home/p4/p4-dev/saina/saina.p4"
+# 1 "saina_squeezenet.p4"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "/home/p4/p4-dev/saina/saina.p4"
+# 1 "saina_squeezenet.p4"
 # 1 "/usr/local/share/p4c/p4include/core.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -85,7 +85,7 @@ match_kind {
     /// Longest-prefix match.
     lpm
 }
-# 2 "/home/p4/p4-dev/saina/saina.p4" 2
+# 2 "saina_squeezenet.p4" 2
 # 1 "/usr/local/share/p4c/p4include/v1model.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -864,9 +864,9 @@ package V1Switch<H, M>(Parser<H, M> p,
                        ComputeChecksum<H, M> ck,
                        Deparser<H> dep
                        );
-# 3 "/home/p4/p4-dev/saina/saina.p4" 2
+# 3 "saina_squeezenet.p4" 2
 
-# 1 "/home/p4/p4-dev/saina/configuration.p4" 1
+# 1 "configuration.p4" 1
 
 
 
@@ -891,8 +891,8 @@ package V1Switch<H, M>(Parser<H, M> p,
 
 
 // Total number of destination queue pairs
-# 5 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/types.p4" 1
+# 5 "saina_squeezenet.p4" 2
+# 1 "types.p4" 1
 
 
 
@@ -1094,7 +1094,7 @@ header switchml_md_h { //31B +
 
     // bit<8> k_counter;
     bit<8> k;
-    bit<8> round;
+    bit<16> round;
     // bit<8> round_end_flag;
     // bit<32> packet_id; 
 }
@@ -1140,8 +1140,8 @@ struct metadata_t {
     bit<32> sign_vector1;
     bit<32> sign_vector2;
 }
-# 6 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/headers.p4" 1
+# 6 "saina_squeezenet.p4" 2
+# 1 "headers.p4" 1
 
 
 
@@ -1214,12 +1214,9 @@ header switchml_h {
     bit<32> tsi; //FIXME: Also used for k_counter value
     bit<16> pool_index;
     bit<8> packet_type;
-    bit<8> k; //FIXME:
 
-    // bit<16> round; //FIXME:
-    bit<8> round; //FIXME:
-    bit<32> test1;
-    bit<32> test2;
+    bit<16> round; //FIXME:
+    // bit<8> round; //FIXME:
     bit<8> last_packet_flag;
 
     // bit<32> sign_reg_idx; 
@@ -1287,8 +1284,8 @@ struct header_t {
     switchml_h switchml;
     data_h d0;
 }
-# 7 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/parsers.p4" 1
+# 7 "saina_squeezenet.p4" 2
+# 1 "parsers.p4" 1
 
 
 
@@ -1383,8 +1380,8 @@ control MyComputeChecksum(inout header_t hdr, inout metadata_t meta) {
      apply {
     }
 }
-# 8 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/arp_icmp_responder.p4" 1
+# 8 "saina_squeezenet.p4" 2
+# 1 "arp_icmp_responder.p4" 1
 
 
 
@@ -1451,8 +1448,8 @@ control ARPandICMPResponder(
         arp_icmp.apply();
     }
 }
-# 9 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/forwarder.p4" 1
+# 9 "saina_squeezenet.p4" 2
+# 1 "forwarder.p4" 1
 
 
 
@@ -1493,9 +1490,9 @@ control Forwarder(
         forward.apply();
     }
 }
-# 10 "/home/p4/p4-dev/saina/saina.p4" 2
+# 10 "saina_squeezenet.p4" 2
 // #include "drop_simulator.p4"
-# 1 "/home/p4/p4-dev/saina/udp_receiver.p4" 1
+# 1 "udp_receiver.p4" 1
 
 
 
@@ -1621,8 +1618,8 @@ control UDPReceiver(
         receive_udp.apply();
     }
 }
-# 12 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/udp_sender.p4" 1
+# 12 "saina_squeezenet.p4" 2
+# 1 "udp_sender.p4" 1
 
 
 
@@ -1645,7 +1642,7 @@ control UDPSender(
         hdr.ipv4.version = 4;
         hdr.ipv4.ihl = 5;
         hdr.ipv4.diffserv = 0x00;
-        hdr.ipv4.total_len = 20 + 156;;
+        hdr.ipv4.total_len = 20 + 157;;
         hdr.ipv4.identification = 0x0000;
         hdr.ipv4.flags = 0b000;
         hdr.ipv4.frag_offset = 0;
@@ -1653,7 +1650,7 @@ control UDPSender(
         hdr.ipv4.protocol = ip_protocol_t.UDP;
         hdr.ipv4.src_addr = switch_ip;
 
-        hdr.udp.length = 156;
+        hdr.udp.length = 157;
 
         hdr.switchml.setValid();
         hdr.switchml.msg_type = 1;
@@ -1663,20 +1660,15 @@ control UDPSender(
 
         hdr.switchml.round = meta.switchml_md.round; //FIXME:
         hdr.switchml.round_end_flag = meta.switchml_md.round_end_flag; //FIXME:
-        hdr.switchml.packet_type = (bit<8>)meta.switchml_md.packet_type; //FIXME:
-        hdr.switchml.k = meta.switchml_md.k; //FIXME:
-
+        hdr.switchml.packet_type = (bit<8>)meta.switchml_md.packet_type; //FIXME:        
 
         hdr.switchml.pool_index[13:0] = meta.switchml_md.pool_index[14:1];
-
-        hdr.switchml.test1 = meta.test1;
-        hdr.switchml.test2 = meta.test2;
 
     }
 
     table switch_mac_and_ip {
         key = {
-            hdr.switchml.k : ternary;
+            hdr.switchml.job_number : ternary;
             }
         actions = {
             set_switch_mac_and_ip;
@@ -1737,10 +1729,10 @@ control UDPSender(
         }
     }
 }
-# 13 "/home/p4/p4-dev/saina/saina.p4" 2
+# 13 "saina_squeezenet.p4" 2
 // #include "rdma_receiver.p4"
 // #include "rdma_sender.p4"
-# 1 "/home/p4/p4-dev/saina/bitmap_checker.p4" 1
+# 1 "bitmap_checker.p4" 1
 
 
 
@@ -1872,8 +1864,8 @@ control UpdateAndCheckWorkerBitmap(
         update_and_check_worker_bitmap.apply();
     }
 }
-# 16 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/workers_counter.p4" 1
+# 16 "saina_squeezenet.p4" 2
+# 1 "workers_counter.p4" 1
 
 
 
@@ -1952,9 +1944,9 @@ control WorkersCounter(
         }
     }
 }
-# 17 "/home/p4/p4-dev/saina/saina.p4" 2
+# 17 "saina_squeezenet.p4" 2
 // #include "exponents.p4"
-# 1 "/home/p4/p4-dev/saina/processor.p4" 1
+# 1 "processor.p4" 1
 
 
 
@@ -2024,8 +2016,8 @@ control Processor(
         sum.apply();
     }
 }
-# 19 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/next_step_selector.p4" 1
+# 19 "saina_squeezenet.p4" 2
+# 1 "next_step_selector.p4" 1
 
 
 
@@ -2145,7 +2137,7 @@ control NextStepSelector(
         next_step.apply();
     }
 }
-# 20 "/home/p4/p4-dev/saina/saina.p4" 2
+# 20 "saina_squeezenet.p4" 2
 // #include "process_sign.p4"
 // #include "extraction.p4"
 // #include "Popcount.p4"
@@ -2173,8 +2165,8 @@ control MyIngress(
     inout standard_metadata_t standard_metadata) {
 
 
-    register<bit<32>>(163840) sign1;
-    register<bit<32>>(163840) sign2;
+    register<bit<32>>(114538) sign1;
+    register<bit<32>>(114538) sign2;
     register<bit<32>>(1024) idx_counter_register;
     register<bit<32>>(1) sum_grad_sign;
     register<bit<32>>(1) sum_grad_sign_backup;
@@ -2705,7 +2697,7 @@ control MyIngress(
             (31, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_31();
         }
     }
-# 592 "/home/p4/p4-dev/saina/saina.p4"
+# 592 "saina_squeezenet.p4"
     ARPandICMPResponder() arp_icmp_responder;
     Forwarder() forwarder;
 
@@ -2840,6 +2832,7 @@ control MyIngress(
             bit<32> k_count;
 
             meta.sign_reg_idx = (bit<32>)hdr.switchml.tsi[31:5];
+            // meta.test1 = meta.sign_reg_idx;
             meta.sign_bitmap_index = hdr.switchml.tsi % 32;
             // meta.round_mod = hdr.switchml.round % 2;
 
@@ -2854,9 +2847,9 @@ control MyIngress(
                 idx_counter_register.read(idx_counter, meta.sign_reg_idx);
 
                 // meta.test1 = meta.sign_vector2; // TEST
-                meta.test1 = idx_counter; // TEST
+                // meta.test1 = idx_counter; // TEST
 
-                if(idx_counter == 31){
+                if(idx_counter == 31 || hdr.switchml.last_packet_flag==1){
                     sign1.read(meta.sign_vector1, meta.sign_reg_idx);
                     xor_result = meta.sign_vector2 ^ meta.sign_vector1;
                     sign1.write(meta.sign_reg_idx, 0);
@@ -2877,9 +2870,9 @@ control MyIngress(
                 idx_counter_register.read(idx_counter, meta.sign_reg_idx);
 
                 // meta.test1 = meta.sign_vector1; // TEST
-                meta.test1 = idx_counter; // TEST
+                // meta.test1 = idx_counter; // TEST
 
-                if(idx_counter == 31){
+                if(idx_counter == 31 || hdr.switchml.last_packet_flag==1){
                     sign2.read(meta.sign_vector2, meta.sign_reg_idx);
                     xor_result = meta.sign_vector1 ^ meta.sign_vector2;
                     sign2.write(meta.sign_reg_idx, 0);
@@ -2891,9 +2884,11 @@ control MyIngress(
                 }
             }
 
+            meta.test1 = xor_result;
+
             sum_grad_sign.read(sum, 0);
 
-            if(idx_counter == 31){
+            if(idx_counter == 31 || hdr.switchml.last_packet_flag==1){
                 bit<32> temp1;
                 bit<32> temp2;
                 bit<32> popcount_result;
@@ -2933,7 +2928,7 @@ control MyIngress(
                 idx_counter_register.write(meta.sign_reg_idx, 0);
 
                 k_counter.read(k_count, 0);
-                if(sum >= 40){
+                if(sum >= 1718){
                     k_count = k_count + 1;
                     k_counter.write(0, k_count);
                 }
@@ -2947,7 +2942,7 @@ control MyIngress(
                     k_counter.write(0, k_count);
                 }
 
-                if(k_count >= 1){
+                if(k_count >= 5){
                     k_register.read(meta.switchml_md.k, 0);
                     if(meta.switchml_md.k != 16){
                         meta.switchml_md.k = meta.switchml_md.k + 1;

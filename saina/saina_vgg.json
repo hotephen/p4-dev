@@ -388,7 +388,7 @@
         ["pool_index", 16, false],
         ["packet_type", 8, false],
         ["k", 8, false],
-        ["round", 8, false],
+        ["round", 16, false],
         ["test1", 32, false],
         ["test2", 32, false],
         ["last_packet_flag", 8, false]
@@ -456,7 +456,7 @@
         ["egress_drop_flag", 1, false],
         ["num_workers", 8, false],
         ["k", 8, false],
-        ["round", 8, false]
+        ["round", 16, false]
       ]
     },
     {
@@ -920,8 +920,8 @@
       "name" : "deparser",
       "id" : 0,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 866,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 867,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -936,44 +936,44 @@
       "name" : "MyIngress.sign1",
       "id" : 0,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 47,
-        "column" : 30,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 48,
+        "column" : 31,
         "source_fragment" : "sign1"
       },
-      "size" : 163840,
+      "size" : 2097151,
       "bitwidth" : 32
     },
     {
       "name" : "MyIngress.sign2",
       "id" : 1,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 48,
-        "column" : 30,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 49,
+        "column" : 31,
         "source_fragment" : "sign2"
       },
-      "size" : 163840,
+      "size" : 2097151,
       "bitwidth" : 32
     },
     {
       "name" : "MyIngress.idx_counter_register",
       "id" : 2,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 49,
-        "column" : 28,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 50,
+        "column" : 31,
         "source_fragment" : "idx_counter_register"
       },
-      "size" : 1024,
+      "size" : 2097151,
       "bitwidth" : 32
     },
     {
       "name" : "MyIngress.sum_grad_sign",
       "id" : 3,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 50,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 51,
         "column" : 25,
         "source_fragment" : "sum_grad_sign"
       },
@@ -984,8 +984,8 @@
       "name" : "MyIngress.sum_grad_sign_backup",
       "id" : 4,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 51,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 52,
         "column" : 25,
         "source_fragment" : "sum_grad_sign_backup"
       },
@@ -996,8 +996,8 @@
       "name" : "MyIngress.k_counter",
       "id" : 5,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 52,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 53,
         "column" : 25,
         "source_fragment" : "k_counter"
       },
@@ -1008,8 +1008,8 @@
       "name" : "MyIngress.k_register",
       "id" : 6,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 53,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 54,
         "column" : 24,
         "source_fragment" : "k_register"
       },
@@ -1020,8 +1020,8 @@
       "name" : "MyIngress.worker_bitmap",
       "id" : 7,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 57,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 58,
         "column" : 28,
         "source_fragment" : "worker_bitmap"
       },
@@ -1032,8 +1032,8 @@
       "name" : "MyIngress.worker_bitmap1",
       "id" : 8,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 58,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 59,
         "column" : 28,
         "source_fragment" : "worker_bitmap1"
       },
@@ -2081,8 +2081,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 61,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 62,
             "column" : 8,
             "source_fragment" : "meta.worker_bitmap = bitmap"
           }
@@ -2103,8 +2103,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 108,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 109,
             "column" : 8,
             "source_fragment" : "mark_to_drop(standard_metadata)"
           }
@@ -2122,8 +2122,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 109,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 110,
             "column" : 8,
             "source_fragment" : "meta.drop_flag = 1"
           }
@@ -2191,8 +2191,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 120,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 121,
             "column" : 39,
             "source_fragment" : "(bit<32>)meta.switchml_md.pool_index[14:1]"
           }
@@ -2214,8 +2214,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 120,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 121,
             "column" : 8,
             "source_fragment" : "worker_bitmap.read(read_value, (bit<32>)meta.switchml_md.pool_index[14:1])"
           }
@@ -2233,8 +2233,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 121,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 122,
             "column" : 8,
             "source_fragment" : "meta.switchml_md.worker_bitmap_before = read_value"
           }
@@ -2265,8 +2265,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 122,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 123,
             "column" : 8,
             "source_fragment" : "read_value = read_value | meta.worker_bitmap"
           }
@@ -2327,8 +2327,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 123,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 124,
             "column" : 28,
             "source_fragment" : "(bit<32>)meta.switchml_md.pool_index[14:1]"
           }
@@ -2350,8 +2350,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 123,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 124,
             "column" : 8,
             "source_fragment" : "worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value)"
           }
@@ -2412,8 +2412,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 126,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 127,
             "column" : 42,
             "source_fragment" : "(bit<32>)meta.switchml_md.pool_index[14:1]"
           }
@@ -2435,8 +2435,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 126,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 127,
             "column" : 8,
             "source_fragment" : "worker_bitmap1.read(read_value1 , (bit<32>)meta.switchml_md.pool_index[14:1])"
           }
@@ -2484,8 +2484,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 127,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 128,
             "column" : 8,
             "source_fragment" : "read_value1 = read_value1 & (~meta.worker_bitmap)"
           }
@@ -2546,8 +2546,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 128,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 129,
             "column" : 29,
             "source_fragment" : "(bit<32>)meta.switchml_md.pool_index[14:1]"
           }
@@ -2569,8 +2569,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 128,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 129,
             "column" : 8,
             "source_fragment" : "worker_bitmap1.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value1)"
           }
@@ -2601,8 +2601,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 115,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 116,
             "column" : 8,
             "source_fragment" : "meta.switchml_md.map_result = meta.switchml_md.worker_bitmap_before & meta.worker_bitmap"
           }
@@ -2670,8 +2670,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 135,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 136,
             "column" : 41,
             "source_fragment" : "(bit<32>)meta.switchml_md.pool_index[14:1]"
           }
@@ -2693,8 +2693,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 135,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 136,
             "column" : 8,
             "source_fragment" : "worker_bitmap1.read(read_value1, (bit<32>)meta.switchml_md.pool_index[14:1])"
           }
@@ -2712,8 +2712,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 136,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 137,
             "column" : 8,
             "source_fragment" : "meta.switchml_md.worker_bitmap_before = read_value1"
           }
@@ -2744,8 +2744,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 137,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 138,
             "column" : 8,
             "source_fragment" : "read_value1 = read_value1 | meta.worker_bitmap"
           }
@@ -2806,8 +2806,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 138,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 139,
             "column" : 29,
             "source_fragment" : "(bit<32>)meta.switchml_md.pool_index[14:1]"
           }
@@ -2829,8 +2829,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 138,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 139,
             "column" : 8,
             "source_fragment" : "worker_bitmap1.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value1)"
           }
@@ -2891,8 +2891,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 141,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 142,
             "column" : 39,
             "source_fragment" : "(bit<32>)meta.switchml_md.pool_index[14:1]"
           }
@@ -2914,8 +2914,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 141,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 142,
             "column" : 8,
             "source_fragment" : "worker_bitmap.read(read_value, (bit<32>)meta.switchml_md.pool_index[14:1])"
           }
@@ -2963,8 +2963,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 142,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 143,
             "column" : 8,
             "source_fragment" : "read_value = read_value & (~meta.worker_bitmap)"
           }
@@ -3025,8 +3025,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 143,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 144,
             "column" : 28,
             "source_fragment" : "(bit<32>)meta.switchml_md.pool_index[14:1]"
           }
@@ -3048,8 +3048,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 143,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 144,
             "column" : 8,
             "source_fragment" : "worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], read_value)"
           }
@@ -3080,8 +3080,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 115,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 116,
             "column" : 8,
             "source_fragment" : "meta.switchml_md.map_result = meta.switchml_md.worker_bitmap_before & meta.worker_bitmap"
           }
@@ -3129,8 +3129,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 173,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 174,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000001"
           }
@@ -3178,8 +3178,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 177,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 178,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000002"
           }
@@ -3227,8 +3227,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 181,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 182,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000004"
           }
@@ -3276,8 +3276,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 185,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 186,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000008"
           }
@@ -3325,8 +3325,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 189,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 190,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000010"
           }
@@ -3374,8 +3374,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 193,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 194,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000020"
           }
@@ -3423,8 +3423,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 197,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 198,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000040"
           }
@@ -3472,8 +3472,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 201,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 202,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000080"
           }
@@ -3521,8 +3521,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 205,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 206,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000100"
           }
@@ -3570,8 +3570,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 209,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 210,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000200"
           }
@@ -3619,8 +3619,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 213,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 214,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000400"
           }
@@ -3668,8 +3668,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 217,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 218,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00000800"
           }
@@ -3717,8 +3717,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 221,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 222,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00001000"
           }
@@ -3766,8 +3766,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 225,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 226,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00002000"
           }
@@ -3815,8 +3815,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 229,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 230,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00004000"
           }
@@ -3864,8 +3864,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 233,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 234,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00008000"
           }
@@ -3913,8 +3913,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 237,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 238,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00010000"
           }
@@ -3962,8 +3962,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 241,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 242,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00020000"
           }
@@ -4011,8 +4011,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 245,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 246,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00040000"
           }
@@ -4060,8 +4060,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 249,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 250,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00080000"
           }
@@ -4109,8 +4109,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 253,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 254,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00100000"
           }
@@ -4158,8 +4158,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 257,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 258,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00200000"
           }
@@ -4207,8 +4207,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 261,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 262,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00400000"
           }
@@ -4256,8 +4256,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 265,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 266,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x00800000"
           }
@@ -4305,8 +4305,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 269,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 270,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x01000000"
           }
@@ -4354,8 +4354,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 273,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 274,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x02000000"
           }
@@ -4403,8 +4403,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 277,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 278,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x04000000"
           }
@@ -4452,8 +4452,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 281,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 282,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x08000000"
           }
@@ -4501,8 +4501,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 285,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 286,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x10000000"
           }
@@ -4550,8 +4550,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 289,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 290,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x20000000"
           }
@@ -4599,8 +4599,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 293,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 294,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x40000000"
           }
@@ -4648,8 +4648,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 297,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 298,
             "column" : 8,
             "source_fragment" : "meta.sign_vector1 = meta.sign_vector1 + 0x80000000"
           }
@@ -4697,8 +4697,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 301,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 302,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000001"
           }
@@ -4746,8 +4746,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 305,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 306,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000002"
           }
@@ -4795,8 +4795,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 309,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 310,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000004"
           }
@@ -4844,8 +4844,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 313,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 314,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000008"
           }
@@ -4893,8 +4893,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 317,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 318,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000010"
           }
@@ -4942,8 +4942,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 321,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 322,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000020"
           }
@@ -4991,8 +4991,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 325,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 326,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000040"
           }
@@ -5040,8 +5040,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 329,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 330,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000080"
           }
@@ -5089,8 +5089,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 333,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 334,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000100"
           }
@@ -5138,8 +5138,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 337,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 338,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000200"
           }
@@ -5187,8 +5187,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 341,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 342,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000400"
           }
@@ -5236,8 +5236,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 345,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 346,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00000800"
           }
@@ -5285,8 +5285,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 349,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 350,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00001000"
           }
@@ -5334,8 +5334,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 353,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 354,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00002000"
           }
@@ -5383,8 +5383,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 357,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 358,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00004000"
           }
@@ -5432,8 +5432,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 361,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 362,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00008000"
           }
@@ -5481,8 +5481,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 365,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 366,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00010000"
           }
@@ -5530,8 +5530,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 369,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 370,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00020000"
           }
@@ -5579,8 +5579,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 373,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 374,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00040000"
           }
@@ -5628,8 +5628,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 377,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 378,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00080000"
           }
@@ -5677,8 +5677,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 381,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 382,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00100000"
           }
@@ -5726,8 +5726,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 385,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 386,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00200000"
           }
@@ -5775,8 +5775,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 389,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 390,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00400000"
           }
@@ -5824,8 +5824,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 393,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 394,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x00800000"
           }
@@ -5873,8 +5873,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 397,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 398,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x01000000"
           }
@@ -5922,8 +5922,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 401,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 402,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x02000000"
           }
@@ -5971,8 +5971,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 405,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 406,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x04000000"
           }
@@ -6020,8 +6020,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 409,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 410,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x08000000"
           }
@@ -6069,8 +6069,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 413,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 414,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x10000000"
           }
@@ -6118,8 +6118,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 417,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 418,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x20000000"
           }
@@ -6167,8 +6167,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 421,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 422,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x40000000"
           }
@@ -6216,8 +6216,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 425,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 426,
             "column" : 8,
             "source_fragment" : "meta.sign_vector2 = meta.sign_vector2 + 0x80000000"
           }
@@ -18678,7 +18678,7 @@
       ]
     },
     {
-      "name" : "saina640",
+      "name" : "saina_vgg641",
       "id" : 218,
       "runtime_data" : [],
       "primitives" : [
@@ -18695,8 +18695,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 640,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 641,
             "column" : 12,
             "source_fragment" : "meta.switchml_md.ingress_port = standard_metadata.ingress_port"
           }
@@ -18704,7 +18704,7 @@
       ]
     },
     {
-      "name" : "saina660",
+      "name" : "saina_vgg661",
       "id" : 219,
       "runtime_data" : [],
       "primitives" : [
@@ -18721,8 +18721,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 660,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 661,
             "column" : 20,
             "source_fragment" : "meta.switchml_md.k = 1"
           }
@@ -18744,8 +18744,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 661,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 662,
             "column" : 20,
             "source_fragment" : "k_register.write(0, 1)"
           }
@@ -18753,7 +18753,7 @@
       ]
     },
     {
-      "name" : "saina657",
+      "name" : "saina_vgg658",
       "id" : 220,
       "runtime_data" : [],
       "primitives" : [
@@ -18774,8 +18774,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 657,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 658,
             "column" : 16,
             "source_fragment" : "k_register.read(meta.switchml_md.k, 0)"
           }
@@ -19631,7 +19631,7 @@
       ]
     },
     {
-      "name" : "saina734",
+      "name" : "saina_vgg735",
       "id" : 255,
       "runtime_data" : [],
       "primitives" : [
@@ -19691,8 +19691,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -19714,8 +19714,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 734,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 735,
             "column" : 16,
             "source_fragment" : "sign2.read(meta.sign_vector2, meta.sign_reg_idx)"
           }
@@ -19723,7 +19723,7 @@
       ]
     },
     {
-      "name" : "saina743",
+      "name" : "saina_vgg744",
       "id" : 256,
       "runtime_data" : [],
       "primitives" : [
@@ -19783,8 +19783,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -19806,8 +19806,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 743,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 744,
             "column" : 20,
             "source_fragment" : "sign1.read(meta.sign_vector1, meta.sign_reg_idx)"
           }
@@ -19838,8 +19838,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 744,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 745,
             "column" : 20,
             "source_fragment" : "xor_result = meta.sign_vector2 ^ meta.sign_vector1"
           }
@@ -19900,8 +19900,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -19923,8 +19923,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 745,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 746,
             "column" : 20,
             "source_fragment" : "sign1.write(meta.sign_reg_idx, 0)"
           }
@@ -19985,8 +19985,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20008,8 +20008,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 746,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 747,
             "column" : 20,
             "source_fragment" : "idx_counter_register.write(meta.sign_reg_idx, 0)"
           }
@@ -20017,7 +20017,7 @@
       ]
     },
     {
-      "name" : "saina750",
+      "name" : "saina_vgg751",
       "id" : 257,
       "runtime_data" : [],
       "primitives" : [
@@ -20077,8 +20077,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20119,8 +20119,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 750,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 751,
             "column" : 66,
             "source_fragment" : "idx_counter + 1"
           }
@@ -20142,8 +20142,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 750,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 751,
             "column" : 20,
             "source_fragment" : "idx_counter_register.write(meta.sign_reg_idx, idx_counter + 1)"
           }
@@ -20151,7 +20151,7 @@
       ]
     },
     {
-      "name" : "saina736",
+      "name" : "saina_vgg737",
       "id" : 258,
       "runtime_data" : [],
       "primitives" : [
@@ -20211,8 +20211,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20234,8 +20234,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 736,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 737,
             "column" : 16,
             "source_fragment" : "sign2.write(meta.sign_reg_idx, meta.sign_vector2)"
           }
@@ -20296,8 +20296,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20319,8 +20319,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 737,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 738,
             "column" : 16,
             "source_fragment" : "idx_counter_register.read(idx_counter, meta.sign_reg_idx)"
           }
@@ -20338,8 +20338,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 740,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 741,
             "column" : 16,
             "source_fragment" : "meta.test1 = idx_counter"
           }
@@ -20347,7 +20347,7 @@
       ]
     },
     {
-      "name" : "saina757",
+      "name" : "saina_vgg758",
       "id" : 259,
       "runtime_data" : [],
       "primitives" : [
@@ -20407,8 +20407,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20430,8 +20430,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 757,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 758,
             "column" : 16,
             "source_fragment" : "sign1.read(meta.sign_vector1, meta.sign_reg_idx)"
           }
@@ -20439,7 +20439,7 @@
       ]
     },
     {
-      "name" : "saina766",
+      "name" : "saina_vgg767",
       "id" : 260,
       "runtime_data" : [],
       "primitives" : [
@@ -20499,8 +20499,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20522,8 +20522,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 766,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 767,
             "column" : 20,
             "source_fragment" : "sign2.read(meta.sign_vector2, meta.sign_reg_idx)"
           }
@@ -20554,8 +20554,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 767,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 768,
             "column" : 20,
             "source_fragment" : "xor_result = meta.sign_vector1 ^ meta.sign_vector2"
           }
@@ -20616,8 +20616,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20639,8 +20639,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 768,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 769,
             "column" : 20,
             "source_fragment" : "sign2.write(meta.sign_reg_idx, 0)"
           }
@@ -20701,8 +20701,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20724,8 +20724,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 769,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 770,
             "column" : 20,
             "source_fragment" : "idx_counter_register.write(meta.sign_reg_idx, 0)"
           }
@@ -20733,7 +20733,7 @@
       ]
     },
     {
-      "name" : "saina773",
+      "name" : "saina_vgg774",
       "id" : 261,
       "runtime_data" : [],
       "primitives" : [
@@ -20793,8 +20793,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20835,8 +20835,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 773,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 774,
             "column" : 66,
             "source_fragment" : "idx_counter + 1"
           }
@@ -20858,8 +20858,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 773,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 774,
             "column" : 20,
             "source_fragment" : "idx_counter_register.write(meta.sign_reg_idx, idx_counter + 1)"
           }
@@ -20867,7 +20867,7 @@
       ]
     },
     {
-      "name" : "saina759",
+      "name" : "saina_vgg760",
       "id" : 262,
       "runtime_data" : [],
       "primitives" : [
@@ -20927,8 +20927,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -20950,8 +20950,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 759,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 760,
             "column" : 16,
             "source_fragment" : "sign1.write(meta.sign_reg_idx, meta.sign_vector1)"
           }
@@ -21012,8 +21012,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -21035,8 +21035,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 760,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 761,
             "column" : 16,
             "source_fragment" : "idx_counter_register.read(idx_counter, meta.sign_reg_idx)"
           }
@@ -21054,8 +21054,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 763,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 764,
             "column" : 16,
             "source_fragment" : "meta.test1 = idx_counter"
           }
@@ -21063,7 +21063,7 @@
       ]
     },
     {
-      "name" : "saina725",
+      "name" : "saina_vgg726",
       "id" : 263,
       "runtime_data" : [],
       "primitives" : [
@@ -21123,8 +21123,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 12,
             "source_fragment" : "meta.sign_reg_idx = (bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -21155,8 +21155,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 726,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 727,
             "column" : 12,
             "source_fragment" : "meta.sign_bitmap_index = hdr.switchml.tsi % 32"
           }
@@ -21164,7 +21164,7 @@
       ]
     },
     {
-      "name" : "saina800",
+      "name" : "saina_vgg801",
       "id" : 264,
       "runtime_data" : [],
       "primitives" : [
@@ -23064,8 +23064,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 800,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 801,
             "column" : 16,
             "source_fragment" : "sum = sum + popcount_result"
           }
@@ -23087,8 +23087,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 801,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 802,
             "column" : 16,
             "source_fragment" : "sum_grad_sign.write(0, sum)"
           }
@@ -23110,8 +23110,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 802,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 803,
             "column" : 16,
             "source_fragment" : "sum_grad_sign_backup.write(0, sum)"
           }
@@ -23119,7 +23119,7 @@
       ]
     },
     {
-      "name" : "saina777",
+      "name" : "saina_vgg778",
       "id" : 265,
       "runtime_data" : [],
       "primitives" : [
@@ -23140,8 +23140,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 777,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 778,
             "column" : 12,
             "source_fragment" : "sum_grad_sign.read(sum, 0)"
           }
@@ -23149,7 +23149,7 @@
       ]
     },
     {
-      "name" : "saina809",
+      "name" : "saina_vgg810",
       "id" : 266,
       "runtime_data" : [],
       "primitives" : [
@@ -23209,8 +23209,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -23232,8 +23232,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 809,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 810,
             "column" : 20,
             "source_fragment" : "sign2.write(meta.sign_reg_idx, 0)"
           }
@@ -23241,7 +23241,7 @@
       ]
     },
     {
-      "name" : "saina812",
+      "name" : "saina_vgg813",
       "id" : 267,
       "runtime_data" : [],
       "primitives" : [
@@ -23301,8 +23301,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -23324,8 +23324,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 812,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 813,
             "column" : 20,
             "source_fragment" : "sign1.write(meta.sign_reg_idx, 0)"
           }
@@ -23333,7 +23333,7 @@
       ]
     },
     {
-      "name" : "saina820",
+      "name" : "saina_vgg821",
       "id" : 268,
       "runtime_data" : [],
       "primitives" : [
@@ -23373,8 +23373,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 820,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 821,
             "column" : 20,
             "source_fragment" : "k_count = k_count + 1"
           }
@@ -23396,8 +23396,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 821,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 822,
             "column" : 20,
             "source_fragment" : "k_counter.write(0, k_count)"
           }
@@ -23405,7 +23405,7 @@
       ]
     },
     {
-      "name" : "saina828",
+      "name" : "saina_vgg829",
       "id" : 269,
       "runtime_data" : [],
       "primitives" : [
@@ -23445,8 +23445,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 828,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 829,
             "column" : 24,
             "source_fragment" : "k_count = k_count - 1"
           }
@@ -23454,7 +23454,7 @@
       ]
     },
     {
-      "name" : "saina830",
+      "name" : "saina_vgg831",
       "id" : 270,
       "runtime_data" : [],
       "primitives" : [
@@ -23475,8 +23475,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 830,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 831,
             "column" : 20,
             "source_fragment" : "k_counter.write(0, k_count)"
           }
@@ -23484,7 +23484,7 @@
       ]
     },
     {
-      "name" : "saina814",
+      "name" : "saina_vgg815",
       "id" : 271,
       "runtime_data" : [],
       "primitives" : [
@@ -23505,8 +23505,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 814,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 815,
             "column" : 16,
             "source_fragment" : "sum_grad_sign_backup.write(0, sum)"
           }
@@ -23528,8 +23528,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 815,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 816,
             "column" : 16,
             "source_fragment" : "sum_grad_sign.write(0, 0)"
           }
@@ -23590,8 +23590,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 32,
             "source_fragment" : "(bit<32>)hdr.switchml.tsi[31:5]"
           }
@@ -23613,8 +23613,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 816,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 817,
             "column" : 16,
             "source_fragment" : "idx_counter_register.write(meta.sign_reg_idx, 0)"
           }
@@ -23636,8 +23636,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 818,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 819,
             "column" : 16,
             "source_fragment" : "k_counter.read(k_count, 0)"
           }
@@ -23645,7 +23645,7 @@
       ]
     },
     {
-      "name" : "saina836",
+      "name" : "saina_vgg837",
       "id" : 272,
       "runtime_data" : [],
       "primitives" : [
@@ -23685,8 +23685,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 836,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 837,
             "column" : 24,
             "source_fragment" : "meta.switchml_md.k = meta.switchml_md.k + 1"
           }
@@ -23694,7 +23694,7 @@
       ]
     },
     {
-      "name" : "saina834",
+      "name" : "saina_vgg835",
       "id" : 273,
       "runtime_data" : [],
       "primitives" : [
@@ -23715,8 +23715,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 834,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 835,
             "column" : 20,
             "source_fragment" : "k_register.read(meta.switchml_md.k, 0)"
           }
@@ -23724,7 +23724,7 @@
       ]
     },
     {
-      "name" : "saina838",
+      "name" : "saina_vgg839",
       "id" : 274,
       "runtime_data" : [],
       "primitives" : [
@@ -23745,8 +23745,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 838,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 839,
             "column" : 20,
             "source_fragment" : "k_register.write(0,meta.switchml_md.k)"
           }
@@ -23768,8 +23768,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 839,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 840,
             "column" : 20,
             "source_fragment" : "k_counter.write(0,0)"
           }
@@ -23777,7 +23777,7 @@
       ]
     },
     {
-      "name" : "saina842",
+      "name" : "saina_vgg843",
       "id" : 275,
       "runtime_data" : [],
       "primitives" : [
@@ -23794,8 +23794,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 842,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 843,
             "column" : 12,
             "source_fragment" : "meta.test2 = sum"
           }
@@ -23803,7 +23803,7 @@
       ]
     },
     {
-      "name" : "saina847",
+      "name" : "saina_vgg848",
       "id" : 276,
       "runtime_data" : [],
       "primitives" : [
@@ -23824,8 +23824,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 847,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 848,
             "column" : 12,
             "source_fragment" : "sum_grad_sign_backup.read(meta.test2, 0)"
           }
@@ -23833,7 +23833,7 @@
       ]
     },
     {
-      "name" : "saina849",
+      "name" : "saina_vgg850",
       "id" : 277,
       "runtime_data" : [],
       "primitives" : [
@@ -23854,8 +23854,8 @@
             }
           ],
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 849,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 850,
             "column" : 8,
             "source_fragment" : "k_register.read(meta.switchml_md.k, 0)"
           }
@@ -24011,14 +24011,14 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x00b0"
+              "value" : "0x00b1"
             }
           ],
           "source_info" : {
             "filename" : "/home/p4/p4-dev/saina/udp_sender.p4",
             "line" : 23,
             "column" : 8,
-            "source_fragment" : "hdr.ipv4.total_len = 20 + 156"
+            "source_fragment" : "hdr.ipv4.total_len = 20 + 157"
           }
         },
         {
@@ -24144,14 +24144,14 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x009c"
+              "value" : "0x009d"
             }
           ],
           "source_info" : {
             "filename" : "/home/p4/p4-dev/saina/udp_sender.p4",
             "line" : 31,
             "column" : 8,
-            "source_fragment" : "hdr.udp.length = 156"
+            "source_fragment" : "hdr.udp.length = 157"
           }
         },
         {
@@ -24924,8 +24924,8 @@
       "name" : "ingress",
       "id" : 0,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 41,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 42,
         "column" : 8,
         "source_fragment" : "MyIngress"
       },
@@ -24986,11 +24986,11 @@
           "direct_meters" : null,
           "action_ids" : [111, 113, 112],
           "actions" : ["MyIngress.udp_receiver.drop", "MyIngress.udp_receiver.set_bitmap", "MyIngress.udp_receiver.forward"],
-          "base_default_next" : "tbl_saina640",
+          "base_default_next" : "tbl_saina_vgg641",
           "next_tables" : {
-            "MyIngress.udp_receiver.drop" : "tbl_saina640",
-            "MyIngress.udp_receiver.set_bitmap" : "tbl_saina640",
-            "MyIngress.udp_receiver.forward" : "tbl_saina640"
+            "MyIngress.udp_receiver.drop" : "tbl_saina_vgg641",
+            "MyIngress.udp_receiver.set_bitmap" : "tbl_saina_vgg641",
+            "MyIngress.udp_receiver.forward" : "tbl_saina_vgg641"
           },
           "default_entry" : {
             "action_id" : 112,
@@ -25722,11 +25722,11 @@
           ]
         },
         {
-          "name" : "tbl_saina640",
+          "name" : "tbl_saina_vgg641",
           "id" : 1,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 640,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 641,
             "column" : 42,
             "source_fragment" : "="
           },
@@ -25738,10 +25738,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [218],
-          "actions" : ["saina640"],
+          "actions" : ["saina_vgg641"],
           "base_default_next" : "node_7",
           "next_tables" : {
-            "saina640" : "node_7"
+            "saina_vgg641" : "node_7"
           },
           "default_entry" : {
             "action_id" : 218,
@@ -25754,8 +25754,8 @@
           "name" : "MyIngress.reconstruct_worker_bitmap",
           "id" : 2,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 64,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 65,
             "column" : 10,
             "source_fragment" : "reconstruct_worker_bitmap"
           },
@@ -25789,8 +25789,8 @@
           "entries" : [
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 72,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 73,
                 "column" : 12,
                 "source_fragment" : "0 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 0)"
               },
@@ -25809,8 +25809,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 73,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 74,
                 "column" : 12,
                 "source_fragment" : "1 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 1)"
               },
@@ -25829,8 +25829,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 74,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 75,
                 "column" : 12,
                 "source_fragment" : "2 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 2)"
               },
@@ -25849,8 +25849,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 75,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 76,
                 "column" : 12,
                 "source_fragment" : "3 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 3)"
               },
@@ -25869,8 +25869,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 76,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 77,
                 "column" : 12,
                 "source_fragment" : "4 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 4)"
               },
@@ -25889,8 +25889,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 77,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 78,
                 "column" : 12,
                 "source_fragment" : "5 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 5)"
               },
@@ -25909,8 +25909,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 78,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 79,
                 "column" : 12,
                 "source_fragment" : "6 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 6)"
               },
@@ -25929,8 +25929,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 79,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 80,
                 "column" : 12,
                 "source_fragment" : "7 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 7)"
               },
@@ -25949,8 +25949,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 80,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 81,
                 "column" : 12,
                 "source_fragment" : "8 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 8)"
               },
@@ -25969,8 +25969,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 81,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 82,
                 "column" : 12,
                 "source_fragment" : "9 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 9)"
               },
@@ -25989,8 +25989,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 82,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 83,
                 "column" : 12,
                 "source_fragment" : "10 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 10)"
               },
@@ -26009,8 +26009,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 83,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 84,
                 "column" : 12,
                 "source_fragment" : "11 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 11)"
               },
@@ -26029,8 +26029,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 84,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 85,
                 "column" : 12,
                 "source_fragment" : "12 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 12)"
               },
@@ -26049,8 +26049,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 85,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 86,
                 "column" : 12,
                 "source_fragment" : "13 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 13)"
               },
@@ -26069,8 +26069,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 86,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 87,
                 "column" : 12,
                 "source_fragment" : "14 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 14)"
               },
@@ -26089,8 +26089,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 87,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 88,
                 "column" : 12,
                 "source_fragment" : "15 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 15)"
               },
@@ -26109,8 +26109,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 88,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 89,
                 "column" : 12,
                 "source_fragment" : "16 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 16)"
               },
@@ -26129,8 +26129,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 89,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 90,
                 "column" : 12,
                 "source_fragment" : "17 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 17)"
               },
@@ -26149,8 +26149,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 90,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 91,
                 "column" : 12,
                 "source_fragment" : "18 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 18)"
               },
@@ -26169,8 +26169,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 91,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 92,
                 "column" : 12,
                 "source_fragment" : "19 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 19)"
               },
@@ -26189,8 +26189,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 92,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 93,
                 "column" : 12,
                 "source_fragment" : "20 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 20)"
               },
@@ -26209,8 +26209,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 93,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 94,
                 "column" : 12,
                 "source_fragment" : "21 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 21)"
               },
@@ -26229,8 +26229,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 94,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 95,
                 "column" : 12,
                 "source_fragment" : "22 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 22)"
               },
@@ -26249,8 +26249,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 95,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 96,
                 "column" : 12,
                 "source_fragment" : "23 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 23)"
               },
@@ -26269,8 +26269,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 96,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 97,
                 "column" : 12,
                 "source_fragment" : "24 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 24)"
               },
@@ -26289,8 +26289,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 97,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 98,
                 "column" : 12,
                 "source_fragment" : "25 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 25)"
               },
@@ -26309,8 +26309,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 98,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 99,
                 "column" : 12,
                 "source_fragment" : "26 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 26)"
               },
@@ -26329,8 +26329,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 99,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 100,
                 "column" : 12,
                 "source_fragment" : "27 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 27)"
               },
@@ -26349,8 +26349,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 100,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 101,
                 "column" : 12,
                 "source_fragment" : "28 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 28)"
               },
@@ -26369,8 +26369,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 101,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 102,
                 "column" : 12,
                 "source_fragment" : "29 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 29)"
               },
@@ -26389,8 +26389,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 102,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 103,
                 "column" : 12,
                 "source_fragment" : "30 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 30)"
               },
@@ -26409,8 +26409,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 103,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 104,
                 "column" : 12,
                 "source_fragment" : "31 &&& 0x1f : reconstruct_worker_bitmap_from_worker_id(1 << 31)"
               },
@@ -26433,8 +26433,8 @@
           "name" : "MyIngress.update_and_check_worker_bitmap",
           "id" : 3,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 148,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 149,
             "column" : 10,
             "source_fragment" : "update_and_check_worker_bitmap"
           },
@@ -26460,12 +26460,12 @@
           "direct_meters" : null,
           "action_ids" : [41, 42, 40, 1],
           "actions" : ["MyIngress.update_worker_bitmap_set0_action", "MyIngress.update_worker_bitmap_set1_action", "MyIngress.drop", "NoAction"],
-          "base_default_next" : "tbl_saina657",
+          "base_default_next" : "tbl_saina_vgg658",
           "next_tables" : {
-            "MyIngress.update_worker_bitmap_set0_action" : "tbl_saina657",
-            "MyIngress.update_worker_bitmap_set1_action" : "tbl_saina657",
-            "MyIngress.drop" : "tbl_saina657",
-            "NoAction" : "tbl_saina657"
+            "MyIngress.update_worker_bitmap_set0_action" : "tbl_saina_vgg658",
+            "MyIngress.update_worker_bitmap_set1_action" : "tbl_saina_vgg658",
+            "MyIngress.drop" : "tbl_saina_vgg658",
+            "NoAction" : "tbl_saina_vgg658"
           },
           "default_entry" : {
             "action_id" : 1,
@@ -26476,8 +26476,8 @@
           "entries" : [
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 162,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 163,
                 "column" : 12,
                 "source_fragment" : "(15w0 &&& 15w1, 4) : update_worker_bitmap_set0_action()"
               },
@@ -26501,8 +26501,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 163,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 164,
                 "column" : 12,
                 "source_fragment" : "(15w1 &&& 15w1, 4) : update_worker_bitmap_set1_action()"
               },
@@ -26527,11 +26527,11 @@
           ]
         },
         {
-          "name" : "tbl_saina657",
+          "name" : "tbl_saina_vgg658",
           "id" : 4,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 657,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 658,
             "column" : 16,
             "source_fragment" : "k_register.read(meta.switchml_md.k, 0)"
           },
@@ -26543,10 +26543,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [220],
-          "actions" : ["saina657"],
+          "actions" : ["saina_vgg658"],
           "base_default_next" : "node_11",
           "next_tables" : {
-            "saina657" : "node_11"
+            "saina_vgg658" : "node_11"
           },
           "default_entry" : {
             "action_id" : 220,
@@ -26556,11 +26556,11 @@
           }
         },
         {
-          "name" : "tbl_saina660",
+          "name" : "tbl_saina_vgg661",
           "id" : 5,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 660,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 661,
             "column" : 39,
             "source_fragment" : "= 1; ..."
           },
@@ -26572,10 +26572,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [219],
-          "actions" : ["saina660"],
+          "actions" : ["saina_vgg661"],
           "base_default_next" : "MyIngress.workers_counter.count_workers",
           "next_tables" : {
-            "saina660" : "MyIngress.workers_counter.count_workers"
+            "saina_vgg661" : "MyIngress.workers_counter.count_workers"
           },
           "default_entry" : {
             "action_id" : 219,
@@ -33154,8 +33154,8 @@
                 },
                 {
                   "match_type" : "ternary",
-                  "key" : "0x00",
-                  "mask" : "0x00"
+                  "key" : "0x0000",
+                  "mask" : "0x0000"
                 }
               ],
               "action_entry" : {
@@ -33209,8 +33209,8 @@
                 },
                 {
                   "match_type" : "ternary",
-                  "key" : "0x00",
-                  "mask" : "0x00"
+                  "key" : "0x0000",
+                  "mask" : "0x0000"
                 }
               ],
               "action_entry" : {
@@ -33264,8 +33264,8 @@
                 },
                 {
                   "match_type" : "ternary",
-                  "key" : "0x00",
-                  "mask" : "0x00"
+                  "key" : "0x0000",
+                  "mask" : "0x0000"
                 }
               ],
               "action_entry" : {
@@ -33319,8 +33319,8 @@
                 },
                 {
                   "match_type" : "ternary",
-                  "key" : "0x00",
-                  "mask" : "0x00"
+                  "key" : "0x0000",
+                  "mask" : "0x0000"
                 }
               ],
               "action_entry" : {
@@ -33374,8 +33374,8 @@
                 },
                 {
                   "match_type" : "ternary",
-                  "key" : "0x00",
-                  "mask" : "0x00"
+                  "key" : "0x0000",
+                  "mask" : "0x0000"
                 }
               ],
               "action_entry" : {
@@ -33475,11 +33475,11 @@
           }
         },
         {
-          "name" : "tbl_saina725",
+          "name" : "tbl_saina_vgg726",
           "id" : 76,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 725,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 726,
             "column" : 30,
             "source_fragment" : "= (bit<32>)hdr.switchml.tsi[31:5]; ..."
           },
@@ -33491,10 +33491,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [263],
-          "actions" : ["saina725"],
+          "actions" : ["saina_vgg726"],
           "base_default_next" : "node_88",
           "next_tables" : {
-            "saina725" : "node_88"
+            "saina_vgg726" : "node_88"
           },
           "default_entry" : {
             "action_id" : 263,
@@ -33504,11 +33504,11 @@
           }
         },
         {
-          "name" : "tbl_saina734",
+          "name" : "tbl_saina_vgg735",
           "id" : 77,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 734,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 735,
             "column" : 16,
             "source_fragment" : "sign2.read(meta.sign_vector2, meta.sign_reg_idx)"
           },
@@ -33520,10 +33520,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [255],
-          "actions" : ["saina734"],
+          "actions" : ["saina_vgg735"],
           "base_default_next" : "MyIngress.save_sign_bit2",
           "next_tables" : {
-            "saina734" : "MyIngress.save_sign_bit2"
+            "saina_vgg735" : "MyIngress.save_sign_bit2"
           },
           "default_entry" : {
             "action_id" : 255,
@@ -33536,8 +33536,8 @@
           "name" : "MyIngress.save_sign_bit2",
           "id" : 78,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 504,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 505,
             "column" : 10,
             "source_fragment" : "save_sign_bit2"
           },
@@ -33563,41 +33563,41 @@
           "direct_meters" : null,
           "action_ids" : [75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 3],
           "actions" : ["MyIngress.save_sign_bit_action2_0", "MyIngress.save_sign_bit_action2_1", "MyIngress.save_sign_bit_action2_2", "MyIngress.save_sign_bit_action2_3", "MyIngress.save_sign_bit_action2_4", "MyIngress.save_sign_bit_action2_5", "MyIngress.save_sign_bit_action2_6", "MyIngress.save_sign_bit_action2_7", "MyIngress.save_sign_bit_action2_8", "MyIngress.save_sign_bit_action2_9", "MyIngress.save_sign_bit_action2_10", "MyIngress.save_sign_bit_action2_11", "MyIngress.save_sign_bit_action2_12", "MyIngress.save_sign_bit_action2_13", "MyIngress.save_sign_bit_action2_14", "MyIngress.save_sign_bit_action2_15", "MyIngress.save_sign_bit_action2_16", "MyIngress.save_sign_bit_action2_17", "MyIngress.save_sign_bit_action2_18", "MyIngress.save_sign_bit_action2_19", "MyIngress.save_sign_bit_action2_20", "MyIngress.save_sign_bit_action2_21", "MyIngress.save_sign_bit_action2_22", "MyIngress.save_sign_bit_action2_23", "MyIngress.save_sign_bit_action2_24", "MyIngress.save_sign_bit_action2_25", "MyIngress.save_sign_bit_action2_26", "MyIngress.save_sign_bit_action2_27", "MyIngress.save_sign_bit_action2_28", "MyIngress.save_sign_bit_action2_29", "MyIngress.save_sign_bit_action2_30", "MyIngress.save_sign_bit_action2_31", "NoAction"],
-          "base_default_next" : "tbl_saina736",
+          "base_default_next" : "tbl_saina_vgg737",
           "next_tables" : {
-            "MyIngress.save_sign_bit_action2_0" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_1" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_2" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_3" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_4" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_5" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_6" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_7" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_8" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_9" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_10" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_11" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_12" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_13" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_14" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_15" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_16" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_17" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_18" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_19" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_20" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_21" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_22" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_23" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_24" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_25" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_26" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_27" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_28" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_29" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_30" : "tbl_saina736",
-            "MyIngress.save_sign_bit_action2_31" : "tbl_saina736",
-            "NoAction" : "tbl_saina736"
+            "MyIngress.save_sign_bit_action2_0" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_1" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_2" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_3" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_4" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_5" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_6" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_7" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_8" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_9" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_10" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_11" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_12" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_13" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_14" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_15" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_16" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_17" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_18" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_19" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_20" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_21" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_22" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_23" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_24" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_25" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_26" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_27" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_28" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_29" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_30" : "tbl_saina_vgg737",
+            "MyIngress.save_sign_bit_action2_31" : "tbl_saina_vgg737",
+            "NoAction" : "tbl_saina_vgg737"
           },
           "default_entry" : {
             "action_id" : 3,
@@ -33608,8 +33608,8 @@
           "entries" : [
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 545,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 546,
                 "column" : 12,
                 "source_fragment" : "(0, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_0()"
               },
@@ -33632,8 +33632,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 546,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 547,
                 "column" : 12,
                 "source_fragment" : "(1, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_1()"
               },
@@ -33656,8 +33656,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 547,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 548,
                 "column" : 12,
                 "source_fragment" : "(2, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_2()"
               },
@@ -33680,8 +33680,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 548,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 549,
                 "column" : 12,
                 "source_fragment" : "(3, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_3()"
               },
@@ -33704,8 +33704,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 549,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 550,
                 "column" : 12,
                 "source_fragment" : "(4, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_4()"
               },
@@ -33728,8 +33728,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 550,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 551,
                 "column" : 12,
                 "source_fragment" : "(5, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_5()"
               },
@@ -33752,8 +33752,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 551,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 552,
                 "column" : 12,
                 "source_fragment" : "(6, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_6()"
               },
@@ -33776,8 +33776,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 552,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 553,
                 "column" : 12,
                 "source_fragment" : "(7, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_7()"
               },
@@ -33800,8 +33800,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 553,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 554,
                 "column" : 12,
                 "source_fragment" : "(8, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_8()"
               },
@@ -33824,8 +33824,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 554,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 555,
                 "column" : 12,
                 "source_fragment" : "(9, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_9()"
               },
@@ -33848,8 +33848,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 555,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 556,
                 "column" : 12,
                 "source_fragment" : "(10, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_10()"
               },
@@ -33872,8 +33872,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 556,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 557,
                 "column" : 12,
                 "source_fragment" : "(11, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_11()"
               },
@@ -33896,8 +33896,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 557,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 558,
                 "column" : 12,
                 "source_fragment" : "(12, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_12()"
               },
@@ -33920,8 +33920,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 558,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 559,
                 "column" : 12,
                 "source_fragment" : "(13, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_13()"
               },
@@ -33944,8 +33944,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 559,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 560,
                 "column" : 12,
                 "source_fragment" : "(14, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_14()"
               },
@@ -33968,8 +33968,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 560,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 561,
                 "column" : 12,
                 "source_fragment" : "(15, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_15()"
               },
@@ -33992,8 +33992,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 561,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 562,
                 "column" : 12,
                 "source_fragment" : "(16, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_16()"
               },
@@ -34016,8 +34016,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 562,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 563,
                 "column" : 12,
                 "source_fragment" : "(17, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_17()"
               },
@@ -34040,8 +34040,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 563,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 564,
                 "column" : 12,
                 "source_fragment" : "(18, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_18()"
               },
@@ -34064,8 +34064,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 564,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 565,
                 "column" : 12,
                 "source_fragment" : "(19, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_19()"
               },
@@ -34088,8 +34088,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 565,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 566,
                 "column" : 12,
                 "source_fragment" : "(20, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_20()"
               },
@@ -34112,8 +34112,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 566,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 567,
                 "column" : 12,
                 "source_fragment" : "(21, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_21()"
               },
@@ -34136,8 +34136,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 567,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 568,
                 "column" : 12,
                 "source_fragment" : "(22, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_22()"
               },
@@ -34160,8 +34160,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 568,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 569,
                 "column" : 12,
                 "source_fragment" : "(23, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_23()"
               },
@@ -34184,8 +34184,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 569,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 570,
                 "column" : 12,
                 "source_fragment" : "(24, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_24()"
               },
@@ -34208,8 +34208,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 570,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 571,
                 "column" : 12,
                 "source_fragment" : "(25, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_25()"
               },
@@ -34232,8 +34232,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 571,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 572,
                 "column" : 12,
                 "source_fragment" : "(26, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_26()"
               },
@@ -34256,8 +34256,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 572,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 573,
                 "column" : 12,
                 "source_fragment" : "(27, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_27()"
               },
@@ -34280,8 +34280,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 573,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 574,
                 "column" : 12,
                 "source_fragment" : "(28, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_28()"
               },
@@ -34304,8 +34304,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 574,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 575,
                 "column" : 12,
                 "source_fragment" : "(29, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_29()"
               },
@@ -34328,8 +34328,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 575,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 576,
                 "column" : 12,
                 "source_fragment" : "(30, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_30()"
               },
@@ -34352,8 +34352,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 576,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 577,
                 "column" : 12,
                 "source_fragment" : "(31, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_31()"
               },
@@ -34377,11 +34377,11 @@
           ]
         },
         {
-          "name" : "tbl_saina736",
+          "name" : "tbl_saina_vgg737",
           "id" : 79,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 736,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 737,
             "column" : 16,
             "source_fragment" : "sign2.write(meta.sign_reg_idx, meta.sign_vector2); ..."
           },
@@ -34393,10 +34393,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [258],
-          "actions" : ["saina736"],
+          "actions" : ["saina_vgg737"],
           "base_default_next" : "node_92",
           "next_tables" : {
-            "saina736" : "node_92"
+            "saina_vgg737" : "node_92"
           },
           "default_entry" : {
             "action_id" : 258,
@@ -34406,11 +34406,11 @@
           }
         },
         {
-          "name" : "tbl_saina743",
+          "name" : "tbl_saina_vgg744",
           "id" : 80,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 743,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 744,
             "column" : 20,
             "source_fragment" : "sign1.read(meta.sign_vector1, meta.sign_reg_idx); ..."
           },
@@ -34422,10 +34422,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [256],
-          "actions" : ["saina743"],
-          "base_default_next" : "tbl_saina777",
+          "actions" : ["saina_vgg744"],
+          "base_default_next" : "tbl_saina_vgg778",
           "next_tables" : {
-            "saina743" : "tbl_saina777"
+            "saina_vgg744" : "tbl_saina_vgg778"
           },
           "default_entry" : {
             "action_id" : 256,
@@ -34435,11 +34435,11 @@
           }
         },
         {
-          "name" : "tbl_saina750",
+          "name" : "tbl_saina_vgg751",
           "id" : 81,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 750,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 751,
             "column" : 20,
             "source_fragment" : "idx_counter_register.write(meta.sign_reg_idx, idx_counter + 1)"
           },
@@ -34451,10 +34451,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [257],
-          "actions" : ["saina750"],
-          "base_default_next" : "tbl_saina777",
+          "actions" : ["saina_vgg751"],
+          "base_default_next" : "tbl_saina_vgg778",
           "next_tables" : {
-            "saina750" : "tbl_saina777"
+            "saina_vgg751" : "tbl_saina_vgg778"
           },
           "default_entry" : {
             "action_id" : 257,
@@ -34464,11 +34464,11 @@
           }
         },
         {
-          "name" : "tbl_saina757",
+          "name" : "tbl_saina_vgg758",
           "id" : 82,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 757,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 758,
             "column" : 16,
             "source_fragment" : "sign1.read(meta.sign_vector1, meta.sign_reg_idx)"
           },
@@ -34480,10 +34480,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [259],
-          "actions" : ["saina757"],
+          "actions" : ["saina_vgg758"],
           "base_default_next" : "MyIngress.save_sign_bit1",
           "next_tables" : {
-            "saina757" : "MyIngress.save_sign_bit1"
+            "saina_vgg758" : "MyIngress.save_sign_bit1"
           },
           "default_entry" : {
             "action_id" : 259,
@@ -34496,8 +34496,8 @@
           "name" : "MyIngress.save_sign_bit1",
           "id" : 83,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 428,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 429,
             "column" : 10,
             "source_fragment" : "save_sign_bit1"
           },
@@ -34523,41 +34523,41 @@
           "direct_meters" : null,
           "action_ids" : [43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 2],
           "actions" : ["MyIngress.save_sign_bit_action1_0", "MyIngress.save_sign_bit_action1_1", "MyIngress.save_sign_bit_action1_2", "MyIngress.save_sign_bit_action1_3", "MyIngress.save_sign_bit_action1_4", "MyIngress.save_sign_bit_action1_5", "MyIngress.save_sign_bit_action1_6", "MyIngress.save_sign_bit_action1_7", "MyIngress.save_sign_bit_action1_8", "MyIngress.save_sign_bit_action1_9", "MyIngress.save_sign_bit_action1_10", "MyIngress.save_sign_bit_action1_11", "MyIngress.save_sign_bit_action1_12", "MyIngress.save_sign_bit_action1_13", "MyIngress.save_sign_bit_action1_14", "MyIngress.save_sign_bit_action1_15", "MyIngress.save_sign_bit_action1_16", "MyIngress.save_sign_bit_action1_17", "MyIngress.save_sign_bit_action1_18", "MyIngress.save_sign_bit_action1_19", "MyIngress.save_sign_bit_action1_20", "MyIngress.save_sign_bit_action1_21", "MyIngress.save_sign_bit_action1_22", "MyIngress.save_sign_bit_action1_23", "MyIngress.save_sign_bit_action1_24", "MyIngress.save_sign_bit_action1_25", "MyIngress.save_sign_bit_action1_26", "MyIngress.save_sign_bit_action1_27", "MyIngress.save_sign_bit_action1_28", "MyIngress.save_sign_bit_action1_29", "MyIngress.save_sign_bit_action1_30", "MyIngress.save_sign_bit_action1_31", "NoAction"],
-          "base_default_next" : "tbl_saina759",
+          "base_default_next" : "tbl_saina_vgg760",
           "next_tables" : {
-            "MyIngress.save_sign_bit_action1_0" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_1" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_2" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_3" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_4" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_5" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_6" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_7" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_8" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_9" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_10" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_11" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_12" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_13" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_14" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_15" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_16" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_17" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_18" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_19" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_20" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_21" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_22" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_23" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_24" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_25" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_26" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_27" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_28" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_29" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_30" : "tbl_saina759",
-            "MyIngress.save_sign_bit_action1_31" : "tbl_saina759",
-            "NoAction" : "tbl_saina759"
+            "MyIngress.save_sign_bit_action1_0" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_1" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_2" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_3" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_4" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_5" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_6" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_7" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_8" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_9" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_10" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_11" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_12" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_13" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_14" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_15" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_16" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_17" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_18" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_19" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_20" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_21" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_22" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_23" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_24" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_25" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_26" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_27" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_28" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_29" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_30" : "tbl_saina_vgg760",
+            "MyIngress.save_sign_bit_action1_31" : "tbl_saina_vgg760",
+            "NoAction" : "tbl_saina_vgg760"
           },
           "default_entry" : {
             "action_id" : 2,
@@ -34568,8 +34568,8 @@
           "entries" : [
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 469,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 470,
                 "column" : 12,
                 "source_fragment" : "(0, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_0()"
               },
@@ -34592,8 +34592,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 470,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 471,
                 "column" : 12,
                 "source_fragment" : "(1, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_1()"
               },
@@ -34616,8 +34616,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 471,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 472,
                 "column" : 12,
                 "source_fragment" : "(2, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_2()"
               },
@@ -34640,8 +34640,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 472,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 473,
                 "column" : 12,
                 "source_fragment" : "(3, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_3()"
               },
@@ -34664,8 +34664,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 473,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 474,
                 "column" : 12,
                 "source_fragment" : "(4, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_4()"
               },
@@ -34688,8 +34688,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 474,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 475,
                 "column" : 12,
                 "source_fragment" : "(5, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_5()"
               },
@@ -34712,8 +34712,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 475,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 476,
                 "column" : 12,
                 "source_fragment" : "(6, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_6()"
               },
@@ -34736,8 +34736,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 476,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 477,
                 "column" : 12,
                 "source_fragment" : "(7, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_7()"
               },
@@ -34760,8 +34760,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 477,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 478,
                 "column" : 12,
                 "source_fragment" : "(8, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_8()"
               },
@@ -34784,8 +34784,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 478,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 479,
                 "column" : 12,
                 "source_fragment" : "(9, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_9()"
               },
@@ -34808,8 +34808,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 479,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 480,
                 "column" : 12,
                 "source_fragment" : "(10, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_10()"
               },
@@ -34832,8 +34832,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 480,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 481,
                 "column" : 12,
                 "source_fragment" : "(11, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_11()"
               },
@@ -34856,8 +34856,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 481,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 482,
                 "column" : 12,
                 "source_fragment" : "(12, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_12()"
               },
@@ -34880,8 +34880,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 482,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 483,
                 "column" : 12,
                 "source_fragment" : "(13, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_13()"
               },
@@ -34904,8 +34904,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 483,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 484,
                 "column" : 12,
                 "source_fragment" : "(14, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_14()"
               },
@@ -34928,8 +34928,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 484,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 485,
                 "column" : 12,
                 "source_fragment" : "(15, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_15()"
               },
@@ -34952,8 +34952,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 485,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 486,
                 "column" : 12,
                 "source_fragment" : "(16, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_16()"
               },
@@ -34976,8 +34976,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 486,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 487,
                 "column" : 12,
                 "source_fragment" : "(17, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_17()"
               },
@@ -35000,8 +35000,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 487,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 488,
                 "column" : 12,
                 "source_fragment" : "(18, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_18()"
               },
@@ -35024,8 +35024,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 488,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 489,
                 "column" : 12,
                 "source_fragment" : "(19, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_19()"
               },
@@ -35048,8 +35048,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 489,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 490,
                 "column" : 12,
                 "source_fragment" : "(20, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_20()"
               },
@@ -35072,8 +35072,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 490,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 491,
                 "column" : 12,
                 "source_fragment" : "(21, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_21()"
               },
@@ -35096,8 +35096,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 491,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 492,
                 "column" : 12,
                 "source_fragment" : "(22, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_22()"
               },
@@ -35120,8 +35120,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 492,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 493,
                 "column" : 12,
                 "source_fragment" : "(23, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_23()"
               },
@@ -35144,8 +35144,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 493,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 494,
                 "column" : 12,
                 "source_fragment" : "(24, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_24()"
               },
@@ -35168,8 +35168,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 494,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 495,
                 "column" : 12,
                 "source_fragment" : "(25, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_25()"
               },
@@ -35192,8 +35192,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 495,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 496,
                 "column" : 12,
                 "source_fragment" : "(26, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_26()"
               },
@@ -35216,8 +35216,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 496,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 497,
                 "column" : 12,
                 "source_fragment" : "(27, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_27()"
               },
@@ -35240,8 +35240,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 497,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 498,
                 "column" : 12,
                 "source_fragment" : "(28, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_28()"
               },
@@ -35264,8 +35264,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 498,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 499,
                 "column" : 12,
                 "source_fragment" : "(29, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_29()"
               },
@@ -35288,8 +35288,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 499,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 500,
                 "column" : 12,
                 "source_fragment" : "(30, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_30()"
               },
@@ -35312,8 +35312,8 @@
             },
             {
               "source_info" : {
-                "filename" : "/home/p4/p4-dev/saina/saina.p4",
-                "line" : 500,
+                "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+                "line" : 501,
                 "column" : 12,
                 "source_fragment" : "(31, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_31()"
               },
@@ -35337,11 +35337,11 @@
           ]
         },
         {
-          "name" : "tbl_saina759",
+          "name" : "tbl_saina_vgg760",
           "id" : 84,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 759,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 760,
             "column" : 16,
             "source_fragment" : "sign1.write(meta.sign_reg_idx, meta.sign_vector1); ..."
           },
@@ -35353,10 +35353,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [262],
-          "actions" : ["saina759"],
+          "actions" : ["saina_vgg760"],
           "base_default_next" : "node_98",
           "next_tables" : {
-            "saina759" : "node_98"
+            "saina_vgg760" : "node_98"
           },
           "default_entry" : {
             "action_id" : 262,
@@ -35366,11 +35366,11 @@
           }
         },
         {
-          "name" : "tbl_saina766",
+          "name" : "tbl_saina_vgg767",
           "id" : 85,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 766,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 767,
             "column" : 20,
             "source_fragment" : "sign2.read(meta.sign_vector2, meta.sign_reg_idx); ..."
           },
@@ -35382,10 +35382,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [260],
-          "actions" : ["saina766"],
-          "base_default_next" : "tbl_saina777",
+          "actions" : ["saina_vgg767"],
+          "base_default_next" : "tbl_saina_vgg778",
           "next_tables" : {
-            "saina766" : "tbl_saina777"
+            "saina_vgg767" : "tbl_saina_vgg778"
           },
           "default_entry" : {
             "action_id" : 260,
@@ -35395,11 +35395,11 @@
           }
         },
         {
-          "name" : "tbl_saina773",
+          "name" : "tbl_saina_vgg774",
           "id" : 86,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 773,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 774,
             "column" : 20,
             "source_fragment" : "idx_counter_register.write(meta.sign_reg_idx, idx_counter + 1)"
           },
@@ -35411,10 +35411,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [261],
-          "actions" : ["saina773"],
-          "base_default_next" : "tbl_saina777",
+          "actions" : ["saina_vgg774"],
+          "base_default_next" : "tbl_saina_vgg778",
           "next_tables" : {
-            "saina773" : "tbl_saina777"
+            "saina_vgg774" : "tbl_saina_vgg778"
           },
           "default_entry" : {
             "action_id" : 261,
@@ -35424,11 +35424,11 @@
           }
         },
         {
-          "name" : "tbl_saina777",
+          "name" : "tbl_saina_vgg778",
           "id" : 87,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 777,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 778,
             "column" : 12,
             "source_fragment" : "sum_grad_sign.read(sum, 0)"
           },
@@ -35440,10 +35440,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [265],
-          "actions" : ["saina777"],
+          "actions" : ["saina_vgg778"],
           "base_default_next" : "node_102",
           "next_tables" : {
-            "saina777" : "node_102"
+            "saina_vgg778" : "node_102"
           },
           "default_entry" : {
             "action_id" : 265,
@@ -35453,11 +35453,11 @@
           }
         },
         {
-          "name" : "tbl_saina800",
+          "name" : "tbl_saina_vgg801",
           "id" : 88,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 800,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 801,
             "column" : 20,
             "source_fragment" : "= sum + popcount_result; ..."
           },
@@ -35469,10 +35469,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [264],
-          "actions" : ["saina800"],
+          "actions" : ["saina_vgg801"],
           "base_default_next" : "node_104",
           "next_tables" : {
-            "saina800" : "node_104"
+            "saina_vgg801" : "node_104"
           },
           "default_entry" : {
             "action_id" : 264,
@@ -35482,11 +35482,11 @@
           }
         },
         {
-          "name" : "tbl_saina809",
+          "name" : "tbl_saina_vgg810",
           "id" : 89,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 809,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 810,
             "column" : 20,
             "source_fragment" : "sign2.write(meta.sign_reg_idx, 0)"
           },
@@ -35498,10 +35498,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [266],
-          "actions" : ["saina809"],
-          "base_default_next" : "tbl_saina814",
+          "actions" : ["saina_vgg810"],
+          "base_default_next" : "tbl_saina_vgg815",
           "next_tables" : {
-            "saina809" : "tbl_saina814"
+            "saina_vgg810" : "tbl_saina_vgg815"
           },
           "default_entry" : {
             "action_id" : 266,
@@ -35511,11 +35511,11 @@
           }
         },
         {
-          "name" : "tbl_saina812",
+          "name" : "tbl_saina_vgg813",
           "id" : 90,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 812,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 813,
             "column" : 20,
             "source_fragment" : "sign1.write(meta.sign_reg_idx, 0)"
           },
@@ -35527,10 +35527,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [267],
-          "actions" : ["saina812"],
-          "base_default_next" : "tbl_saina814",
+          "actions" : ["saina_vgg813"],
+          "base_default_next" : "tbl_saina_vgg815",
           "next_tables" : {
-            "saina812" : "tbl_saina814"
+            "saina_vgg813" : "tbl_saina_vgg815"
           },
           "default_entry" : {
             "action_id" : 267,
@@ -35540,11 +35540,11 @@
           }
         },
         {
-          "name" : "tbl_saina814",
+          "name" : "tbl_saina_vgg815",
           "id" : 91,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 814,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 815,
             "column" : 16,
             "source_fragment" : "sum_grad_sign_backup.write(0, sum); //FIXME:TEST ..."
           },
@@ -35556,10 +35556,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [271],
-          "actions" : ["saina814"],
+          "actions" : ["saina_vgg815"],
           "base_default_next" : "node_109",
           "next_tables" : {
-            "saina814" : "node_109"
+            "saina_vgg815" : "node_109"
           },
           "default_entry" : {
             "action_id" : 271,
@@ -35569,11 +35569,11 @@
           }
         },
         {
-          "name" : "tbl_saina820",
+          "name" : "tbl_saina_vgg821",
           "id" : 92,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 820,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 821,
             "column" : 28,
             "source_fragment" : "= k_count + 1; ..."
           },
@@ -35585,10 +35585,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [268],
-          "actions" : ["saina820"],
+          "actions" : ["saina_vgg821"],
           "base_default_next" : "node_114",
           "next_tables" : {
-            "saina820" : "node_114"
+            "saina_vgg821" : "node_114"
           },
           "default_entry" : {
             "action_id" : 268,
@@ -35598,11 +35598,11 @@
           }
         },
         {
-          "name" : "tbl_saina828",
+          "name" : "tbl_saina_vgg829",
           "id" : 93,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 828,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 829,
             "column" : 32,
             "source_fragment" : "="
           },
@@ -35614,10 +35614,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [269],
-          "actions" : ["saina828"],
-          "base_default_next" : "tbl_saina830",
+          "actions" : ["saina_vgg829"],
+          "base_default_next" : "tbl_saina_vgg831",
           "next_tables" : {
-            "saina828" : "tbl_saina830"
+            "saina_vgg829" : "tbl_saina_vgg831"
           },
           "default_entry" : {
             "action_id" : 269,
@@ -35627,11 +35627,11 @@
           }
         },
         {
-          "name" : "tbl_saina830",
+          "name" : "tbl_saina_vgg831",
           "id" : 94,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 830,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 831,
             "column" : 20,
             "source_fragment" : "k_counter.write(0, k_count)"
           },
@@ -35643,10 +35643,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [270],
-          "actions" : ["saina830"],
+          "actions" : ["saina_vgg831"],
           "base_default_next" : "node_114",
           "next_tables" : {
-            "saina830" : "node_114"
+            "saina_vgg831" : "node_114"
           },
           "default_entry" : {
             "action_id" : 270,
@@ -35656,11 +35656,11 @@
           }
         },
         {
-          "name" : "tbl_saina834",
+          "name" : "tbl_saina_vgg835",
           "id" : 95,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 834,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 835,
             "column" : 20,
             "source_fragment" : "k_register.read(meta.switchml_md.k, 0)"
           },
@@ -35672,10 +35672,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [273],
-          "actions" : ["saina834"],
+          "actions" : ["saina_vgg835"],
           "base_default_next" : "node_116",
           "next_tables" : {
-            "saina834" : "node_116"
+            "saina_vgg835" : "node_116"
           },
           "default_entry" : {
             "action_id" : 273,
@@ -35685,11 +35685,11 @@
           }
         },
         {
-          "name" : "tbl_saina836",
+          "name" : "tbl_saina_vgg837",
           "id" : 96,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 836,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 837,
             "column" : 43,
             "source_fragment" : "="
           },
@@ -35701,10 +35701,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [272],
-          "actions" : ["saina836"],
-          "base_default_next" : "tbl_saina838",
+          "actions" : ["saina_vgg837"],
+          "base_default_next" : "tbl_saina_vgg839",
           "next_tables" : {
-            "saina836" : "tbl_saina838"
+            "saina_vgg837" : "tbl_saina_vgg839"
           },
           "default_entry" : {
             "action_id" : 272,
@@ -35714,11 +35714,11 @@
           }
         },
         {
-          "name" : "tbl_saina838",
+          "name" : "tbl_saina_vgg839",
           "id" : 97,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 838,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 839,
             "column" : 20,
             "source_fragment" : "k_register.write(0,meta.switchml_md.k); ..."
           },
@@ -35730,10 +35730,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [274],
-          "actions" : ["saina838"],
-          "base_default_next" : "tbl_saina842",
+          "actions" : ["saina_vgg839"],
+          "base_default_next" : "tbl_saina_vgg843",
           "next_tables" : {
-            "saina838" : "tbl_saina842"
+            "saina_vgg839" : "tbl_saina_vgg843"
           },
           "default_entry" : {
             "action_id" : 274,
@@ -35743,11 +35743,11 @@
           }
         },
         {
-          "name" : "tbl_saina842",
+          "name" : "tbl_saina_vgg843",
           "id" : 98,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 842,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 843,
             "column" : 23,
             "source_fragment" : "="
           },
@@ -35759,10 +35759,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [275],
-          "actions" : ["saina842"],
-          "base_default_next" : "tbl_saina849",
+          "actions" : ["saina_vgg843"],
+          "base_default_next" : "tbl_saina_vgg850",
           "next_tables" : {
-            "saina842" : "tbl_saina849"
+            "saina_vgg843" : "tbl_saina_vgg850"
           },
           "default_entry" : {
             "action_id" : 275,
@@ -35772,11 +35772,11 @@
           }
         },
         {
-          "name" : "tbl_saina847",
+          "name" : "tbl_saina_vgg848",
           "id" : 99,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 847,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 848,
             "column" : 12,
             "source_fragment" : "sum_grad_sign_backup.read(meta.test2, 0)"
           },
@@ -35788,10 +35788,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [276],
-          "actions" : ["saina847"],
-          "base_default_next" : "tbl_saina849",
+          "actions" : ["saina_vgg848"],
+          "base_default_next" : "tbl_saina_vgg850",
           "next_tables" : {
-            "saina847" : "tbl_saina849"
+            "saina_vgg848" : "tbl_saina_vgg850"
           },
           "default_entry" : {
             "action_id" : 276,
@@ -35801,11 +35801,11 @@
           }
         },
         {
-          "name" : "tbl_saina849",
+          "name" : "tbl_saina_vgg850",
           "id" : 100,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 849,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 850,
             "column" : 8,
             "source_fragment" : "k_register.read(meta.switchml_md.k, 0)"
           },
@@ -35817,10 +35817,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [277],
-          "actions" : ["saina849"],
+          "actions" : ["saina_vgg850"],
           "base_default_next" : null,
           "next_tables" : {
-            "saina849" : null
+            "saina_vgg850" : null
           },
           "default_entry" : {
             "action_id" : 277,
@@ -35836,8 +35836,8 @@
           "name" : "node_2",
           "id" : 0,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 638,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 639,
             "column" : 12,
             "source_fragment" : "meta.switchml_md.packet_type == 4"
           },
@@ -35862,8 +35862,8 @@
           "name" : "node_5",
           "id" : 1,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 642,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 643,
             "column" : 19,
             "source_fragment" : "meta.switchml_md.packet_type == 5 || ..."
           },
@@ -35928,8 +35928,8 @@
           "name" : "node_7",
           "id" : 2,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 650,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 651,
             "column" : 12,
             "source_fragment" : "meta.drop_flag == 1w0"
           },
@@ -35954,8 +35954,8 @@
           "name" : "node_8",
           "id" : 3,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 651,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 652,
             "column" : 16,
             "source_fragment" : "meta.switchml_md.packet_type == 4 || ..."
           },
@@ -36040,8 +36040,8 @@
           "name" : "node_11",
           "id" : 4,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 658,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 659,
             "column" : 19,
             "source_fragment" : "meta.switchml_md.k == 0"
           },
@@ -36059,7 +36059,7 @@
               }
             }
           },
-          "true_next" : "tbl_saina660",
+          "true_next" : "tbl_saina_vgg661",
           "false_next" : "MyIngress.workers_counter.count_workers"
         },
         {
@@ -36118,8 +36118,8 @@
           "name" : "node_18",
           "id" : 7,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 666,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 667,
             "column" : 16,
             "source_fragment" : "(packet_type_underlying_t) meta.switchml_md.packet_type >= ..."
           },
@@ -36144,8 +36144,8 @@
           "name" : "node_86",
           "id" : 8,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 713,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 714,
             "column" : 12,
             "source_fragment" : "hdr.switchml.round_end_flag == 1 && meta.switchml_md.packet_type == 1"
           },
@@ -36183,15 +36183,15 @@
               }
             }
           },
-          "true_next" : "tbl_saina725",
-          "false_next" : "tbl_saina847"
+          "true_next" : "tbl_saina_vgg726",
+          "false_next" : "tbl_saina_vgg848"
         },
         {
           "name" : "node_88",
           "id" : 9,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 730,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 731,
             "column" : 16,
             "source_fragment" : "hdr.switchml.round % 2 == 0"
           },
@@ -36209,25 +36209,25 @@
                   },
                   "right" : {
                     "type" : "hexstr",
-                    "value" : "0x01"
+                    "value" : "0x0001"
                   }
                 }
               },
               "right" : {
                 "type" : "hexstr",
-                "value" : "0x00"
+                "value" : "0x0000"
               }
             }
           },
-          "true_next" : "tbl_saina734",
-          "false_next" : "tbl_saina757"
+          "true_next" : "tbl_saina_vgg735",
+          "false_next" : "tbl_saina_vgg758"
         },
         {
           "name" : "node_92",
           "id" : 10,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 742,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 743,
             "column" : 19,
             "source_fragment" : "idx_counter == 31"
           },
@@ -36245,15 +36245,15 @@
               }
             }
           },
-          "true_next" : "tbl_saina743",
-          "false_next" : "tbl_saina750"
+          "true_next" : "tbl_saina_vgg744",
+          "false_next" : "tbl_saina_vgg751"
         },
         {
           "name" : "node_98",
           "id" : 11,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 765,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 766,
             "column" : 19,
             "source_fragment" : "idx_counter == 31"
           },
@@ -36271,15 +36271,15 @@
               }
             }
           },
-          "true_next" : "tbl_saina766",
-          "false_next" : "tbl_saina773"
+          "true_next" : "tbl_saina_vgg767",
+          "false_next" : "tbl_saina_vgg774"
         },
         {
           "name" : "node_102",
           "id" : 12,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 779,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 780,
             "column" : 15,
             "source_fragment" : "idx_counter == 31"
           },
@@ -36297,15 +36297,15 @@
               }
             }
           },
-          "true_next" : "tbl_saina800",
+          "true_next" : "tbl_saina_vgg801",
           "false_next" : "node_104"
         },
         {
           "name" : "node_104",
           "id" : 13,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 807,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 808,
             "column" : 15,
             "source_fragment" : "hdr.switchml.last_packet_flag==1"
           },
@@ -36324,14 +36324,14 @@
             }
           },
           "true_next" : "node_105",
-          "false_next" : "tbl_saina842"
+          "false_next" : "tbl_saina_vgg843"
         },
         {
           "name" : "node_105",
           "id" : 14,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 808,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 809,
             "column" : 19,
             "source_fragment" : "hdr.switchml.round % 2 == 1"
           },
@@ -36349,27 +36349,27 @@
                   },
                   "right" : {
                     "type" : "hexstr",
-                    "value" : "0x01"
+                    "value" : "0x0001"
                   }
                 }
               },
               "right" : {
                 "type" : "hexstr",
-                "value" : "0x01"
+                "value" : "0x0001"
               }
             }
           },
-          "true_next" : "tbl_saina809",
-          "false_next" : "tbl_saina812"
+          "true_next" : "tbl_saina_vgg810",
+          "false_next" : "tbl_saina_vgg813"
         },
         {
           "name" : "node_109",
           "id" : 15,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 819,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 820,
             "column" : 19,
-            "source_fragment" : "sum >= 40"
+            "source_fragment" : "sum >= 557221"
           },
           "expression" : {
             "type" : "expression",
@@ -36381,19 +36381,19 @@
               },
               "right" : {
                 "type" : "hexstr",
-                "value" : "0x00000028"
+                "value" : "0x000880a5"
               }
             }
           },
-          "true_next" : "tbl_saina820",
+          "true_next" : "tbl_saina_vgg821",
           "false_next" : "node_111"
         },
         {
           "name" : "node_111",
           "id" : 16,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 824,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 825,
             "column" : 24,
             "source_fragment" : "k_count == 0"
           },
@@ -36411,17 +36411,17 @@
               }
             }
           },
-          "false_next" : "tbl_saina828",
-          "true_next" : "tbl_saina830"
+          "false_next" : "tbl_saina_vgg829",
+          "true_next" : "tbl_saina_vgg831"
         },
         {
           "name" : "node_114",
           "id" : 17,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 833,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 834,
             "column" : 19,
-            "source_fragment" : "k_count >= 1"
+            "source_fragment" : "k_count >= 5"
           },
           "expression" : {
             "type" : "expression",
@@ -36433,19 +36433,19 @@
               },
               "right" : {
                 "type" : "hexstr",
-                "value" : "0x00000001"
+                "value" : "0x00000005"
               }
             }
           },
-          "true_next" : "tbl_saina834",
-          "false_next" : "tbl_saina842"
+          "true_next" : "tbl_saina_vgg835",
+          "false_next" : "tbl_saina_vgg843"
         },
         {
           "name" : "node_116",
           "id" : 18,
           "source_info" : {
-            "filename" : "/home/p4/p4-dev/saina/saina.p4",
-            "line" : 835,
+            "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+            "line" : 836,
             "column" : 23,
             "source_fragment" : "meta.switchml_md.k != 16"
           },
@@ -36463,8 +36463,8 @@
               }
             }
           },
-          "true_next" : "tbl_saina836",
-          "false_next" : "tbl_saina838"
+          "true_next" : "tbl_saina_vgg837",
+          "false_next" : "tbl_saina_vgg839"
         }
       ]
     },
@@ -36472,8 +36472,8 @@
       "name" : "egress",
       "id" : 1,
       "source_info" : {
-        "filename" : "/home/p4/p4-dev/saina/saina.p4",
-        "line" : 853,
+        "filename" : "/home/p4/p4-dev/saina/saina_vgg.p4",
+        "line" : 854,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
@@ -36858,7 +36858,7 @@
       ["standard_metadata", "priority"]
     ]
   ],
-  "program" : "/home/p4/p4-dev/saina/saina.p4i",
+  "program" : "/home/p4/p4-dev/saina/saina_vgg.p4i",
   "__meta__" : {
     "version" : [2, 23],
     "compiler" : "https://github.com/p4lang/p4c"

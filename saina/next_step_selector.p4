@@ -80,6 +80,8 @@ control NextStepSelector(
             meta.switchml_md.map_result : ternary;
             meta.switchml_md.round_end_flag : ternary; // FIXME:
             meta.switchml_md.k : ternary;
+            meta.switchml_md.round : ternary;
+
 
         }
         actions = {
@@ -93,13 +95,14 @@ control NextStepSelector(
 
         const entries = {
             // 2. Normal last worker's gradient : last=1, map=None end_flag=0;
-            (_, _, 4, 1, _, _, _) : broadcast();
+            (_, _, 4, 1, 0, _, _, _) : broadcast();
 
             // 1. Normal gradient : last=None, map=0, end_flag=None
-            (_, _, 4, _, 0, _, 1) : broadcast();
-            (_, _, 4, _, 0, _, _) : finish_consume();
+            (_, _, 4, _, 0, _, 1, _) : broadcast();
+            (_, _, 4, _, 0, _, _, _) : finish_consume();
 
-            (_, _, 4, _, _, _, _): retransmit();
+            (_, _, 4, 0, _, _, _, _) : retransmit(); // global gradient completed and retransmission packet comes
+            (_, _, 4, _, _, _, _, _) : drop(); // aggregation is not yet completed but retransmission packet comes
             
             // 3. round end packet : last=1, map=0, end_flag=1;
             // (0, _, 4, 1, 0, 1) : recirculate_for_HARVEST7(68); 

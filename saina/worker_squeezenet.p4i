@@ -1,7 +1,7 @@
-# 1 "/home/p4/p4-dev/saina/saina.p4"
+# 1 "worker_squeezenet.p4"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "/home/p4/p4-dev/saina/saina.p4"
+# 1 "worker_squeezenet.p4"
 # 1 "/usr/local/share/p4c/p4include/core.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -85,7 +85,7 @@ match_kind {
     /// Longest-prefix match.
     lpm
 }
-# 2 "/home/p4/p4-dev/saina/saina.p4" 2
+# 2 "worker_squeezenet.p4" 2
 # 1 "/usr/local/share/p4c/p4include/v1model.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -864,9 +864,9 @@ package V1Switch<H, M>(Parser<H, M> p,
                        ComputeChecksum<H, M> ck,
                        Deparser<H> dep
                        );
-# 3 "/home/p4/p4-dev/saina/saina.p4" 2
+# 3 "worker_squeezenet.p4" 2
 
-# 1 "/home/p4/p4-dev/saina/configuration.p4" 1
+# 1 "configuration.p4" 1
 
 
 
@@ -891,8 +891,8 @@ package V1Switch<H, M>(Parser<H, M> p,
 
 
 // Total number of destination queue pairs
-# 5 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/types.p4" 1
+# 5 "worker_squeezenet.p4" 2
+# 1 "types.p4" 1
 
 
 
@@ -1094,7 +1094,7 @@ header switchml_md_h { //31B +
 
     // bit<8> k_counter;
     bit<8> k;
-    bit<8> round;
+    bit<16> round;
     // bit<8> round_end_flag;
     // bit<32> packet_id; 
 }
@@ -1140,8 +1140,8 @@ struct metadata_t {
     bit<32> sign_vector1;
     bit<32> sign_vector2;
 }
-# 6 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/headers.p4" 1
+# 6 "worker_squeezenet.p4" 2
+# 1 "headers.p4" 1
 
 
 
@@ -1214,12 +1214,9 @@ header switchml_h {
     bit<32> tsi; //FIXME: Also used for k_counter value
     bit<16> pool_index;
     bit<8> packet_type;
-    bit<8> k; //FIXME:
 
-    // bit<16> round; //FIXME:
-    bit<8> round; //FIXME:
-    bit<32> test1;
-    bit<32> test2;
+    bit<16> round; //FIXME:
+    // bit<8> round; //FIXME:
     bit<8> last_packet_flag;
 
     // bit<32> sign_reg_idx; 
@@ -1287,8 +1284,8 @@ struct header_t {
     switchml_h switchml;
     data_h d0;
 }
-# 7 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/parsers.p4" 1
+# 7 "worker_squeezenet.p4" 2
+# 1 "parsers.p4" 1
 
 
 
@@ -1383,8 +1380,8 @@ control MyComputeChecksum(inout header_t hdr, inout metadata_t meta) {
      apply {
     }
 }
-# 8 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/arp_icmp_responder.p4" 1
+# 8 "worker_squeezenet.p4" 2
+# 1 "arp_icmp_responder.p4" 1
 
 
 
@@ -1451,8 +1448,8 @@ control ARPandICMPResponder(
         arp_icmp.apply();
     }
 }
-# 9 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/forwarder.p4" 1
+# 9 "worker_squeezenet.p4" 2
+# 1 "forwarder.p4" 1
 
 
 
@@ -1493,9 +1490,9 @@ control Forwarder(
         forward.apply();
     }
 }
-# 10 "/home/p4/p4-dev/saina/saina.p4" 2
+# 10 "worker_squeezenet.p4" 2
 // #include "drop_simulator.p4"
-# 1 "/home/p4/p4-dev/saina/udp_receiver.p4" 1
+# 1 "udp_receiver.p4" 1
 
 
 
@@ -1621,8 +1618,8 @@ control UDPReceiver(
         receive_udp.apply();
     }
 }
-# 12 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/udp_sender.p4" 1
+# 12 "worker_squeezenet.p4" 2
+# 1 "udp_sender.p4" 1
 
 
 
@@ -1645,7 +1642,7 @@ control UDPSender(
         hdr.ipv4.version = 4;
         hdr.ipv4.ihl = 5;
         hdr.ipv4.diffserv = 0x00;
-        hdr.ipv4.total_len = 20 + 156;;
+        hdr.ipv4.total_len = 20 + 157;;
         hdr.ipv4.identification = 0x0000;
         hdr.ipv4.flags = 0b000;
         hdr.ipv4.frag_offset = 0;
@@ -1653,7 +1650,7 @@ control UDPSender(
         hdr.ipv4.protocol = ip_protocol_t.UDP;
         hdr.ipv4.src_addr = switch_ip;
 
-        hdr.udp.length = 156;
+        hdr.udp.length = 157;
 
         hdr.switchml.setValid();
         hdr.switchml.msg_type = 1;
@@ -1664,19 +1661,15 @@ control UDPSender(
         hdr.switchml.round = meta.switchml_md.round; //FIXME:
         hdr.switchml.round_end_flag = meta.switchml_md.round_end_flag; //FIXME:
         hdr.switchml.packet_type = (bit<8>)meta.switchml_md.packet_type; //FIXME:
-        hdr.switchml.k = meta.switchml_md.k; //FIXME:
 
 
         hdr.switchml.pool_index[13:0] = meta.switchml_md.pool_index[14:1];
-
-        hdr.switchml.test1 = meta.test1;
-        hdr.switchml.test2 = meta.test2;
 
     }
 
     table switch_mac_and_ip {
         key = {
-            hdr.switchml.k : ternary;
+            hdr.switchml.job_number : ternary;
             }
         actions = {
             set_switch_mac_and_ip;
@@ -1737,10 +1730,10 @@ control UDPSender(
         }
     }
 }
-# 13 "/home/p4/p4-dev/saina/saina.p4" 2
+# 13 "worker_squeezenet.p4" 2
 // #include "rdma_receiver.p4"
 // #include "rdma_sender.p4"
-# 1 "/home/p4/p4-dev/saina/bitmap_checker.p4" 1
+# 1 "bitmap_checker.p4" 1
 
 
 
@@ -1872,8 +1865,8 @@ control UpdateAndCheckWorkerBitmap(
         update_and_check_worker_bitmap.apply();
     }
 }
-# 16 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/workers_counter.p4" 1
+# 16 "worker_squeezenet.p4" 2
+# 1 "workers_counter.p4" 1
 
 
 
@@ -1952,9 +1945,9 @@ control WorkersCounter(
         }
     }
 }
-# 17 "/home/p4/p4-dev/saina/saina.p4" 2
+# 17 "worker_squeezenet.p4" 2
 // #include "exponents.p4"
-# 1 "/home/p4/p4-dev/saina/processor.p4" 1
+# 1 "processor.p4" 1
 
 
 
@@ -2024,8 +2017,8 @@ control Processor(
         sum.apply();
     }
 }
-# 19 "/home/p4/p4-dev/saina/saina.p4" 2
-# 1 "/home/p4/p4-dev/saina/next_step_selector.p4" 1
+# 19 "worker_squeezenet.p4" 2
+# 1 "next_step_selector.p4" 1
 
 
 
@@ -2145,7 +2138,7 @@ control NextStepSelector(
         next_step.apply();
     }
 }
-# 20 "/home/p4/p4-dev/saina/saina.p4" 2
+# 20 "worker_squeezenet.p4" 2
 // #include "process_sign.p4"
 // #include "extraction.p4"
 // #include "Popcount.p4"
@@ -2155,8 +2148,6 @@ control NextStepSelector(
 
 
 // #define HALF_NUM_PARAMETERS 400000
-
-
 
 
 // control Ingress(
@@ -2173,8 +2164,8 @@ control MyIngress(
     inout standard_metadata_t standard_metadata) {
 
 
-    register<bit<32>>(163840) sign1;
-    register<bit<32>>(163840) sign2;
+    register<bit<32>>(114538) sign1;
+    register<bit<32>>(114538) sign2;
     register<bit<32>>(1024) idx_counter_register;
     register<bit<32>>(1) sum_grad_sign;
     register<bit<32>>(1) sum_grad_sign_backup;
@@ -2295,417 +2286,6 @@ control MyIngress(
         const default_action = NoAction;
     }
 
-
-
-    action save_sign_bit_action1_0(){
-         //FIXME:
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000001;
-    }
-    action save_sign_bit_action1_1(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000002;
-    }
-    action save_sign_bit_action1_2(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000004;
-    }
-    action save_sign_bit_action1_3(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000008;
-    }
-    action save_sign_bit_action1_4(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000010;
-    }
-    action save_sign_bit_action1_5(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000020;
-    }
-    action save_sign_bit_action1_6(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000040;
-    }
-    action save_sign_bit_action1_7(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000080;
-    }
-    action save_sign_bit_action1_8(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000100;
-    }
-    action save_sign_bit_action1_9(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000200;
-    }
-    action save_sign_bit_action1_10(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000400;
-    }
-    action save_sign_bit_action1_11(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00000800;
-    }
-    action save_sign_bit_action1_12(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00001000;
-    }
-    action save_sign_bit_action1_13(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00002000;
-    }
-    action save_sign_bit_action1_14(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00004000;
-    }
-    action save_sign_bit_action1_15(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00008000;
-    }
-    action save_sign_bit_action1_16(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00010000;
-    }
-    action save_sign_bit_action1_17(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00020000;
-    }
-    action save_sign_bit_action1_18(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00040000;
-    }
-    action save_sign_bit_action1_19(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00080000;
-    }
-    action save_sign_bit_action1_20(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00100000;
-    }
-    action save_sign_bit_action1_21(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00200000;
-    }
-    action save_sign_bit_action1_22(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00400000;
-    }
-    action save_sign_bit_action1_23(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x00800000;
-    }
-    action save_sign_bit_action1_24(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x01000000;
-    }
-    action save_sign_bit_action1_25(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x02000000;
-    }
-    action save_sign_bit_action1_26(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x04000000;
-    }
-    action save_sign_bit_action1_27(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x08000000;
-    }
-    action save_sign_bit_action1_28(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x10000000;
-    }
-    action save_sign_bit_action1_29(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x20000000;
-    }
-    action save_sign_bit_action1_30(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x40000000;
-    }
-    action save_sign_bit_action1_31(){
-
-        meta.sign_vector1 = meta.sign_vector1 + 0x80000000;
-    }
-    action save_sign_bit_action2_0(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000001;
-    }
-    action save_sign_bit_action2_1(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000002;
-    }
-    action save_sign_bit_action2_2(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000004;
-    }
-    action save_sign_bit_action2_3(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000008;
-    }
-    action save_sign_bit_action2_4(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000010;
-    }
-    action save_sign_bit_action2_5(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000020;
-    }
-    action save_sign_bit_action2_6(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000040;
-    }
-    action save_sign_bit_action2_7(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000080;
-    }
-    action save_sign_bit_action2_8(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000100;
-    }
-    action save_sign_bit_action2_9(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000200;
-    }
-    action save_sign_bit_action2_10(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000400;
-    }
-    action save_sign_bit_action2_11(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00000800;
-    }
-    action save_sign_bit_action2_12(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00001000;
-    }
-    action save_sign_bit_action2_13(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00002000;
-    }
-    action save_sign_bit_action2_14(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00004000;
-    }
-    action save_sign_bit_action2_15(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00008000;
-    }
-    action save_sign_bit_action2_16(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00010000;
-    }
-    action save_sign_bit_action2_17(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00020000;
-    }
-    action save_sign_bit_action2_18(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00040000;
-    }
-    action save_sign_bit_action2_19(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00080000;
-    }
-    action save_sign_bit_action2_20(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00100000;
-    }
-    action save_sign_bit_action2_21(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00200000;
-    }
-    action save_sign_bit_action2_22(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00400000;
-    }
-    action save_sign_bit_action2_23(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x00800000;
-    }
-    action save_sign_bit_action2_24(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x01000000;
-    }
-    action save_sign_bit_action2_25(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x02000000;
-    }
-    action save_sign_bit_action2_26(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x04000000;
-    }
-    action save_sign_bit_action2_27(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x08000000;
-    }
-    action save_sign_bit_action2_28(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x10000000;
-    }
-    action save_sign_bit_action2_29(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x20000000;
-    }
-    action save_sign_bit_action2_30(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x40000000;
-    }
-    action save_sign_bit_action2_31(){
-
-        meta.sign_vector2 = meta.sign_vector2 + 0x80000000;
-    }
-
-    table save_sign_bit1 {
-        key = {
-            meta.sign_bitmap_index : exact;
-            hdr.d0.d00 : ternary;
-        }
-        actions = {
-            save_sign_bit_action1_0();
-            save_sign_bit_action1_1();
-            save_sign_bit_action1_2();
-            save_sign_bit_action1_3();
-            save_sign_bit_action1_4();
-            save_sign_bit_action1_5();
-            save_sign_bit_action1_6();
-            save_sign_bit_action1_7();
-            save_sign_bit_action1_8();
-            save_sign_bit_action1_9();
-            save_sign_bit_action1_10();
-            save_sign_bit_action1_11();
-            save_sign_bit_action1_12();
-            save_sign_bit_action1_13();
-            save_sign_bit_action1_14();
-            save_sign_bit_action1_15();
-            save_sign_bit_action1_16();
-            save_sign_bit_action1_17();
-            save_sign_bit_action1_18();
-            save_sign_bit_action1_19();
-            save_sign_bit_action1_20();
-            save_sign_bit_action1_21();
-            save_sign_bit_action1_22();
-            save_sign_bit_action1_23();
-            save_sign_bit_action1_24();
-            save_sign_bit_action1_25();
-            save_sign_bit_action1_26();
-            save_sign_bit_action1_27();
-            save_sign_bit_action1_28();
-            save_sign_bit_action1_29();
-            save_sign_bit_action1_30();
-            save_sign_bit_action1_31();
-            NoAction;
-        }
-        const entries = {
-            (0, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_0();
-            (1, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_1();
-            (2, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_2();
-            (3, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_3();
-            (4, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_4();
-            (5, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_5();
-            (6, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_6();
-            (7, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_7();
-            (8, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_8();
-            (9, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_9();
-            (10, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_10();
-            (11, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_11();
-            (12, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_12();
-            (13, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_13();
-            (14, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_14();
-            (15, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_15();
-            (16, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_16();
-            (17, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_17();
-            (18, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_18();
-            (19, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_19();
-            (20, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_20();
-            (21, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_21();
-            (22, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_22();
-            (23, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_23();
-            (24, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_24();
-            (25, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_25();
-            (26, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_26();
-            (27, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_27();
-            (28, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_28();
-            (29, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_29();
-            (30, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_30();
-            (31, 0x80000000 &&& 0x80000000) : save_sign_bit_action1_31();
-        }
-    }
-
-    table save_sign_bit2 {
-        key = {
-            meta.sign_bitmap_index : exact;
-            hdr.d0.d00 : ternary;
-        }
-        actions = {
-            save_sign_bit_action2_0();
-            save_sign_bit_action2_1();
-            save_sign_bit_action2_2();
-            save_sign_bit_action2_3();
-            save_sign_bit_action2_4();
-            save_sign_bit_action2_5();
-            save_sign_bit_action2_6();
-            save_sign_bit_action2_7();
-            save_sign_bit_action2_8();
-            save_sign_bit_action2_9();
-            save_sign_bit_action2_10();
-            save_sign_bit_action2_11();
-            save_sign_bit_action2_12();
-            save_sign_bit_action2_13();
-            save_sign_bit_action2_14();
-            save_sign_bit_action2_15();
-            save_sign_bit_action2_16();
-            save_sign_bit_action2_17();
-            save_sign_bit_action2_18();
-            save_sign_bit_action2_19();
-            save_sign_bit_action2_20();
-            save_sign_bit_action2_21();
-            save_sign_bit_action2_22();
-            save_sign_bit_action2_23();
-            save_sign_bit_action2_24();
-            save_sign_bit_action2_25();
-            save_sign_bit_action2_26();
-            save_sign_bit_action2_27();
-            save_sign_bit_action2_28();
-            save_sign_bit_action2_29();
-            save_sign_bit_action2_30();
-            save_sign_bit_action2_31();
-            NoAction;
-        }
-        const entries = {
-            (0, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_0();
-            (1, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_1();
-            (2, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_2();
-            (3, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_3();
-            (4, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_4();
-            (5, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_5();
-            (6, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_6();
-            (7, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_7();
-            (8, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_8();
-            (9, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_9();
-            (10, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_10();
-            (11, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_11();
-            (12, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_12();
-            (13, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_13();
-            (14, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_14();
-            (15, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_15();
-            (16, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_16();
-            (17, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_17();
-            (18, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_18();
-            (19, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_19();
-            (20, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_20();
-            (21, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_21();
-            (22, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_22();
-            (23, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_23();
-            (24, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_24();
-            (25, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_25();
-            (26, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_26();
-            (27, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_27();
-            (28, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_28();
-            (29, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_29();
-            (30, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_30();
-            (31, 0x80000000 &&& 0x80000000) : save_sign_bit_action2_31();
-        }
-    }
-# 592 "/home/p4/p4-dev/saina/saina.p4"
     ARPandICMPResponder() arp_icmp_responder;
     Forwarder() forwarder;
 
@@ -2826,144 +2406,6 @@ control MyIngress(
 
             }
         }
-
-        if (hdr.switchml.round_end_flag == 1 && meta.switchml_md.packet_type == 1){
-            // Clear worker_bitmap
-            // worker_bitmap.write((bit<32>)meta.switchml_md.pool_index[14:1], 0);
-
-            // bit<32> sign_reg_idx;
-            bit<32> sign_vector1;
-            bit<32> sign_vector2;
-            bit<32> xor_result;
-            bit<32> idx_counter;
-            bit<32> sum;
-            bit<32> k_count;
-
-            meta.sign_reg_idx = (bit<32>)hdr.switchml.tsi[31:5];
-            meta.sign_bitmap_index = hdr.switchml.tsi % 32;
-            // meta.round_mod = hdr.switchml.round % 2;
-
-
-            if (hdr.switchml.round % 2 == 0){
-                // sign2.read(sign_vector2, sign_reg_idx);
-                // sign_vector2 = sign_vector2 << 1;
-                // sign_vector2 = sign_vector2 + (bit<32>)hdr.d0.d00[31:31];
-                sign2.read(meta.sign_vector2, meta.sign_reg_idx);
-                save_sign_bit2.apply();
-                sign2.write(meta.sign_reg_idx, meta.sign_vector2);
-                idx_counter_register.read(idx_counter, meta.sign_reg_idx);
-
-                // meta.test1 = meta.sign_vector2; // TEST
-                meta.test1 = idx_counter; // TEST
-
-                if(idx_counter == 31){
-                    sign1.read(meta.sign_vector1, meta.sign_reg_idx);
-                    xor_result = meta.sign_vector2 ^ meta.sign_vector1;
-                    sign1.write(meta.sign_reg_idx, 0);
-                    idx_counter_register.write(meta.sign_reg_idx, 0);
-
-                }
-                else{
-                    idx_counter_register.write(meta.sign_reg_idx, idx_counter + 1);
-                }
-            }
-            else{ // if(hdr.switchml.round % 2 == 1) {
-                // sign1.read(sign_vector1 , sign_reg_idx);
-                // sign_vector1 = sign_vector1 << 1;
-                // sign_vector1 = sign_vector1 + (bit<32>)hdr.d0.d00[31:31];
-                sign1.read(meta.sign_vector1, meta.sign_reg_idx);
-                save_sign_bit1.apply();
-                sign1.write(meta.sign_reg_idx, meta.sign_vector1);
-                idx_counter_register.read(idx_counter, meta.sign_reg_idx);
-
-                // meta.test1 = meta.sign_vector1; // TEST
-                meta.test1 = idx_counter; // TEST
-
-                if(idx_counter == 31){
-                    sign2.read(meta.sign_vector2, meta.sign_reg_idx);
-                    xor_result = meta.sign_vector1 ^ meta.sign_vector2;
-                    sign2.write(meta.sign_reg_idx, 0);
-                    idx_counter_register.write(meta.sign_reg_idx, 0);
-
-                }
-                else{
-                    idx_counter_register.write(meta.sign_reg_idx, idx_counter + 1);
-                }
-            }
-
-            sum_grad_sign.read(sum, 0);
-
-            if(idx_counter == 31){
-                bit<32> temp1;
-                bit<32> temp2;
-                bit<32> popcount_result;
-
-                temp1 = xor_result & 0x55555555;
-                temp2 = (xor_result >> 1) & 0x55555555;
-                popcount_result = temp1 + temp2;
-                temp1 = popcount_result & 0x33333333;
-                temp2 = (popcount_result >> 2) & 0x33333333;
-                popcount_result = temp1 + temp2;
-                temp1 = popcount_result & 0x0f0f0f0f;
-                temp2 = (popcount_result >> 4) & 0x0f0f0f0f;
-                popcount_result = temp1 + temp2;
-                temp1 = popcount_result & 0x00ff00ff;
-                temp2 = (popcount_result >> 8) & 0x00ff00ff;
-                popcount_result = temp1 + temp2;
-                temp1 = popcount_result & 0x0000ffff;
-                temp2 = (popcount_result >> 16) & 0x0000ffff;
-                popcount_result = temp1 + temp2;
-
-                sum = sum + popcount_result;
-                sum_grad_sign.write(0, sum);
-                sum_grad_sign_backup.write(0, sum); //FIXME:TEST
-            }
-
-            // if(hdr.switchml.last_packet_flag==1){
-            // if(meta.switchml_md.first_last_flag == 0 && hdr.switchml.last_packet_flag==1){
-            if(hdr.switchml.last_packet_flag==1){
-                if(hdr.switchml.round % 2 == 1){
-                    sign2.write(meta.sign_reg_idx, 0);
-                }
-                else{
-                    sign1.write(meta.sign_reg_idx, 0);
-                }
-                sum_grad_sign_backup.write(0, sum); //FIXME:TEST
-                sum_grad_sign.write(0, 0);
-                idx_counter_register.write(meta.sign_reg_idx, 0);
-
-                k_counter.read(k_count, 0);
-                if(sum >= 40){
-                    k_count = k_count + 1;
-                    k_counter.write(0, k_count);
-                }
-                else{
-                    if (k_count == 0){
-                        // nothing
-                    }
-                    else{
-                        k_count = k_count - 1;
-                    }
-                    k_counter.write(0, k_count);
-                }
-
-                if(k_count >= 1){
-                    k_register.read(meta.switchml_md.k, 0);
-                    if(meta.switchml_md.k != 16){
-                        meta.switchml_md.k = meta.switchml_md.k + 1;
-                    }
-                    k_register.write(0,meta.switchml_md.k);
-                    k_counter.write(0,0);
-                }
-            }
-            meta.test2 = sum;
-            // sum_grad_sign.read(meta.test2, 0); //FIXME:
-            k_register.read(meta.switchml_md.k, 0); //FIXME:
-        }
-        else{
-            sum_grad_sign_backup.read(meta.test2, 0); //FIXME: TEST
-        }
-        k_register.read(meta.switchml_md.k, 0); //FIXME:
     }
 }
 

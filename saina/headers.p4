@@ -70,12 +70,9 @@ header switchml_h {
     bit<32> tsi;        //FIXME: Also used for k_counter value
     bit<16> pool_index;
     bit<8> packet_type;
-    bit<8> k; //FIXME:
 
-    // bit<16> round; //FIXME:
-    bit<8> round; //FIXME:
-    bit<32> test1;      
-    bit<32> test2;      
+    bit<16> round; //FIXME:
+    // bit<8> round; //FIXME:
     bit<8> last_packet_flag;
 
     // bit<32> sign_reg_idx; 

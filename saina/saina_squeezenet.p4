@@ -7,36 +7,19 @@
 #include "parsers.p4"
 #include "arp_icmp_responder.p4"
 #include "forwarder.p4"
-// #include "drop_simulator.p4"
 #include "udp_receiver.p4"
 #include "udp_sender.p4"
-// #include "rdma_receiver.p4"
-// #include "rdma_sender.p4"
 #include "bitmap_checker.p4"
 #include "workers_counter.p4"
-// #include "exponents.p4"
 #include "processor.p4"
 #include "next_step_selector.p4"
-// #include "process_sign.p4"
-// #include "extraction.p4"
-// #include "Popcount.p4"
-// #include "k_counter.p4"
-// #include "k_update.p4"
 
 
 
 // #define HALF_NUM_PARAMETERS 400000
-#define PARAMETERS 163840 // 37148106 / 32 / 32
-#define S_THRESHOLD 40 // 37148106*0.48/32= 557,221 (VGG-16)
-#define K_THRESHOLD 1
-
-// control Ingress(
-//     inout header_t hdr,
-//     inout ingress_metadata_t ig_md,
-//     in ingress_intrinsic_metadata_t ig_intr_md,
-//     in ingress_intrinsic_metadata_from_parser_t ig_prsr_md,
-//     inout ingress_intrinsic_metadata_for_deparser_t ig_dprsr_md,
-//     inout ingress_intrinsic_metadata_for_tm_t ig_tm_md) {
+#define PARAMETERS 114538 // 37148106 / 32 / 32
+#define S_THRESHOLD 1718 // 37148106*0.48/32= 557,221 (VGG-16)
+#define K_THRESHOLD 5
 
 control MyIngress(
     inout header_t hdr,
@@ -723,6 +706,7 @@ control MyIngress(
             bit<32> k_count;
             
             meta.sign_reg_idx = (bit<32>)hdr.switchml.tsi[31:5];
+            // meta.test1 = meta.sign_reg_idx;
             meta.sign_bitmap_index = hdr.switchml.tsi % 32;
             // meta.round_mod = hdr.switchml.round % 2;
             
@@ -737,9 +721,9 @@ control MyIngress(
                 idx_counter_register.read(idx_counter, meta.sign_reg_idx);
                 
                 // meta.test1 = meta.sign_vector2; // TEST
-                meta.test1 = idx_counter; // TEST
+                // meta.test1 = idx_counter; // TEST
                 
-                if(idx_counter == 31){
+                if(idx_counter == 31 || hdr.switchml.last_packet_flag==1){
                     sign1.read(meta.sign_vector1, meta.sign_reg_idx);
                     xor_result = meta.sign_vector2 ^ meta.sign_vector1;
                     sign1.write(meta.sign_reg_idx, 0);
@@ -760,9 +744,9 @@ control MyIngress(
                 idx_counter_register.read(idx_counter, meta.sign_reg_idx);
 
                 // meta.test1 = meta.sign_vector1; // TEST
-                meta.test1 = idx_counter; // TEST
+                // meta.test1 = idx_counter; // TEST
                 
-                if(idx_counter == 31){
+                if(idx_counter == 31 || hdr.switchml.last_packet_flag==1){
                     sign2.read(meta.sign_vector2, meta.sign_reg_idx);
                     xor_result = meta.sign_vector1 ^ meta.sign_vector2;
                     sign2.write(meta.sign_reg_idx, 0);
@@ -772,11 +756,13 @@ control MyIngress(
                 else{
                     idx_counter_register.write(meta.sign_reg_idx, idx_counter + 1);
                 }
-            }   
+            }
+
+            meta.test1 = xor_result;   
 
             sum_grad_sign.read(sum, 0);
 
-            if(idx_counter == 31){
+            if(idx_counter == 31 || hdr.switchml.last_packet_flag==1){
                 bit<32> temp1;
                 bit<32> temp2;
                 bit<32> popcount_result;

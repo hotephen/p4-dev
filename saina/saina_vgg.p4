@@ -26,9 +26,10 @@
 
 
 // #define HALF_NUM_PARAMETERS 400000
-#define PARAMETERS 163840 // 37148106 / 32 / 32
-#define S_THRESHOLD 40 // 37148106*0.48/32= 557,221 (VGG-16)
-#define K_THRESHOLD 1
+#define PARAMETERS 37148106 // 37148106 / 32 / 32
+#define SIGN_REGISTER_SIZE 2097151 // 37148106 / 32 = 1,160,879
+#define S_THRESHOLD 557221 // 37148106*0.48/32= 557,221 (VGG-16)
+#define K_THRESHOLD 5
 
 // control Ingress(
 //     inout header_t hdr,
@@ -44,9 +45,9 @@ control MyIngress(
     inout standard_metadata_t standard_metadata) {
 
 
-    register<bit<32>>(PARAMETERS) sign1;
-    register<bit<32>>(PARAMETERS) sign2;
-    register<bit<32>>(1024) idx_counter_register;
+    register<bit<32>>(SIGN_REGISTER_SIZE) sign1;
+    register<bit<32>>(SIGN_REGISTER_SIZE) sign2;
+    register<bit<32>>(SIGN_REGISTER_SIZE) idx_counter_register;
     register<bit<32>>(1) sum_grad_sign;
     register<bit<32>>(1) sum_grad_sign_backup;
     register<bit<32>>(1) k_counter;

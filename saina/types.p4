@@ -199,6 +199,7 @@ header switchml_md_h { //31B +
 
     // bit<8> k_counter;
     bit<8> k;
+    bit<16> round;
     // bit<8> round_end_flag;
     // bit<32> packet_id; 
 }
@@ -239,6 +240,10 @@ struct metadata_t {
     bit<1> action_flag;
     bit<32> test1;
     bit<32> test2;
+    bit<32> sign_bitmap_index;
+    bit<32> sign_reg_idx;
+    bit<32> sign_vector1;
+    bit<32> sign_vector2;
 }
 
 

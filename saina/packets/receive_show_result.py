@@ -21,6 +21,8 @@ parser.add_argument('--src_ip', required=False, type=str, default="10.10.0.1", h
 parser.add_argument('--dst_ip', required=False, type=str, default="10.10.0.12", help='')
 
 args = parser.parse_args()
+global xor_sum
+xor_sum = 0
 
 class switchml(Packet):
     """ Switchml Header. """
@@ -91,14 +93,20 @@ bind_layers(switchml, data)
 
 
 def handle_pkt(pkt):
-    # global count
+    global xor_sum
     # count = count + 1
     # pkt.show()
     # hexdump(pkt)
     if (pkt[Ether].dst =='00:00:00:00:00:00'):
         if args.s == 1:
             pkt.show()
-        print("tsi: ", pkt[switchml].tsi , "sign_vector: ", bin(pkt[switchml].test1).zfill(32), "sum: ", pkt[switchml].test2, "k: ", pkt[switchml].k, "round: ", pkt[switchml].round)
+        print("tsi: ", pkt[switchml].tsi , "sign_vector: ", bin(pkt[switchml].test1).zfill(32), 
+                "sum: ", pkt[switchml].test2, "k: ", pkt[switchml].k, "round: ", pkt[switchml].round)
+        xor = pkt[switchml].test1
+        binary = format(xor, 'b')
+        count = binary.count('1')
+        xor_sum += count
+        print("xor_sum: ", xor_sum)
         print("=========================================================")
 
 def main():

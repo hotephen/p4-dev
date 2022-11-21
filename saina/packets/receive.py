@@ -86,7 +86,7 @@ def receive_from_switch():
 def handle_pkt(pkt):
 
     # global gradient_arr, cnt
-    # pkt.show()
+    pkt.show()
     pkt_id = pkt[SAINA_hdr].packet_id
     print(pkt_id)
 

@@ -42,6 +42,7 @@ control UDPReceiver(
         meta.switchml_md.packet_size = hdr.switchml.size;
         
         meta.switchml_md.round_end_flag = hdr.switchml.round_end_flag; //FIXME:
+        meta.switchml_md.round = hdr.switchml.round; //FIXME:
 
         meta.switchml_md.worker_type = worker_type;
         meta.switchml_md.worker_id = worker_id;
@@ -96,6 +97,17 @@ control UDPReceiver(
             (2, _, _, _, _, 48864) : set_bitmap(1, 0, 2, 1, 16, 1<<2, 0, 0);
             (3, _, _, _, _, 48864) : set_bitmap(1, 0, 3, 1, 16, 1<<3, 0, 0);
             (4, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<4, 0, 0);
+            (5, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<5, 0, 0);
+            (6, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<6, 0, 0);
+            (7, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<7, 0, 0);
+            (8, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<8, 0, 0);
+            (9, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<9, 0, 0);
+            (10, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<10, 0, 0);
+            (11, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<11, 0, 0);
+            (12, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<12, 0, 0);
+            (13, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<13, 0, 0);
+            (14, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<14, 0, 0);
+            (15, _, _, _, _, 48864) : set_bitmap(1, 0, 4, 1, 16, 1<<15, 0, 0);
             // 1 mgid, 2 worker_type, 3 worker_id, 4 packet_type, 5 num_workers, 6 worker_bitmap, pool_base, pool_size_minus_1
         }
 

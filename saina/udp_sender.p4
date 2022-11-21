@@ -1,7 +1,7 @@
 #ifndef _UDP_SENDER_
 #define _UDP_SENDER_
 
-#define UDP_LENGTH 156 // 8udp + 20SW + 128
+#define UDP_LENGTH 157 // 8udp + 20SW + 128
 #define IPV4_LENGTH 20 + UDP_LENGTH;
 
 control UDPSender(
@@ -36,21 +36,18 @@ control UDPSender(
         hdr.switchml.job_number = meta.switchml_md.job_number;
         hdr.switchml.tsi = meta.switchml_md.tsi;
 
+        hdr.switchml.round = meta.switchml_md.round; //FIXME:
         hdr.switchml.round_end_flag = meta.switchml_md.round_end_flag; //FIXME:
         hdr.switchml.packet_type = (bit<8>)meta.switchml_md.packet_type; //FIXME:
-        hdr.switchml.k = meta.switchml_md.k; //FIXME:
         
 
         hdr.switchml.pool_index[13:0] = meta.switchml_md.pool_index[14:1];
-
-        hdr.switchml.test1 = meta.test1;
-        hdr.switchml.test2 = meta.test2;
 
     }
 
     table switch_mac_and_ip {
         key = {
-            hdr.switchml.k : ternary;
+            hdr.switchml.job_number : ternary;
             }
         actions = { 
             set_switch_mac_and_ip; 
