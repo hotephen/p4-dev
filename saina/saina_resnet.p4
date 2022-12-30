@@ -12,7 +12,7 @@
 #include "udp_sender.p4"
 // #include "rdma_receiver.p4"
 // #include "rdma_sender.p4"
-#include "bitmap_checker.p4"
+#include "bitmap_checker.p4" 
 #include "workers_counter.p4"
 // #include "exponents.p4"
 #include "processor.p4"
@@ -23,7 +23,7 @@
 // #include "k_counter.p4"
 // #include "k_update.p4"
 
-
+// hi
 
 // #define HALF_NUM_PARAMETERS 400000
 #define PARAMETERS 23608202 // 37148106 / 32 / 32
